@@ -25,7 +25,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-QUnit.test('hello test', function(assert) {
-	assert.ok(1 == '1', 'Passed!');
-});
+module OpenWeatherJS {
+	export enum LocationType {
+		ID,
+		NAME,
+		COORDINATES,
+		ZIP
+	}
+}
