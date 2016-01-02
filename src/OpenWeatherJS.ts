@@ -26,8 +26,16 @@
  * SOFTWARE.
  */
 
- function greet(msg: string) {
- console.log(msg);
+interface OperativeSystem{
+	system: string;
 }
 
-greet("Greetings, OS X");
+ function greet(os: OperativeSystem) {
+ console.log("Greetings, " + os.system);
+}
+
+var osx = {system: "OS X"};
+var ubuntu = {system: "Ubuntu 14.03"};
+
+greet(osx);
+greet(ubuntu);
