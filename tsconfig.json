@@ -1,10 +1,16 @@
 {
 	"compilerOptions": {
+		"target":             "es3",
+		"module":             "amd",
 		"noImplicitAny":      true,
 		"removeComments":     true,
 		"preserveConstEnums": true,
-		"out":                "build/OpenWeatherJS.js",
+		"outFile":            "build/OpenWeatherJS.js",
 		"sourceMap":          true
 	},
-	"files": ["src/OpenWeatherJS.ts"]
+	"files": [
+		"src/Asserts.ts",
+		"src/Location.ts",
+		"src/LocationType.ts",
+		"src/OpenWeatherJS.ts"]
 }
