@@ -1,5 +1,8 @@
-function greet(msg) {
-    console.log(msg);
+function greet(os) {
+    console.log("Greetings, " + os.system);
 }
-greet("Greetings, OS X");
+var osx = { system: "OS X" };
+var ubuntu = { system: "Ubuntu 14.03" };
+greet(osx);
+greet(ubuntu);
 //# sourceMappingURL=OpenWeatherJS.js.map
