@@ -1,6 +1,10 @@
 {
 	"compilerOptions": {
-		"sourceMap": true
+		"noImplicitAny":      true,
+		"removeComments":     true,
+		"preserveConstEnums": true,
+		"out":                "build/OpenWeatherJS.js",
+		"sourceMap":          true
 	},
 	"files": ["src/OpenWeatherJS.ts"]
 }
