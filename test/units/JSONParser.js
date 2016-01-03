@@ -32,7 +32,6 @@
    var cityName = "London";
    var countryName = "GB";
 
-
    assert.strictEqual(new OpenWeatherJS.JSONParser.Parse(url).name, cityName, "The city name is London");
    assert.strictEqual(new OpenWeatherJS.JSONParser.Parse(url).sys.country, countryName, "The city name is GB");
    assert.strictEqual(new OpenWeatherJS.JSONParser.Parse(url).base, base, "The base is stations");

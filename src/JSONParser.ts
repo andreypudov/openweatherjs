@@ -38,18 +38,35 @@
 		 */
     static Parse(url: string): Object{
       Asserts.isUrl(url, 'URL is invalid');
+      var obj = new Object;
 
       var xmlHttp = new XMLHttpRequest();
-      var obj = new Object;
-      xmlHttp.open('GET', url, false);
+      xmlHttp.open('GET', url, true);
+      xmlHttp.timeout = 2000;
+
+      xmlHttp.onload = function() {
+        if (xmlHttp.readyState == 4) {
+          if (xmlHttp.status == 200) {
+              obj = JSON.parse(xmlHttp.responseText);
+              console.log(obj);
+          }
+        }
+      };
+
+      xmlHttp.ontimeout = function () {
+        console.log("The Request Timed Out.");
+        xmlHttp.abort();
+      };
+      /*
       xmlHttp.onreadystatechange = function() {
           if (xmlHttp.readyState == 4) {
-              if(xmlHttp.status == 200) {
+              if (xmlHttp.status == 200) {
                   obj = JSON.parse(xmlHttp.responseText);
                }
           }
-      };
-      xmlHttp.send();
+      };*/
+
+      xmlHttp.send(null);
 
       return obj;
     }

@@ -27,8 +27,6 @@ var OpenWeatherJS;
             }
         };
         Asserts.isUrl = function (value, message) {
-            console.log("Checking");
-            var regexExpr = '(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?';
             var yourRegularExpression = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
             var matcher = yourRegularExpression;
             var match = value.match(matcher);
@@ -98,17 +96,23 @@ var OpenWeatherJS;
         }
         JSONParser.Parse = function (url) {
             OpenWeatherJS.Asserts.isUrl(url, 'URL is invalid');
-            var xmlHttp = new XMLHttpRequest();
             var obj = new Object;
-            xmlHttp.open('GET', url, false);
-            xmlHttp.onreadystatechange = function () {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open('GET', url, true);
+            xmlHttp.timeout = 2000;
+            xmlHttp.onload = function () {
                 if (xmlHttp.readyState == 4) {
                     if (xmlHttp.status == 200) {
                         obj = JSON.parse(xmlHttp.responseText);
+                        console.log(obj);
                     }
                 }
             };
-            xmlHttp.send();
+            xmlHttp.ontimeout = function () {
+                console.log("The Request Timed Out.");
+                xmlHttp.abort();
+            };
+            xmlHttp.send(null);
             return obj;
         };
         return JSONParser;
