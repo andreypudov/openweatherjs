@@ -34,6 +34,11 @@ var OpenWeatherJS;
                 throw new TypeError(message);
             }
         };
+        Asserts.isJSON = function (value, message) {
+            if (typeof value !== 'object') {
+                throw new TypeError(message);
+            }
+        };
         return Asserts;
     })();
     OpenWeatherJS.Asserts = Asserts;
@@ -95,13 +100,19 @@ var OpenWeatherJS;
         function JSONParser() {
         }
         JSONParser.Parse = function (url, done) {
-            OpenWeatherJS.Asserts.isUrl(url, 'URL is invalid');
+            OpenWeatherJS.Asserts.isUrl(url, 'URL is invalid.');
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.onreadystatechange = function () {
                 if (xmlHttp.readyState == 4) {
-                    if (xmlHttp.status == 200) {
-                        var obj = JSON.parse(xmlHttp.responseText);
-                        done(obj);
+                    try {
+                        if (xmlHttp.status == 200) {
+                            var obj = JSON.parse(xmlHttp.responseText);
+                            OpenWeatherJS.Asserts.isJSON(obj, 'Retrieved JSON is invalid.');
+                            done(obj);
+                        }
+                    }
+                    catch (err) {
+                        throw new Error("Error connecting: " + err);
                     }
                 }
             };

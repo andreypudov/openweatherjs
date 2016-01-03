@@ -42,7 +42,7 @@
 
      assert.throws(function(){
        new OpenWeatherJS.JSONParser.Parse("example")
-     }, new TypeError('URL is invalid'),
+     }, new TypeError('URL is invalid.'),
      'URL is invalid.');
    });
 

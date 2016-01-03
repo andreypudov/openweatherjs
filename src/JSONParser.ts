@@ -38,15 +38,20 @@
 		 * @return Object - JSON Object.
 		 */
     static Parse(url: string, done: (obj: any) => void): void{
-      Asserts.isUrl (url, 'URL is invalid');
+      Asserts.isUrl (url, 'URL is invalid.');
       var xmlHttp = new XMLHttpRequest ();
 
       xmlHttp.onreadystatechange = function () {
           if (xmlHttp.readyState == 4) {
+            try{
               if (xmlHttp.status == 200) {
                 var obj = JSON.parse(xmlHttp.responseText);
+                Asserts.isJSON(obj, 'Retrieved JSON is invalid.')
                 done(obj);
-               }
+              }
+            }catch(err){
+             throw new Error("Error connecting: " + err);
+            }
           }
         };
 

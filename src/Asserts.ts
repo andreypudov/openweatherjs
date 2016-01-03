@@ -111,8 +111,10 @@ module OpenWeatherJS {
 		 * @param value   - a value being tested.
 		 * @param message - a short description of the assertion.
 		 */
-		static isJSON(value: string, message: string): void {
-
+		static isJSON(value: Object, message: string): void {
+			if (typeof value !== 'object') {
+				throw new TypeError(message);
+			}
 		}
 	}
 }
