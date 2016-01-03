@@ -113,9 +113,12 @@ module OpenWeatherJS {
 		 */
 		static isJSONString(value: string, message: string): void {
 			try{
-				JSON.parse(value);
-			} catch(e){
-				throw new TypeError(message);
+				var o = JSON.parse(value);
+				if (typeof o !== 'object' || o == null) {
+					throw new TypeError(message);
+				}
+			}catch(e){
+				throw new Error(e);
 			}
 		}
 	}

@@ -36,10 +36,13 @@ var OpenWeatherJS;
         };
         Asserts.isJSONString = function (value, message) {
             try {
-                JSON.parse(value);
+                var o = JSON.parse(value);
+                if (typeof o !== 'object' || o == null) {
+                    throw new TypeError(message);
+                }
             }
             catch (e) {
-                throw new TypeError(message);
+                throw new Error(e);
             }
         };
         return Asserts;
@@ -110,7 +113,8 @@ var OpenWeatherJS;
                     try {
                         if (xmlHttp.status == 200) {
                             var obj = JSON.parse(xmlHttp.responseText);
-                            OpenWeatherJS.Asserts.isJSONString(obj, 'Retrieved JSON is invalid.');
+                            console.log(obj);
+                            OpenWeatherJS.Asserts.isJSONString(JSON.stringify(obj), 'Retrieved JSON is invalid.');
                             done(obj);
                         }
                     }
