@@ -1,6 +1,6 @@
 /**
  * The OpenWeatherJS Library.
- * The JavaScript library to work with weather information and forecasts data 
+ * The JavaScript library to work with weather information and forecasts data
  * provided by Open Weather Map. Built using TypeScript.
  *
  * The MIT License (MIT)
@@ -29,7 +29,7 @@
 module OpenWeatherJS {
 	export class Asserts {
 		/**
-		 * Validates provided value and throws a new type error whether the specified string 
+		 * Validates provided value and throws a new type error whether the specified string
 		 * is null or an undefined.
 		 *
 		 * @param value   - a value being tested.
@@ -62,7 +62,7 @@ module OpenWeatherJS {
 		}
 
 		/**
-		 * Validates provided value is a number and throws a new TypeError 
+		 * Validates provided value is a number and throws a new TypeError
 		 * with specified message otherwise..
 		 *
 		 * @param value   - a value being tested.
@@ -75,7 +75,7 @@ module OpenWeatherJS {
 		}
 
 		/**
-		 * Validates provided value is a string and throws a new TypeError 
+		 * Validates provided value is a string and throws a new TypeError
 		 * with specified message otherwise..
 		 *
 		 * @param value   - a value being tested.
@@ -83,6 +83,23 @@ module OpenWeatherJS {
 		 */
 		static IsString(value: any, message: string): void {
 			if (typeof value !== 'string') {
+				throw new TypeError(message);
+			}
+		}
+
+		/**
+		 * Validates provided value is a URL and throws a new TypeError
+		 * with specified message otherwise..
+		 *
+		 * @param value   - a value being tested.
+		 * @param message - a short description of the assertion.
+		 */
+		static isUrl(value: string, message: string): void {
+			var yourRegularExpression = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+			var matcher = yourRegularExpression;
+
+			var match = value.match(matcher);
+			if (!match){
 				throw new TypeError(message);
 			}
 		}

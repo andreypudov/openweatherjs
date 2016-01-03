@@ -1,6 +1,6 @@
 /**
  * The OpenWeatherJS Library.
- * The JavaScript library to work with weather information and forecasts data 
+ * The JavaScript library to work with weather information and forecasts data
  * provided by Open Weather Map. Built using TypeScript.
  *
  * The MIT License (MIT)
@@ -28,6 +28,30 @@
 
  module OpenWeatherJS{
  	export class JSONParser{
- 		
+    /**
+		 * Sends a XMLHttpRequest to the given url returning the JSON
+     * response from the url. Throws error if a bad url is placed in parameters,
+     * throws error on timeout and internet connection failure.
+		 *
+		 * @param url   - URL to send request to.
+		 * @return Object - JSON Object.
+		 */
+    static Parse(url: string): Object{
+      Asserts.isUrl(url, 'URL is invalid');
+
+      var xmlHttp = new XMLHttpRequest();
+      var obj = new Object;
+      xmlHttp.open('GET', url, false);
+      xmlHttp.onreadystatechange = function() {
+          if (xmlHttp.readyState == 4) {
+              if(xmlHttp.status == 200) {
+                  obj = JSON.parse(xmlHttp.responseText);
+               }
+          }
+      };
+      xmlHttp.send();
+
+      return obj;
+    }
  	}
  }

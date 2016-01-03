@@ -26,6 +26,16 @@ var OpenWeatherJS;
                 throw new TypeError(message);
             }
         };
+        Asserts.isUrl = function (value, message) {
+            console.log("Checking");
+            var regexExpr = '(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?';
+            var yourRegularExpression = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+            var matcher = yourRegularExpression;
+            var match = value.match(matcher);
+            if (!match) {
+                throw new TypeError(message);
+            }
+        };
         return Asserts;
     })();
     OpenWeatherJS.Asserts = Asserts;
@@ -80,5 +90,29 @@ var OpenWeatherJS;
         LocationType[LocationType["ZIP"] = 3] = "ZIP";
     })(OpenWeatherJS.LocationType || (OpenWeatherJS.LocationType = {}));
     var LocationType = OpenWeatherJS.LocationType;
+})(OpenWeatherJS || (OpenWeatherJS = {}));
+var OpenWeatherJS;
+(function (OpenWeatherJS) {
+    var JSONParser = (function () {
+        function JSONParser() {
+        }
+        JSONParser.Parse = function (url) {
+            OpenWeatherJS.Asserts.isUrl(url, 'URL is invalid');
+            var xmlHttp = new XMLHttpRequest();
+            var obj = new Object;
+            xmlHttp.open('GET', url, false);
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState == 4) {
+                    if (xmlHttp.status == 200) {
+                        obj = JSON.parse(xmlHttp.responseText);
+                    }
+                }
+            };
+            xmlHttp.send();
+            return obj;
+        };
+        return JSONParser;
+    })();
+    OpenWeatherJS.JSONParser = JSONParser;
 })(OpenWeatherJS || (OpenWeatherJS = {}));
 //# sourceMappingURL=OpenWeatherJS.js.map

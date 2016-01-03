@@ -1,4 +1,4 @@
-<!--
+/**
  * The OpenWeatherJS Library.
  * The JavaScript library to work with weather information and forecasts data
  * provided by Open Weather Map. Built using TypeScript.
@@ -14,35 +14,31 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
--->
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset='utf-8'>
-  	<title>The OpenWeatherJS Library Unit Tests</title>
-  	<link rel='stylesheet' href='../external/qunit/qunit-1.20.0.css'>
-</head>
-<body>
-  	<div id='qunit'></div>
-  	<div id='qunit-fixture'></div>
-  	<!-- qUnit Testing Framework -->
-  	<script src='../external/qunit/qunit-1.20.0.js'></script>
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
-  	<!-- OpenWeatherJS - target library -->
-  	<script src='../build/OpenWeatherJS.js'></script>
+ QUnit.test('JSONParser', function(assert){
+   var url = "http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=2de143494c0b295cca9337e1e96b00e0";
+   var base = "cmc stations";
+   var cityName = "London";
+   var countryName = "GB";
 
-  	<script src='units/LocationType.js'></script>
-  	<script src='units/Location.js'></script>
-		<script src='units/JSONParser.js'></script>
-</body>
-</html>
+
+   assert.strictEqual(new OpenWeatherJS.JSONParser.Parse(url).name, cityName, "The city name is London");
+   assert.strictEqual(new OpenWeatherJS.JSONParser.Parse(url).sys.country, countryName, "The city name is GB");
+   assert.strictEqual(new OpenWeatherJS.JSONParser.Parse(url).base, base, "The base is stations");
+
+   assert.throws(function(){
+     new OpenWeatherJS.JSONParser.Parse("example")
+   }, new TypeError('URL is invalid'),
+   'URL type exception.');
+ });
