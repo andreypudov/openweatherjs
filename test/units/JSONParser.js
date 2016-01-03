@@ -32,12 +32,21 @@
    var cityName = "London";
    var countryName = "GB";
 
-   assert.strictEqual(new OpenWeatherJS.JSONParser.Parse(url).name, cityName, "The city name is London");
-   assert.strictEqual(new OpenWeatherJS.JSONParser.Parse(url).sys.country, countryName, "The city name is GB");
-   assert.strictEqual(new OpenWeatherJS.JSONParser.Parse(url).base, base, "The base is stations");
+   assert.equal(1, "1", "Equal");
 
-   assert.throws(function(){
-     new OpenWeatherJS.JSONParser.Parse("example")
-   }, new TypeError('URL is invalid'),
-   'URL type exception.');
+   //Asynchronous call to OpenWeatherJS.JSONParser
+   new OpenWeatherJS.JSONParser.Parse(url, function(json){
+     assert.strictEqual(json.name, cityName, "The city name is London");
+     assert.strictEqual(json.sys.country, countryName, "The city name is GB");
+     assert.strictEqual(json.base, base, "The base is stations");
+
+     assert.throws(function(){
+       new OpenWeatherJS.JSONParser.Parse("example")
+     }, new TypeError('URL is invalid'),
+     'URL is invalid.');
+   });
+
+   //assert.strictEqual(json.name, cityName, "The city name is London");
+   //assert.strictEqual(new OpenWeatherJS.JSONParser.Parse(url).sys.country, countryName, "The city name is GB");
+   //assert.strictEqual(new OpenWeatherJS.JSONParser.Parse(url).base, base, "The base is stations");
  });

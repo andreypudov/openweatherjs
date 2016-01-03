@@ -94,26 +94,24 @@ var OpenWeatherJS;
     var JSONParser = (function () {
         function JSONParser() {
         }
-        JSONParser.Parse = function (url) {
+        JSONParser.Parse = function (url, done) {
             OpenWeatherJS.Asserts.isUrl(url, 'URL is invalid');
-            var obj = new Object;
             var xmlHttp = new XMLHttpRequest();
-            xmlHttp.open('GET', url, true);
-            xmlHttp.timeout = 2000;
-            xmlHttp.onload = function () {
+            xmlHttp.onreadystatechange = function () {
                 if (xmlHttp.readyState == 4) {
                     if (xmlHttp.status == 200) {
-                        obj = JSON.parse(xmlHttp.responseText);
-                        console.log(obj);
+                        var obj = JSON.parse(xmlHttp.responseText);
+                        done(obj);
                     }
                 }
             };
+            xmlHttp.open('GET', url, true);
+            xmlHttp.timeout = 2000;
             xmlHttp.ontimeout = function () {
-                console.log("The Request Timed Out.");
                 xmlHttp.abort();
+                throw new Error("Request Timed Out.");
             };
-            xmlHttp.send(null);
-            return obj;
+            xmlHttp.send();
         };
         return JSONParser;
     })();

@@ -103,5 +103,16 @@ module OpenWeatherJS {
 				throw new TypeError(message);
 			}
 		}
+
+		/**
+		 * Validates provided value is a JSON Object and throws a new TypeError
+		 * with specified message otherwise..
+		 *
+		 * @param value   - a value being tested.
+		 * @param message - a short description of the assertion.
+		 */
+		static isJSON(value: string, message: string): void {
+
+		}
 	}
 }

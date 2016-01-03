@@ -30,45 +30,33 @@
  	export class JSONParser{
     /**
 		 * Sends a XMLHttpRequest to the given url returning the JSON
-     * response from the url. Throws error if a bad url is placed in parameters,
-     * throws error on timeout and internet connection failure.
+     * response from the url. Throws a TypeError if a bad url is placed in parameters,
+     * throws Error on timeout and internet connection failure.
 		 *
 		 * @param url   - URL to send request to.
+     * @param done - Callback function letting you use the parsed object.
 		 * @return Object - JSON Object.
 		 */
-    static Parse(url: string): Object{
-      Asserts.isUrl(url, 'URL is invalid');
-      var obj = new Object;
+    static Parse(url: string, done: (obj: any) => void): void{
+      Asserts.isUrl (url, 'URL is invalid');
+      var xmlHttp = new XMLHttpRequest ();
 
-      var xmlHttp = new XMLHttpRequest();
-      xmlHttp.open('GET', url, true);
-      xmlHttp.timeout = 2000;
-
-      xmlHttp.onload = function() {
-        if (xmlHttp.readyState == 4) {
-          if (xmlHttp.status == 200) {
-              obj = JSON.parse(xmlHttp.responseText);
-              console.log(obj);
-          }
-        }
-      };
-
-      xmlHttp.ontimeout = function () {
-        console.log("The Request Timed Out.");
-        xmlHttp.abort();
-      };
-      /*
-      xmlHttp.onreadystatechange = function() {
+      xmlHttp.onreadystatechange = function () {
           if (xmlHttp.readyState == 4) {
               if (xmlHttp.status == 200) {
-                  obj = JSON.parse(xmlHttp.responseText);
+                var obj = JSON.parse(xmlHttp.responseText);
+                done(obj);
                }
           }
-      };*/
+        };
 
-      xmlHttp.send(null);
-
-      return obj;
+      xmlHttp.open('GET', url, true);
+      xmlHttp.timeout = 2000;
+      xmlHttp.ontimeout = function () {
+        xmlHttp.abort();
+        throw new Error("Request Timed Out.");
+      };
+      xmlHttp.send();
     }
  	}
  }
