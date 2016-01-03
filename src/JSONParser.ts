@@ -46,7 +46,7 @@
             try{
               if (xmlHttp.status == 200) {
                 var obj = JSON.parse(xmlHttp.responseText);
-                Asserts.isJSON(obj, 'Retrieved JSON is invalid.')
+                Asserts.isJSONString(obj, 'Retrieved JSON is invalid.')
                 done(obj);
               }
             }catch(err){
