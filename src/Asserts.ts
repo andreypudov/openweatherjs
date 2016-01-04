@@ -119,7 +119,7 @@ module OpenWeatherJS {
                 }
             } catch (e){
                     throw new Error(e);
-                }
+            }
         }
     }
 }

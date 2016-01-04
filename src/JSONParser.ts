@@ -51,7 +51,7 @@
                         }
                     } catch (err){
                             throw new Error("Error connecting: " + err);
-                        }
+                    }
               }
             };
 
