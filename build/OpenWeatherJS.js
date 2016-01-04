@@ -26,6 +26,25 @@ var OpenWeatherJS;
                 throw new TypeError(message);
             }
         };
+        Asserts.isUrl = function (value, message) {
+            var URLValidationRegExp = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+            var matcher = URLValidationRegExp;
+            var match = value.match(matcher);
+            if (!match) {
+                throw new TypeError(message);
+            }
+        };
+        Asserts.isJSONString = function (value, message) {
+            try {
+                var o = JSON.parse(value);
+                if (typeof o !== 'object' || o == null) {
+                    throw new TypeError(message);
+                }
+            }
+            catch (e) {
+                throw new Error(e);
+            }
+        };
         return Asserts;
     })();
     OpenWeatherJS.Asserts = Asserts;
@@ -80,5 +99,39 @@ var OpenWeatherJS;
         LocationType[LocationType["ZIP"] = 3] = "ZIP";
     })(OpenWeatherJS.LocationType || (OpenWeatherJS.LocationType = {}));
     var LocationType = OpenWeatherJS.LocationType;
+})(OpenWeatherJS || (OpenWeatherJS = {}));
+var OpenWeatherJS;
+(function (OpenWeatherJS) {
+    var JSONParser = (function () {
+        function JSONParser() {
+        }
+        JSONParser.Parse = function (url, done) {
+            OpenWeatherJS.Asserts.isUrl(url, 'URL is invalid.');
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState == 4) {
+                    try {
+                        if (xmlHttp.status == 200) {
+                            var obj = JSON.parse(xmlHttp.responseText);
+                            OpenWeatherJS.Asserts.isJSONString(JSON.stringify(obj), 'Retrieved JSON is invalid.');
+                            done(obj);
+                        }
+                    }
+                    catch (err) {
+                        throw new Error("Error connecting: " + err);
+                    }
+                }
+            };
+            xmlHttp.open('GET', url, true);
+            xmlHttp.timeout = 2000;
+            xmlHttp.ontimeout = function () {
+                xmlHttp.abort();
+                throw new Error("Request Timed Out.");
+            };
+            xmlHttp.send();
+        };
+        return JSONParser;
+    })();
+    OpenWeatherJS.JSONParser = JSONParser;
 })(OpenWeatherJS || (OpenWeatherJS = {}));
 //# sourceMappingURL=OpenWeatherJS.js.map

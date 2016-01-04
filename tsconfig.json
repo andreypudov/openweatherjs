@@ -12,5 +12,6 @@
 		"src/Asserts.ts",
 		"src/Location.ts",
 		"src/LocationType.ts",
+		"src/JSONParser.ts",
 		"src/OpenWeatherJS.ts"]
 }

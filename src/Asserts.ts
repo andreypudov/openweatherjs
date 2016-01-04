@@ -1,6 +1,6 @@
 /**
  * The OpenWeatherJS Library.
- * The JavaScript library to work with weather information and forecasts data 
+ * The JavaScript library to work with weather information and forecasts data
  * provided by Open Weather Map. Built using TypeScript.
  *
  * The MIT License (MIT)
@@ -27,64 +27,99 @@
  */
 
 module OpenWeatherJS {
-	export class Asserts {
-		/**
-		 * Validates provided value and throws a new type error whether the specified string 
-		 * is null or an undefined.
-		 *
-		 * @param value   - a value being tested.
-		 * @param message - a short description of the assertion.
-		 */
-		static IsExists(value: any, message: string): void {
-			if (value == null) {
-				throw new TypeError(message);
-			}
-		}
+    export class Asserts {
+        /**
+         * Validates provided value and throws a new type error whether the specified string
+         * is null or an undefined.
+         *
+         * @param value   - a value being tested.
+         * @param message - a short description of the assertion.
+         */
+        static IsExists(value: any, message: string): void {
+            if (value == null) {
+                throw new TypeError(message);
+            }
+        }
 
-		/**
-		 * Validates provided value is in range between values of minimum and maximum, and throws
-		 * a new RangeError otherwise. In case specified value is not number, this function throws
-		 * a new TypeError.
-		 *
-		 * @param value   - a value being tested.
-		 * @param minimum - a minimum value for specified number.
-		 * @param maximum - a maximum value for specified number.
-		 * @param message - a short description of the assertion.
-		 */
-		static IsInRange(value: any, minimum: number, maximum: number, message: string): void {
-			if (typeof value !== 'number') {
-				throw new TypeError('Value is not a number.');
-			}
+        /**
+         * Validates provided value is in range between values of minimum and maximum, and throws
+         * a new RangeError otherwise. In case specified value is not number, this function throws
+         * a new TypeError.
+         *
+         * @param value   - a value being tested.
+         * @param minimum - a minimum value for specified number.
+         * @param maximum - a maximum value for specified number.
+         * @param message - a short description of the assertion.
+         */
+        static IsInRange(value: any, minimum: number, maximum: number, message: string): void {
+            if (typeof value !== 'number') {
+                throw new TypeError('Value is not a number.');
+            }
 
-			if ((value < minimum) || (value > maximum)) {
-				throw new RangeError('Location id value should be between 1 and 99999999');
-			}
-		}
+            if ((value < minimum) || (value > maximum)) {
+                throw new RangeError('Location id value should be between 1 and 99999999');
+            }
+        }
 
-		/**
-		 * Validates provided value is a number and throws a new TypeError 
-		 * with specified message otherwise..
-		 *
-		 * @param value   - a value being tested.
-		 * @param message - a short description of the assertion.
-		 */
-		static IsNumber(value: any, message: string): void {
-			if (typeof value !== 'number') {
-				throw new TypeError(message);
-			}
-		}
+        /**
+         * Validates provided value is a number and throws a new TypeError
+         * with specified message otherwise..
+         *
+         * @param value   - a value being tested.
+         * @param message - a short description of the assertion.
+         */
+        static IsNumber(value: any, message: string): void {
+            if (typeof value !== 'number') {
+                throw new TypeError(message);
+            }
+        }
 
-		/**
-		 * Validates provided value is a string and throws a new TypeError 
-		 * with specified message otherwise..
-		 *
-		 * @param value   - a value being tested.
-		 * @param message - a short description of the assertion.
-		 */
-		static IsString(value: any, message: string): void {
-			if (typeof value !== 'string') {
-				throw new TypeError(message);
-			}
-		}
-	}
+        /**
+         * Validates provided value is a string and throws a new TypeError
+         * with specified message otherwise..
+         *
+         * @param value   - a value being tested.
+         * @param message - a short description of the assertion.
+         */
+        static IsString(value: any, message: string): void {
+            if (typeof value !== 'string') {
+                throw new TypeError(message);
+            }
+        }
+
+        /**
+         * Validates provided value is a URL and throws a new TypeError
+         * with specified message otherwise..
+         *
+         * @param value   - a value being tested.
+         * @param message - a short description of the assertion.
+         */
+        static isUrl(value: string, message: string): void {
+            var URLValidationRegExp = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+            var matcher = URLValidationRegExp;
+
+            var match = value.match(matcher);
+            if (!match){
+                throw new TypeError(message);
+            }
+        }
+
+        /**
+         * Validates provided value is a JSON Object and throws a new TypeError
+         * with specified message otherwise..
+         *
+         * @param value   - a value being tested.
+         * @param message - a short description of the assertion.
+         */
+        static isJSONString(value: string, message: string): void {
+            try {
+                var o = JSON.parse(value);
+                if (typeof o !== 'object' || o == null) {
+                    throw new TypeError(message);
+                }
+            } catch (e){
+                    throw new Error(e);
+            }
+        }
+    }
 }
