@@ -96,12 +96,12 @@ module OpenWeatherJS {
 		 */
 		static isUrl(value: string, message: string): void {
 		    var URLValidationRegExp = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
-			  var matcher = URLValidationRegExp;
+			var matcher = URLValidationRegExp;
 
-			  var match = value.match(matcher);
-			  if (!match){
-				    throw new TypeError(message);
-			  }
+			var match = value.match(matcher);
+			if (!match){
+				throw new TypeError(message);
+			}
 		}
 
 		/**
@@ -113,13 +113,13 @@ module OpenWeatherJS {
 		 */
 		static isJSONString(value: string, message: string): void {
 		    try {
-			      var o = JSON.parse(value);
-				    if (typeof o !== 'object' || o == null) {
-					      throw new TypeError(message);
-				    }
-			  } catch (e){
-				      throw new Error(e);
-				  }
+			    var o = JSON.parse(value);
+				if (typeof o !== 'object' || o == null) {
+					throw new TypeError(message);
+				}
+			} catch (e){
+			    throw new Error(e);
+			  }
 		}
 	}
 }
