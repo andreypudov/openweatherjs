@@ -45,7 +45,7 @@ module OpenWeatherJS {
 		 * @param id - a location id value.
 		 */
 		static getById(id: number): Location {
-			Asserts.IsInRange(id, 1, 99999999, 'Location id is invalid');
+			Asserts.isInRange(id, 1, 99999999, 'Location id is invalid');
 
 			var location = new Location();
 
@@ -62,7 +62,7 @@ module OpenWeatherJS {
 		 * @param name - a location name value.
 		 */
 		static getByName(name: string): Location {
-			Asserts.IsString(name, 'Location name is invalid.');
+			Asserts.isString(name, 'Location name is invalid.');
 
 			var location = new Location();
 
@@ -80,8 +80,8 @@ module OpenWeatherJS {
 		 * @param longitude - a location longitude value.
 		 */
 		static getByCoordinates(latitude: number, longitude: number): Location {
-			Asserts.IsNumber(latitude, 'Location latitude is invalid.');
-			Asserts.IsNumber(longitude, 'Location longitude is invalid.');
+			Asserts.isNumber(latitude, 'Location latitude is invalid.');
+			Asserts.isNumber(longitude, 'Location longitude is invalid.');
 
 			var location = new Location();
 
@@ -100,8 +100,8 @@ module OpenWeatherJS {
 		 * @param country - a location country value, coresponding to zip.
 		 */
 		static getByZip(zip: string, country: string): Location {
-			Asserts.IsString(zip, 'Location zip is invalid.');
-			Asserts.IsString(country, 'Location country is invalid.');
+			Asserts.isString(zip, 'Location zip is invalid.');
+			Asserts.isString(country, 'Location country is invalid.');
 
 			var location = new Location();
 

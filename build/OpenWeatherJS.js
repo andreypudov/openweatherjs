@@ -3,12 +3,12 @@ var OpenWeatherJS;
     var Asserts = (function () {
         function Asserts() {
         }
-        Asserts.IsExists = function (value, message) {
+        Asserts.isExists = function (value, message) {
             if (value == null) {
                 throw new TypeError(message);
             }
         };
-        Asserts.IsInRange = function (value, minimum, maximum, message) {
+        Asserts.isInRange = function (value, minimum, maximum, message) {
             if (typeof value !== 'number') {
                 throw new TypeError('Value is not a number.');
             }
@@ -16,12 +16,12 @@ var OpenWeatherJS;
                 throw new RangeError('Location id value should be between 1 and 99999999');
             }
         };
-        Asserts.IsNumber = function (value, message) {
+        Asserts.isNumber = function (value, message) {
             if (typeof value !== 'number') {
                 throw new TypeError(message);
             }
         };
-        Asserts.IsString = function (value, message) {
+        Asserts.isString = function (value, message) {
             if (typeof value !== 'string') {
                 throw new TypeError(message);
             }
@@ -37,12 +37,12 @@ var OpenWeatherJS;
         Asserts.isJSONString = function (value, message) {
             try {
                 var o = JSON.parse(value);
-                if (typeof o !== 'object' || o == null) {
-                    throw new TypeError(message);
+                if ((typeof o !== 'object') || (o == null)) {
+                    throw new Error(message);
                 }
             }
             catch (e) {
-                throw new Error(e);
+                throw new Error(message);
             }
         };
         return Asserts;
@@ -55,22 +55,22 @@ var OpenWeatherJS;
         function Location() {
         }
         Location.getById = function (id) {
-            OpenWeatherJS.Asserts.IsInRange(id, 1, 99999999, 'Location id is invalid');
+            OpenWeatherJS.Asserts.isInRange(id, 1, 99999999, 'Location id is invalid');
             var location = new Location();
             location.type = OpenWeatherJS.LocationType.ID;
             location.id = id;
             return location;
         };
         Location.getByName = function (name) {
-            OpenWeatherJS.Asserts.IsString(name, 'Location name is invalid.');
+            OpenWeatherJS.Asserts.isString(name, 'Location name is invalid.');
             var location = new Location();
             location.type = OpenWeatherJS.LocationType.NAME;
             location.name = name;
             return location;
         };
         Location.getByCoordinates = function (latitude, longitude) {
-            OpenWeatherJS.Asserts.IsNumber(latitude, 'Location latitude is invalid.');
-            OpenWeatherJS.Asserts.IsNumber(longitude, 'Location longitude is invalid.');
+            OpenWeatherJS.Asserts.isNumber(latitude, 'Location latitude is invalid.');
+            OpenWeatherJS.Asserts.isNumber(longitude, 'Location longitude is invalid.');
             var location = new Location();
             location.type = OpenWeatherJS.LocationType.COORDINATES;
             location.latitude = latitude;
@@ -78,8 +78,8 @@ var OpenWeatherJS;
             return location;
         };
         Location.getByZip = function (zip, country) {
-            OpenWeatherJS.Asserts.IsString(zip, 'Location zip is invalid.');
-            OpenWeatherJS.Asserts.IsString(country, 'Location country is invalid.');
+            OpenWeatherJS.Asserts.isString(zip, 'Location zip is invalid.');
+            OpenWeatherJS.Asserts.isString(country, 'Location country is invalid.');
             var location = new Location();
             location.type = OpenWeatherJS.LocationType.ZIP;
             location.zip = zip;
