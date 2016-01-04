@@ -35,7 +35,7 @@ module OpenWeatherJS {
          * @param value   - a value being tested.
          * @param message - a short description of the assertion.
          */
-        static IsExists(value: any, message: string): void {
+        static isExists(value: any, message: string): void {
             if (value == null) {
                 throw new TypeError(message);
             }
@@ -51,7 +51,7 @@ module OpenWeatherJS {
          * @param maximum - a maximum value for specified number.
          * @param message - a short description of the assertion.
          */
-        static IsInRange(value: any, minimum: number, maximum: number, message: string): void {
+        static isInRange(value: any, minimum: number, maximum: number, message: string): void {
             if (typeof value !== 'number') {
                 throw new TypeError('Value is not a number.');
             }
@@ -68,7 +68,7 @@ module OpenWeatherJS {
          * @param value   - a value being tested.
          * @param message - a short description of the assertion.
          */
-        static IsNumber(value: any, message: string): void {
+        static isNumber(value: any, message: string): void {
             if (typeof value !== 'number') {
                 throw new TypeError(message);
             }
@@ -81,7 +81,7 @@ module OpenWeatherJS {
          * @param value   - a value being tested.
          * @param message - a short description of the assertion.
          */
-        static IsString(value: any, message: string): void {
+        static isString(value: any, message: string): void {
             if (typeof value !== 'string') {
                 throw new TypeError(message);
             }
@@ -99,14 +99,14 @@ module OpenWeatherJS {
             var matcher = URLValidationRegExp;
 
             var match = value.match(matcher);
-            if (!match){
+            if (!match) {
                 throw new TypeError(message);
             }
         }
 
         /**
          * Validates provided value is a JSON Object and throws a new TypeError
-         * with specified message otherwise..
+         * with specified message otherwise.
          *
          * @param value   - a value being tested.
          * @param message - a short description of the assertion.
@@ -114,11 +114,12 @@ module OpenWeatherJS {
         static isJSONString(value: string, message: string): void {
             try {
                 var o = JSON.parse(value);
-                if (typeof o !== 'object' || o == null) {
+                
+                if ((typeof o !== 'object') || (o == null)) {
                     throw new TypeError(message);
                 }
-            } catch (e){
-                    throw new Error(e);
+            } catch (e) {
+                throw new Error(message);
             }
         }
     }
