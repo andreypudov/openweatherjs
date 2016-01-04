@@ -27,16 +27,16 @@
  */
 
  module OpenWeatherJS{
- 	export class JSONParser{
+    export class JSONParser{
     /**
-		 * Sends a XMLHttpRequest to the given url returning the JSON
+         * Sends a XMLHttpRequest to the given url returning the JSON
      * response from the url. Throws a TypeError if a bad url is placed in parameters,
      * throws Error on connection timeout and on internet connection failure.
-		 *
-		 * @param url   - URL to send request to.
+         *
+         * @param url   - URL to send request to.
      * @param done - Callback function letting you use the parsed object.
-		 * @return Object - JSON Object.
-		 */
+         * @return Object - JSON Object.
+         */
     static Parse(url: string, done: (obj: any) => void): void{
         Asserts.isUrl (url, 'URL is invalid.');
         var xmlHttp = new XMLHttpRequest ();
@@ -50,8 +50,8 @@
                         done(obj);
                     }
                 } catch (err){
-                      throw new Error("Error connecting: " + err);
-                  }
+                        throw new Error("Error connecting: " + err);
+                    }
           }
         };
 
@@ -63,5 +63,5 @@
         };
         xmlHttp.send();
     }
- 	}
+    }
  }

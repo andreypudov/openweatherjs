@@ -118,7 +118,7 @@ module OpenWeatherJS {
                     throw new TypeError(message);
                 }
             } catch (e){
-                 throw new Error(e);
+                    throw new Error(e);
                 }
         }
     }
