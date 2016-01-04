@@ -95,8 +95,8 @@ module OpenWeatherJS {
 		 * @param message - a short description of the assertion.
 		 */
 		static isUrl(value: string, message: string): void {
-		    var yourRegularExpression = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
-			  var matcher = yourRegularExpression;
+		    var URLValidationRegExp = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+			  var matcher = URLValidationRegExp;
 
 			  var match = value.match(matcher);
 			  if (!match){

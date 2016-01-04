@@ -31,7 +31,7 @@
     /**
 		 * Sends a XMLHttpRequest to the given url returning the JSON
      * response from the url. Throws a TypeError if a bad url is placed in parameters,
-     * throws Error on timeout and internet connection failure.
+     * throws Error on connection timeout and on internet connection failure.
 		 *
 		 * @param url   - URL to send request to.
      * @param done - Callback function letting you use the parsed object.
@@ -40,7 +40,7 @@
     static Parse(url: string, done: (obj: any) => void): void{
         Asserts.isUrl (url, 'URL is invalid.');
         var xmlHttp = new XMLHttpRequest ();
-
+        
         xmlHttp.onreadystatechange = function () {
             if (xmlHttp.readyState == 4) {
                 try {

@@ -27,8 +27,8 @@ var OpenWeatherJS;
             }
         };
         Asserts.isUrl = function (value, message) {
-            var yourRegularExpression = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
-            var matcher = yourRegularExpression;
+            var URLValidationRegExp = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+            var matcher = URLValidationRegExp;
             var match = value.match(matcher);
             if (!match) {
                 throw new TypeError(message);
