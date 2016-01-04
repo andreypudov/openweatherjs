@@ -38,31 +38,30 @@
 		 * @return Object - JSON Object.
 		 */
     static Parse(url: string, done: (obj: any) => void): void{
-      Asserts.isUrl (url, 'URL is invalid.');
-      var xmlHttp = new XMLHttpRequest ();
+        Asserts.isUrl (url, 'URL is invalid.');
+        var xmlHttp = new XMLHttpRequest ();
 
-      xmlHttp.onreadystatechange = function () {
-          if (xmlHttp.readyState == 4) {
-            try{
-              if (xmlHttp.status == 200) {
-                var obj = JSON.parse(xmlHttp.responseText);
-                console.log(obj);
-                Asserts.isJSONString(JSON.stringify(obj), 'Retrieved JSON is invalid.');
-                done(obj);
-              }
-            }catch(err){
-             throw new Error("Error connecting: " + err);
-            }
+        xmlHttp.onreadystatechange = function () {
+            if (xmlHttp.readyState == 4) {
+                try {
+                    if (xmlHttp.status == 200) {
+                        var obj = JSON.parse(xmlHttp.responseText);
+                        Asserts.isJSONString(JSON.stringify(obj), 'Retrieved JSON is invalid.');
+                        done(obj);
+                    }
+                } catch (err){
+                      throw new Error("Error connecting: " + err);
+                  }
           }
         };
 
-      xmlHttp.open('GET', url, true);
-      xmlHttp.timeout = 2000;
-      xmlHttp.ontimeout = function () {
-        xmlHttp.abort();
-        throw new Error("Request Timed Out.");
-      };
-      xmlHttp.send();
+        xmlHttp.open('GET', url, true);
+        xmlHttp.timeout = 2000;
+        xmlHttp.ontimeout = function () {
+            xmlHttp.abort();
+            throw new Error("Request Timed Out.");
+        };
+        xmlHttp.send();
     }
  	}
  }

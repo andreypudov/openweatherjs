@@ -36,25 +36,25 @@
 
    //Asynchronous call to OpenWeatherJS.JSONParser
    new OpenWeatherJS.JSONParser.Parse(url, function(json){
-     assert.strictEqual(json.name, cityName, "The city name is London");
-     assert.strictEqual(json.sys.country, countryName, "The city name is GB");
-     assert.strictEqual(json.base, base, "The base is stations");
+       assert.strictEqual(json.name, cityName, "The city name is London");
+       assert.strictEqual(json.sys.country, countryName, "The city name is GB");
+       assert.strictEqual(json.base, base, "The base is stations");
 
-     assert.throws(function(){
-       new OpenWeatherJS.JSONParser.Parse("example")
-     }, new TypeError('URL is invalid.'),
-     'URL is invalid.');
-   });
-
-   assert.throws(function(){
-     new OpenWeatherJS.Asserts.isJSONString("example", "Retrieved JSON is invalid.")
-   }, new Error("SyntaxError: JSON.parse: unexpected character at line 1 column 1 of the JSON data"),
-   'Retrieved JSON is invalid.');
+       assert.throws(function(){
+         new OpenWeatherJS.JSONParser.Parse("example")
+         }, new TypeError('URL is invalid.'),
+         'URL is invalid.');
+       });
 
    assert.throws(function(){
-     new OpenWeatherJS.Asserts.isJSONString(1, "Retrieved JSON is invalid.")
-   }, new Error("TypeError: Retrieved JSON is invalid."),
-   'Retrieved JSON is invalid.');
+       new OpenWeatherJS.Asserts.isJSONString("example", "Retrieved JSON is invalid.")},
+       new Error("SyntaxError: JSON.parse: unexpected character at line 1 column 1 of the JSON data"),
+       'Retrieved JSON is invalid.');
+
+   assert.throws(function(){
+       new OpenWeatherJS.Asserts.isJSONString(1, "Retrieved JSON is invalid.")},
+       new Error("TypeError: Retrieved JSON is invalid."),
+       'Retrieved JSON is invalid.');
 
    //assert.strictEqual(json.name, cityName, "The city name is London");
    //assert.strictEqual(new OpenWeatherJS.JSONParser.Parse(url).sys.country, countryName, "The city name is GB");
