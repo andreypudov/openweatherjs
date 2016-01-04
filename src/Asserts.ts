@@ -113,13 +113,13 @@ module OpenWeatherJS {
 		 */
 		static isJSONString(value: string, message: string): void {
 		    try {
-			    var o = JSON.parse(value);
-				if (typeof o !== 'object' || o == null) {
+		    	var o = JSON.parse(value);
+		    	if (typeof o !== 'object' || o == null) {
 					throw new TypeError(message);
 				}
 			} catch (e){
-			    throw new Error(e);
-			  }
+			  	throw new Error(e);
+				}
 		}
 	}
 }
