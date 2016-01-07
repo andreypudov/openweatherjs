@@ -10,10 +10,10 @@ var OpenWeatherJS;
         };
         Asserts.isInRange = function (value, minimum, maximum, message) {
             if (typeof value !== 'number') {
-                throw new TypeError('Value is not a number.');
+                throw new TypeError(message);
             }
             if ((value < minimum) || (value > maximum)) {
-                throw new RangeError('Location id value should be between 1 and 99999999');
+                throw new RangeError(message);
             }
         };
         Asserts.isNumber = function (value, message) {
@@ -43,6 +43,11 @@ var OpenWeatherJS;
             }
             catch (e) {
                 throw new Error(message);
+            }
+        };
+        Asserts.isTypeOf = function (value, type, message) {
+            if ((value instanceof type) === false) {
+                throw new TypeError(message);
             }
         };
         return Asserts;
@@ -88,7 +93,7 @@ var OpenWeatherJS;
         function Location() {
         }
         Location.getById = function (id) {
-            OpenWeatherJS.Asserts.isInRange(id, 1, 99999999, 'Location id is invalid');
+            OpenWeatherJS.Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999.');
             var location = new Location();
             location.type = OpenWeatherJS.LocationType.ID;
             location.id = id;
@@ -143,6 +148,33 @@ var OpenWeatherJS;
         };
         Location.prototype.getCountry = function () {
             return this.country;
+        };
+        Location.prototype.setType = function (type) {
+            this.type = type;
+        };
+        Location.prototype.setId = function (id) {
+            OpenWeatherJS.Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999.');
+            this.id = id;
+        };
+        Location.prototype.setName = function (name) {
+            OpenWeatherJS.Asserts.isString(name, 'Location name is invalid.');
+            this.name = name;
+        };
+        Location.prototype.setLatitude = function (latitude) {
+            OpenWeatherJS.Asserts.isNumber(latitude, 'Location latitude is invalid.');
+            this.latitude = latitude;
+        };
+        Location.prototype.setLongitude = function (longitude) {
+            OpenWeatherJS.Asserts.isNumber(longitude, 'Location longitude is invalid.');
+            this.longitude = longitude;
+        };
+        Location.prototype.setZip = function (zip) {
+            OpenWeatherJS.Asserts.isString(zip, 'Location zip is invalid.');
+            this.zip = zip;
+        };
+        Location.prototype.setCountry = function (country) {
+            OpenWeatherJS.Asserts.isString(country, 'Location country is invalid.');
+            this.country = country;
         };
         return Location;
     })();

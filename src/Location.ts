@@ -45,7 +45,7 @@ module OpenWeatherJS {
 		 * @param id - a location id value.
 		 */
 		static getById(id: number): Location {
-			Asserts.isInRange(id, 1, 99999999, 'Location id is invalid');
+			Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999.');
 
 			var location = new Location();
 
@@ -179,6 +179,47 @@ module OpenWeatherJS {
          */
         getCountry(): string {
             return this.country
+        }
+        
+        setType(type: LocationType): void {
+            
+            this.type = type;
+        }
+        
+        setId(id: number): void {
+            Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999.');
+            
+            this.id = id;
+        }
+
+        setName(name: string): void {
+            Asserts.isString(name, 'Location name is invalid.');
+            
+            this.name = name;
+        }
+
+        setLatitude(latitude: number): void {
+            Asserts.isNumber(latitude, 'Location latitude is invalid.');
+            
+            this.latitude = latitude;
+        }
+        
+        setLongitude(longitude: number): void {
+            Asserts.isNumber(longitude, 'Location longitude is invalid.');
+            
+            this.longitude = longitude;
+        }
+        
+        setZip(zip: string): void {
+            Asserts.isString(zip, 'Location zip is invalid.');
+            
+            this.zip = zip;
+        }
+        
+        setCountry(country: string): void {
+            Asserts.isString(country, 'Location country is invalid.');
+            
+            this.country = country;
         }
 	}
 }

@@ -40,5 +40,15 @@ module OpenWeatherJS {
         private maximum:     number;           /* maximum temperature at the moment */
         private seaLevel:    number;           /* atmospheric pressure on the sea level, hPa */
         private grndLevel:   number;           /* atmospheric pressure on the ground level, hPa */
+        
+        private windSpeed:   number;           /* wind speed */
+        private windDegree:  number;           /* wind direction */
+        
+        private cloudiness:  number;           /* cloudiness, % */
+        private rainVolume:  number;           /* rain volume for the last 3 hours */
+        private snowVolume:  number;           /* snow volume for the last 3 hours */
+        
+        private location:    Location;         /* city id, name and coordinates */
+        private time:        number;           /* time of data calculation, unix, UTC */
     }
 }

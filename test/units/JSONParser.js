@@ -37,13 +37,13 @@ QUnit.test('JSONParser', function(assert) {
     setTimeout(function() {
         assert.ok(true, 'Asynchronous UnitTest.');
 
-        new OpenWeatherJS.JSONParser.parse(url, function(json) {
+        OpenWeatherJS.JSONParser.parse(url, function(json) {
             assert.strictEqual(json.name, cityName, 'The city name is London');
             assert.strictEqual(json.sys.country, countryName, 'The city name is GB');
             assert.strictEqual(json.base, base, 'The base is stations');
 
             assert.throws(function() {
-                    new OpenWeatherJS.JSONParser.parse('example')
+                    OpenWeatherJS.JSONParser.parse('example')
                 },  new TypeError('URL is invalid.'),
                 'URL is invalid.');
         });
@@ -51,12 +51,12 @@ QUnit.test('JSONParser', function(assert) {
     }, 250);
 
     assert.throws(function() {
-        new OpenWeatherJS.Asserts.isJSONString('example', 'Retrieved JSON is invalid.')},
+        OpenWeatherJS.Asserts.isJSONString('example', 'Retrieved JSON is invalid.')},
         new Error('Retrieved JSON is invalid.'),
         'Retrieved JSON is invalid.');
 
     assert.throws(function() {
-        new OpenWeatherJS.Asserts.isJSONString(1, 'Retrieved JSON is invalid.')},
+        OpenWeatherJS.Asserts.isJSONString(1, 'Retrieved JSON is invalid.')},
         new Error('Retrieved JSON is invalid.'),
         'Retrieved JSON is invalid.');
 });

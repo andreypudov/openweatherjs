@@ -29,7 +29,7 @@
 module OpenWeatherJS {
     export class Asserts {
         /**
-         * Validates provided value and throws a new type error whether the specified string
+         * Validates provided value and throws a new type error whether the specified value
          * is null or an undefined.
          *
          * @param value   - a value being tested.
@@ -47,17 +47,17 @@ module OpenWeatherJS {
          * a new TypeError.
          *
          * @param value   - a value being tested.
-         * @param minimum - a minimum value for specified number.
-         * @param maximum - a maximum value for specified number.
+         * @param minimum - a minimum value for specified number inclusively.
+         * @param maximum - a maximum value for specified number inclusively.
          * @param message - a short description of the assertion.
          */
         static isInRange(value: any, minimum: number, maximum: number, message: string): void {
             if (typeof value !== 'number') {
-                throw new TypeError('Value is not a number.');
+                throw new TypeError(message);
             }
 
             if ((value < minimum) || (value > maximum)) {
-                throw new RangeError('Location id value should be between 1 and 99999999');
+                throw new RangeError(message);
             }
         }
 
@@ -120,6 +120,20 @@ module OpenWeatherJS {
                 }
             } catch (e) {
                 throw new Error(message);
+            }
+        }
+        
+        /**
+         * Validates provided value is instance of specified type, 
+         * and throws a new TypeError exception otherwise.
+         *
+         * @param value   - a value being tested.
+         * @param type    - a type to compare.
+         * @param message - a short description of the assertion.
+         */
+        static isTypeOf(value: any, type: any, message: string): void {
+            if ((value instanceof type) === false) {
+                throw new TypeError(message);
             }
         }
     }

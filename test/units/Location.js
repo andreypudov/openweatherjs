@@ -28,75 +28,75 @@
 
 QUnit.test('Location', function(assert) {
 	/* Id */
-	assert.strictEqual(new OpenWeatherJS.Location.getById(6198442).getId(), 6198442, 'Location id is 6198442.');
+	assert.strictEqual(OpenWeatherJS.Location.getById(6198442).getId(), 6198442, 'Location id is 6198442.');
 	assert.throws(function() {
-			new OpenWeatherJS.Location.getById(0)
-		}, new RangeError('Location id value should be between 1 and 99999999'), 
+			OpenWeatherJS.Location.getById(0)
+		}, new RangeError('Location id value should be between 1 and 99999999.'), 
 		'Location id is out of range exception.');
 	assert.throws(function() {
-			new OpenWeatherJS.Location.getById(null)
-		}, new TypeError('Value is not a number.'), 
+			OpenWeatherJS.Location.getById(null)
+		}, new TypeError('Location id value should be between 1 and 99999999.'), 
 		'Location id type exception.');
     assert.strictEqual(new OpenWeatherJS.Location.getById(6198442).getType(), 
         OpenWeatherJS.LocationType.ID, 'Location type is ID.');
 
 	/* Name */
-	assert.strictEqual(new OpenWeatherJS.Location.getByName('Cheboksary').getName(), 'Cheboksary', 
+	assert.strictEqual(OpenWeatherJS.Location.getByName('Cheboksary').getName(), 'Cheboksary', 
 		'Location name is Cheboksary.');
 	assert.throws(function() {
-			new OpenWeatherJS.Location.getByName(null)
+			OpenWeatherJS.Location.getByName(null)
 		}, new TypeError('Location name is invalid.'), 
 		'Location name type exception.');
 	assert.throws(function() {
-			new OpenWeatherJS.Location.getByName(10)
+			OpenWeatherJS.Location.getByName(10)
 		}, new TypeError('Location name is invalid.'), 
 		'Location name type exception.');
-    assert.strictEqual(new OpenWeatherJS.Location.getByName('Cheboksary').getCountry(), undefined, 
+    assert.strictEqual(OpenWeatherJS.Location.getByName('Cheboksary').getCountry(), undefined, 
 		'Location country is undefined.');
-    assert.strictEqual(new OpenWeatherJS.Location.getByName('Cheboksary', 'RU').getCountry(), 'RU', 
+    assert.strictEqual(OpenWeatherJS.Location.getByName('Cheboksary', 'RU').getCountry(), 'RU', 
 		'Location country is RU.');
-    assert.strictEqual(new OpenWeatherJS.Location.getByName('Cheboksary', 'RU').getType(), 
+    assert.strictEqual(OpenWeatherJS.Location.getByName('Cheboksary', 'RU').getType(), 
         OpenWeatherJS.LocationType.NAME, 'Location type is NAME.');
-    assert.strictEqual(new OpenWeatherJS.Location.getByName('Cheboksary').getType(), 
+    assert.strictEqual(OpenWeatherJS.Location.getByName('Cheboksary').getType(), 
         OpenWeatherJS.LocationType.NAME, 'Location type is NAME.');
 
 	/* Coordinates */
-	assert.strictEqual(new OpenWeatherJS.Location.getByCoordinates(56.174999, 47.286388).getLatitude(), 
+	assert.strictEqual(OpenWeatherJS.Location.getByCoordinates(56.174999, 47.286388).getLatitude(), 
 		56.174999, 'Location latitude is 56.174999.');
-	assert.strictEqual(new OpenWeatherJS.Location.getByCoordinates(56.174999, 47.286388).getLongitude(), 
+	assert.strictEqual(OpenWeatherJS.Location.getByCoordinates(56.174999, 47.286388).getLongitude(), 
 		47.286388, 'Location longitude is 47.286388.');
 	assert.throws(function() {
-			new OpenWeatherJS.Location.getByCoordinates(null, 10)
+			OpenWeatherJS.Location.getByCoordinates(null, 10)
 		}, new TypeError('Location latitude is invalid.'), 
 		'Location coordinates type exception.');
 	assert.throws(function() {
-			new OpenWeatherJS.Location.getByCoordinates(10, null)
+			OpenWeatherJS.Location.getByCoordinates(10, null)
 		}, new TypeError('Location longitude is invalid.'), 
 		'Location coordinates type exception.');
 	assert.throws(function() {
-			new OpenWeatherJS.Location.getByCoordinates('56.174999', '47.286388')
+			OpenWeatherJS.Location.getByCoordinates('56.174999', '47.286388')
 		}, new TypeError('Location latitude is invalid.'), 
 		'Location coordinates type exception.');
-    assert.strictEqual(new OpenWeatherJS.Location.getByCoordinates(56.174999, 47.286388).getType(), 
+    assert.strictEqual(OpenWeatherJS.Location.getByCoordinates(56.174999, 47.286388).getType(), 
         OpenWeatherJS.LocationType.COORDINATES, 'Location type is COORDINATES.');
 
 	/* Zip */
-	assert.strictEqual(new OpenWeatherJS.Location.getByZip('428000', 'RU').getZip(), 
+	assert.strictEqual(OpenWeatherJS.Location.getByZip('428000', 'RU').getZip(), 
 		'428000', 'Location zip is 428000');
-	assert.strictEqual(new OpenWeatherJS.Location.getByZip('428000', 'RU').getCountry(), 
+	assert.strictEqual(OpenWeatherJS.Location.getByZip('428000', 'RU').getCountry(), 
 		'RU', 'Location country is RU');
 	assert.throws(function() {
-			new OpenWeatherJS.Location.getByZip(null, 10)
+			OpenWeatherJS.Location.getByZip(null, 10)
 		}, new TypeError('Location zip is invalid.'), 
 		'Location zip type exception.');
 	assert.throws(function() {
-			new OpenWeatherJS.Location.getByZip('428000', 10)
+			OpenWeatherJS.Location.getByZip('428000', 10)
 		}, new TypeError('Location country is invalid.'), 
 		'Location country type exception.');
 	assert.throws(function() {
-			new OpenWeatherJS.Location.getByZip(428000, 'RU')
+			OpenWeatherJS.Location.getByZip(428000, 'RU')
 		}, new TypeError('Location zip is invalid.'), 
 		'Location country type exception.');
-    assert.strictEqual(new OpenWeatherJS.Location.getByZip('428000', 'RU').getType(), 
+    assert.strictEqual(OpenWeatherJS.Location.getByZip('428000', 'RU').getType(), 
         OpenWeatherJS.LocationType.ZIP, 'Location type is ZIP.');
 });
