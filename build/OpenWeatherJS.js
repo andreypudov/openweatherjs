@@ -38,7 +38,7 @@ var OpenWeatherJS;
             try {
                 var o = JSON.parse(value);
                 if ((typeof o !== 'object') || (o == null)) {
-                    throw new Error(message);
+                    throw new TypeError(message);
                 }
             }
             catch (e) {
@@ -48,6 +48,39 @@ var OpenWeatherJS;
         return Asserts;
     })();
     OpenWeatherJS.Asserts = Asserts;
+})(OpenWeatherJS || (OpenWeatherJS = {}));
+var OpenWeatherJS;
+(function (OpenWeatherJS) {
+    var CurrentWeather = (function () {
+        function CurrentWeather() {
+        }
+        CurrentWeather.getWeather = function (location) {
+            OpenWeatherJS.Asserts.isExists(location, 'Location type is invalid.');
+            var url;
+            switch (location.getType()) {
+                case OpenWeatherJS.LocationType.ID:
+                    url = 'api.openweathermap.org/data/2.5/weather?id=' + location.getId();
+                    break;
+                case OpenWeatherJS.LocationType.NAME:
+                    var country = location.getCountry();
+                    url = 'api.openweathermap.org/data/2.5/weather?q=' + location.getName()
+                        + (country !== undefined) ? ', ' + country : '';
+                    break;
+                case OpenWeatherJS.LocationType.COORDINATES:
+                    url = 'api.openweathermap.org/data/2.5/weather?lat=' + location.getLatitude()
+                        + '&lon=' + location.getLongitude();
+                    break;
+                case OpenWeatherJS.LocationType.ZIP:
+                    url = 'api.openweathermap.org/data/2.5/weather?zip=' + location.getZip()
+                        + ', ' + location.getCountry();
+                    break;
+            }
+            OpenWeatherJS.JSONParser.parse(url, function (json) {
+            });
+        };
+        return CurrentWeather;
+    })();
+    OpenWeatherJS.CurrentWeather = CurrentWeather;
 })(OpenWeatherJS || (OpenWeatherJS = {}));
 var OpenWeatherJS;
 (function (OpenWeatherJS) {
@@ -61,11 +94,15 @@ var OpenWeatherJS;
             location.id = id;
             return location;
         };
-        Location.getByName = function (name) {
+        Location.getByName = function (name, country) {
             OpenWeatherJS.Asserts.isString(name, 'Location name is invalid.');
             var location = new Location();
             location.type = OpenWeatherJS.LocationType.NAME;
             location.name = name;
+            if (country) {
+                OpenWeatherJS.Asserts.isString(country, 'Location country is invalid.');
+                location.country = country;
+            }
             return location;
         };
         Location.getByCoordinates = function (latitude, longitude) {
@@ -86,6 +123,27 @@ var OpenWeatherJS;
             location.country = country;
             return location;
         };
+        Location.prototype.getType = function () {
+            return this.type;
+        };
+        Location.prototype.getId = function () {
+            return this.id;
+        };
+        Location.prototype.getName = function () {
+            return this.name;
+        };
+        Location.prototype.getLatitude = function () {
+            return this.latitude;
+        };
+        Location.prototype.getLongitude = function () {
+            return this.longitude;
+        };
+        Location.prototype.getZip = function () {
+            return this.zip;
+        };
+        Location.prototype.getCountry = function () {
+            return this.country;
+        };
         return Location;
     })();
     OpenWeatherJS.Location = Location;
@@ -105,7 +163,7 @@ var OpenWeatherJS;
     var JSONParser = (function () {
         function JSONParser() {
         }
-        JSONParser.Parse = function (url, done) {
+        JSONParser.parse = function (url, done) {
             OpenWeatherJS.Asserts.isUrl(url, 'URL is invalid.');
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.onreadystatechange = function () {
@@ -133,5 +191,94 @@ var OpenWeatherJS;
         return JSONParser;
     })();
     OpenWeatherJS.JSONParser = JSONParser;
+})(OpenWeatherJS || (OpenWeatherJS = {}));
+var OpenWeatherJS;
+(function (OpenWeatherJS) {
+    (function (WeatherCondition) {
+        WeatherCondition[WeatherCondition["THUNDERSTORM_WITH_LIGHT_RAIN"] = 200] = "THUNDERSTORM_WITH_LIGHT_RAIN";
+        WeatherCondition[WeatherCondition["THUNDERSTORM_WITH_RAIN"] = 201] = "THUNDERSTORM_WITH_RAIN";
+        WeatherCondition[WeatherCondition["THUNDERSTORM_WITH_HEAVY_RAIN"] = 202] = "THUNDERSTORM_WITH_HEAVY_RAIN";
+        WeatherCondition[WeatherCondition["LIGHT_THUNDERSTORM"] = 210] = "LIGHT_THUNDERSTORM";
+        WeatherCondition[WeatherCondition["THUNDERSTORM"] = 211] = "THUNDERSTORM";
+        WeatherCondition[WeatherCondition["HEAVY_THUNDERSTORM"] = 212] = "HEAVY_THUNDERSTORM";
+        WeatherCondition[WeatherCondition["RAGGED_THUNDERSTORM"] = 221] = "RAGGED_THUNDERSTORM";
+        WeatherCondition[WeatherCondition["THUNDERSTORM_WITH_LIGHT_DRIZZLE"] = 230] = "THUNDERSTORM_WITH_LIGHT_DRIZZLE";
+        WeatherCondition[WeatherCondition["THUNDERSTORM_WITH_DRIZZLE"] = 231] = "THUNDERSTORM_WITH_DRIZZLE";
+        WeatherCondition[WeatherCondition["THUNDERSTORM_WITH_HEAVY_DRIZZLE"] = 232] = "THUNDERSTORM_WITH_HEAVY_DRIZZLE";
+        WeatherCondition[WeatherCondition["LIGHT_INTENSITY_DRIZZLE"] = 300] = "LIGHT_INTENSITY_DRIZZLE";
+        WeatherCondition[WeatherCondition["DRIZZLE"] = 301] = "DRIZZLE";
+        WeatherCondition[WeatherCondition["HEAVY_INTENSITY_DRIZZLE"] = 302] = "HEAVY_INTENSITY_DRIZZLE";
+        WeatherCondition[WeatherCondition["LIGHT_INTENSITY_DRIZZLE_RAIN"] = 310] = "LIGHT_INTENSITY_DRIZZLE_RAIN";
+        WeatherCondition[WeatherCondition["DRIZZLE_RAIN"] = 311] = "DRIZZLE_RAIN";
+        WeatherCondition[WeatherCondition["HEAVY_INTENSITY_DRIZZLE_RAIN"] = 312] = "HEAVY_INTENSITY_DRIZZLE_RAIN";
+        WeatherCondition[WeatherCondition["SHOWER_RAIN_AND_DRIZZLE"] = 313] = "SHOWER_RAIN_AND_DRIZZLE";
+        WeatherCondition[WeatherCondition["HEAVY_SHOWER_RAIN_AND_DRIZZLE"] = 314] = "HEAVY_SHOWER_RAIN_AND_DRIZZLE";
+        WeatherCondition[WeatherCondition["SHOWER_DRIZZLE"] = 321] = "SHOWER_DRIZZLE";
+        WeatherCondition[WeatherCondition["LIGHT_RAIN"] = 500] = "LIGHT_RAIN";
+        WeatherCondition[WeatherCondition["MODERATE_RAIN"] = 501] = "MODERATE_RAIN";
+        WeatherCondition[WeatherCondition["HEAVY_INTENSITY_RAIN"] = 502] = "HEAVY_INTENSITY_RAIN";
+        WeatherCondition[WeatherCondition["VERY_HEAVY_RAIN"] = 503] = "VERY_HEAVY_RAIN";
+        WeatherCondition[WeatherCondition["EXTREME_RAIN"] = 504] = "EXTREME_RAIN";
+        WeatherCondition[WeatherCondition["FREEZING_RAIN"] = 511] = "FREEZING_RAIN";
+        WeatherCondition[WeatherCondition["LIGHT_INTENSITY_SHOWER_RAIN"] = 520] = "LIGHT_INTENSITY_SHOWER_RAIN";
+        WeatherCondition[WeatherCondition["SHOWER_RAIN"] = 521] = "SHOWER_RAIN";
+        WeatherCondition[WeatherCondition["HEAVY_INTENSITY_SHOWER_RAIN"] = 522] = "HEAVY_INTENSITY_SHOWER_RAIN";
+        WeatherCondition[WeatherCondition["RAGGED_SHOWER_RAIN"] = 531] = "RAGGED_SHOWER_RAIN";
+        WeatherCondition[WeatherCondition["LIGHT_SNOW"] = 600] = "LIGHT_SNOW";
+        WeatherCondition[WeatherCondition["SNOW"] = 601] = "SNOW";
+        WeatherCondition[WeatherCondition["HEAVY_SNOW"] = 602] = "HEAVY_SNOW";
+        WeatherCondition[WeatherCondition["SLEET"] = 611] = "SLEET";
+        WeatherCondition[WeatherCondition["SHOWER_SLEET"] = 612] = "SHOWER_SLEET";
+        WeatherCondition[WeatherCondition["LIGHT_RAIN_AND_SNOW"] = 615] = "LIGHT_RAIN_AND_SNOW";
+        WeatherCondition[WeatherCondition["RAIN_AND_SNOW"] = 616] = "RAIN_AND_SNOW";
+        WeatherCondition[WeatherCondition["LIGHT_SHOWER_SNOW"] = 620] = "LIGHT_SHOWER_SNOW";
+        WeatherCondition[WeatherCondition["SHOWER_SNOW"] = 621] = "SHOWER_SNOW";
+        WeatherCondition[WeatherCondition["HEAVY_SHOWER_SNOW"] = 622] = "HEAVY_SHOWER_SNOW";
+        WeatherCondition[WeatherCondition["MIST"] = 701] = "MIST";
+        WeatherCondition[WeatherCondition["SMOKE"] = 711] = "SMOKE";
+        WeatherCondition[WeatherCondition["HAZE"] = 721] = "HAZE";
+        WeatherCondition[WeatherCondition["SAND_OR_DUST_WHIRLS"] = 731] = "SAND_OR_DUST_WHIRLS";
+        WeatherCondition[WeatherCondition["FOG"] = 741] = "FOG";
+        WeatherCondition[WeatherCondition["SAND"] = 751] = "SAND";
+        WeatherCondition[WeatherCondition["DUST"] = 761] = "DUST";
+        WeatherCondition[WeatherCondition["VOLCANIC_ASH"] = 762] = "VOLCANIC_ASH";
+        WeatherCondition[WeatherCondition["SQUALLS"] = 771] = "SQUALLS";
+        WeatherCondition[WeatherCondition["TORNADO"] = 781] = "TORNADO";
+        WeatherCondition[WeatherCondition["CLEAR_SKY"] = 800] = "CLEAR_SKY";
+        WeatherCondition[WeatherCondition["FEW_CLOUDS"] = 801] = "FEW_CLOUDS";
+        WeatherCondition[WeatherCondition["SCATTERED_CLOUDS"] = 802] = "SCATTERED_CLOUDS";
+        WeatherCondition[WeatherCondition["BROKEN_CLOUDS"] = 803] = "BROKEN_CLOUDS";
+        WeatherCondition[WeatherCondition["OVERCAST_CLOUDS"] = 804] = "OVERCAST_CLOUDS";
+        WeatherCondition[WeatherCondition["TORNADO_STORM"] = 900] = "TORNADO_STORM";
+        WeatherCondition[WeatherCondition["TROPICAL_STORM"] = 901] = "TROPICAL_STORM";
+        WeatherCondition[WeatherCondition["HURRICANE_STORM"] = 902] = "HURRICANE_STORM";
+        WeatherCondition[WeatherCondition["COLD"] = 903] = "COLD";
+        WeatherCondition[WeatherCondition["HOT"] = 904] = "HOT";
+        WeatherCondition[WeatherCondition["WINDY"] = 905] = "WINDY";
+        WeatherCondition[WeatherCondition["HAIL"] = 906] = "HAIL";
+        WeatherCondition[WeatherCondition["CALM"] = 951] = "CALM";
+        WeatherCondition[WeatherCondition["LIGHT_BREEZE"] = 952] = "LIGHT_BREEZE";
+        WeatherCondition[WeatherCondition["GENTLE_BREEZE"] = 953] = "GENTLE_BREEZE";
+        WeatherCondition[WeatherCondition["MODERATE_BREEZE"] = 954] = "MODERATE_BREEZE";
+        WeatherCondition[WeatherCondition["FRESH_BREEZE"] = 955] = "FRESH_BREEZE";
+        WeatherCondition[WeatherCondition["STRONG_BREEZE"] = 956] = "STRONG_BREEZE";
+        WeatherCondition[WeatherCondition["HIGH_WIND"] = 957] = "HIGH_WIND";
+        WeatherCondition[WeatherCondition["_NEAR_GALE"] = 957] = "_NEAR_GALE";
+        WeatherCondition[WeatherCondition["GALE"] = 958] = "GALE";
+        WeatherCondition[WeatherCondition["SEVERE_GALE"] = 959] = "SEVERE_GALE";
+        WeatherCondition[WeatherCondition["STORM"] = 960] = "STORM";
+        WeatherCondition[WeatherCondition["VIOLENT_STORM"] = 961] = "VIOLENT_STORM";
+        WeatherCondition[WeatherCondition["HURRICANE"] = 962] = "HURRICANE";
+    })(OpenWeatherJS.WeatherCondition || (OpenWeatherJS.WeatherCondition = {}));
+    var WeatherCondition = OpenWeatherJS.WeatherCondition;
+})(OpenWeatherJS || (OpenWeatherJS = {}));
+var OpenWeatherJS;
+(function (OpenWeatherJS) {
+    var WeatherEntry = (function () {
+        function WeatherEntry() {
+        }
+        return WeatherEntry;
+    })();
+    OpenWeatherJS.WeatherEntry = WeatherEntry;
 })(OpenWeatherJS || (OpenWeatherJS = {}));
 //# sourceMappingURL=OpenWeatherJS.js.map

@@ -37,8 +37,8 @@
         * @param done - Callback function letting you use the parsed object.
         * @return Object - JSON Object.
         */
-        static Parse(url: string, done: (obj: any) => void): void {
-            Asserts.isUrl (url, 'URL is invalid.');
+        static parse(url: string, done: (obj: any) => void): void {
+            Asserts.isUrl(url, 'URL is invalid.');
             var xmlHttp = new XMLHttpRequest();
             
             xmlHttp.onreadystatechange = function() {

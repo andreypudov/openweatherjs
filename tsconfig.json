@@ -10,8 +10,11 @@
 	},
 	"files": [
 		"src/Asserts.ts",
+        "src/CurrentWeather.ts",
 		"src/Location.ts",
 		"src/LocationType.ts",
 		"src/JSONParser.ts",
-		"src/OpenWeatherJS.ts"]
+		"src/OpenWeatherJS.ts",
+        "src/WeatherCondition.ts",
+        "src/WeatherEntry.ts"]
 }

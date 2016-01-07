@@ -59,15 +59,21 @@ module OpenWeatherJS {
 		 * Constructs a new location instance by given name. 
 		 * Throws a new TypeError if name is not a string.
 		 *
-		 * @param name - a location name value.
+		 * @param name    - a location name value.
+         * @param country - a country name related to @name. An optional parameter.
 		 */
-		static getByName(name: string): Location {
-			Asserts.isString(name, 'Location name is invalid.');
+		static getByName(name: string, country?: string): Location {
+			Asserts.isString(name, 'Location name is invalid.'); 
 
 			var location = new Location();
 
 			location.type = LocationType.NAME;
 			location.name = name;
+            
+            if (country) {
+                Asserts.isString(country, 'Location country is invalid.');
+                location.country = country;
+            }
 
 			return location;
 		}
@@ -111,5 +117,68 @@ module OpenWeatherJS {
 
 			return location;
 		}
+        
+        /**
+         * Returns a location type for this instance.
+         * 
+         * @return a location type for this instance.
+         */
+        getType(): LocationType {
+            return this.type;
+        }
+        
+        /**
+         * Returns a location id for this instance.
+         * 
+         * @return a location id for this instance.
+         */
+        getId(): number {
+            return this.id;
+        }
+        
+        /**
+         * Returns a location name for this instance.
+         * 
+         * @return a location name for this instance.
+         */
+        getName(): string {
+            return this.name;
+        }
+        
+        /**
+         * Returns a location latitude for this instance.
+         * 
+         * @return a location latitude for this instance.
+         */
+        getLatitude(): number {
+            return this.latitude;
+        }
+        
+        /**
+         * Returns a location longitude for this instance.
+         * 
+         * @return a location longitude for this instance.
+         */
+        getLongitude(): number {
+            return this.longitude;
+        }
+        
+        /**
+         * Returns a location zip for this instance.
+         * 
+         * @return a location zip for this instance.
+         */
+        getZip(): string {
+            return this.zip;
+        }
+        
+        /**
+         * Returns a location country for this instance.
+         * 
+         * @return a location country for this instance.
+         */
+        getCountry(): string {
+            return this.country
+        }
 	}
 }

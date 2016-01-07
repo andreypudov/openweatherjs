@@ -26,37 +26,19 @@
  * SOFTWARE.
  */
 
-QUnit.test('JSONParser', function(assert) {
-    var url  = 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=2de143494c0b295cca9337e1e96b00e0';
-    var base = 'cmc stations';
-    var cityName    = 'London';
-    var countryName = 'GB';
-
-    var done = assert.async();
-
-    setTimeout(function() {
-        assert.ok(true, 'Asynchronous UnitTest.');
-
-        new OpenWeatherJS.JSONParser.parse(url, function(json) {
-            assert.strictEqual(json.name, cityName, 'The city name is London');
-            assert.strictEqual(json.sys.country, countryName, 'The city name is GB');
-            assert.strictEqual(json.base, base, 'The base is stations');
-
-            assert.throws(function() {
-                    new OpenWeatherJS.JSONParser.parse('example')
-                },  new TypeError('URL is invalid.'),
-                'URL is invalid.');
-        });
-        done();
-    }, 250);
-
-    assert.throws(function() {
-        new OpenWeatherJS.Asserts.isJSONString('example', 'Retrieved JSON is invalid.')},
-        new Error('Retrieved JSON is invalid.'),
-        'Retrieved JSON is invalid.');
-
-    assert.throws(function() {
-        new OpenWeatherJS.Asserts.isJSONString(1, 'Retrieved JSON is invalid.')},
-        new Error('Retrieved JSON is invalid.'),
-        'Retrieved JSON is invalid.');
-});
+module OpenWeatherJS {
+    export class WeatherEntry {
+        private condition:   WeatherCondition; /* weather condition id */
+        private main:        string;           /* group of weather parameters */
+        private description: string;           /* weather condition within the group */
+        private icon:        string;           /* weather icon id */
+        
+        private temperature: number;           /* temperature */
+        private pressure:    number;           /* atmospheric pressure, hPa */
+        private humidity:    number;           /* humidity, % */
+        private minimum:     number;           /* minimum temperature at the moment */
+        private maximum:     number;           /* maximum temperature at the moment */
+        private seaLevel:    number;           /* atmospheric pressure on the sea level, hPa */
+        private grndLevel:   number;           /* atmospheric pressure on the ground level, hPa */
+    }
+}
