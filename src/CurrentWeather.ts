@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2016 The OpenWeatherJS Project
+ * Copyright (C) 2016 The OpenWeatherJS Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,13 +29,16 @@
 module OpenWeatherJS {
     export class CurrentWeather {
         /**
-         * Returns current weather report for given location value.
+         * Returns a current weather report for a given location value. 
+         * Throws a new Error in case of connection failure and inavlid data recived.  
          *
          * @param location - a location value.
+         * @return a current weather trport for a given location.
          */
-        static getWeather(location: Location): void {
-            Asserts.isExists(location, 'Location type is invalid.');
+        static getWeather(location: Location): WeatherEntry {
+            Asserts.isInstanceofOf(location, Location, 'Location type is invalid.');
             
+            var entry = new WeatherEntry();
             var url: string;
             
             /* generate an URL for API call */
@@ -59,8 +62,21 @@ module OpenWeatherJS {
             }
             
             JSONParser.parse(url, function(json) {
+                var location = new Location();
                 
+                location.setId(json.id);
+                location.setName(json.name)
+                location.setLatitude(json.coord.lat);
+                location.setLatitude(json.coord.lon);
+                location.setZip(json.sys.country);
+                
+                return entry;
             });
+            
+            throw new TypeError('message 2');
+            throw new Error('ddd');
+            
+            return entry;
         }
     }
 }

@@ -1,6 +1,6 @@
 /**
  * The OpenWeatherJS Library.
- * The JavaScript library to work with weather information and forecasts data
+ * The JavaScript library to work with weather information and forecasts data 
  * provided by Open Weather Map. Built using TypeScript.
  *
  * The MIT License (MIT)
@@ -26,27 +26,9 @@
  * SOFTWARE.
  */
 
-QUnit.test('JSONParser', function(assert) {
-    var url  = 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=2de143494c0b295cca9337e1e96b00e0';
-    var base = 'cmc stations';
-    var cityName    = 'London';
-    var countryName = 'GB';
-
-    var done = assert.async();
-
-    setTimeout(function() {
-        assert.ok(true, 'Asynchronous UnitTest.');
-
-        OpenWeatherJS.JSONParser.parse(url, function(json) {
-            assert.strictEqual(json.name, cityName, 'The city name is London');
-            assert.strictEqual(json.sys.country, countryName, 'The city name is GB');
-            assert.strictEqual(json.base, base, 'The base is stations');
-
-            assert.throws(function() {
-                    OpenWeatherJS.JSONParser.parse('example')
-                },  new TypeError('URL is invalid.'),
-                'URL is invalid.');
-        });
-        done();
-    }, 250);
+QUnit.test('CurrentWeather', function(assert) {
+    var location = OpenWeatherJS.Location.getById(6198442);
+	var report   = OpenWeatherJS.CurrentWeather.getWeather(location);
+    
+	assert.strictEqual(report.getLocation().getId(), 6198442, 'Location id is 6198442.');
 });

@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2016 The OpenWeatherJS Project
+ * Copyright (C) 2016 The OpenWeatherJS Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,8 @@
         * throws Error on connection timeout and on internet connection failure.
         *
         * @param url   - URL to send request to.
-        * @param done - Callback function letting you use the parsed object.
+        * @param done  - Callback function letting you use the parsed object.
+        *
         * @return Object - JSON Object.
         */
         static parse(url: string, done: (obj: any) => void): void {

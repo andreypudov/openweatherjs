@@ -29,6 +29,7 @@ var OpenWeatherJS;
         Asserts.isUrl = function (value, message) {
             var URLValidationRegExp = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
             var matcher = URLValidationRegExp;
+            Asserts.isString(value, message);
             var match = value.match(matcher);
             if (!match) {
                 throw new TypeError(message);
@@ -42,11 +43,11 @@ var OpenWeatherJS;
                 }
             }
             catch (e) {
-                throw new Error(message);
+                throw new TypeError(message);
             }
         };
-        Asserts.isTypeOf = function (value, type, message) {
-            if ((value instanceof type) === false) {
+        Asserts.isInstanceofOf = function (value, type, message) {
+            if ((value == null) || ((value instanceof type) === false)) {
                 throw new TypeError(message);
             }
         };
@@ -60,7 +61,8 @@ var OpenWeatherJS;
         function CurrentWeather() {
         }
         CurrentWeather.getWeather = function (location) {
-            OpenWeatherJS.Asserts.isExists(location, 'Location type is invalid.');
+            OpenWeatherJS.Asserts.isInstanceofOf(location, OpenWeatherJS.Location, 'Location type is invalid.');
+            var entry = new OpenWeatherJS.WeatherEntry();
             var url;
             switch (location.getType()) {
                 case OpenWeatherJS.LocationType.ID:
@@ -81,7 +83,17 @@ var OpenWeatherJS;
                     break;
             }
             OpenWeatherJS.JSONParser.parse(url, function (json) {
+                var location = new OpenWeatherJS.Location();
+                location.setId(json.id);
+                location.setName(json.name);
+                location.setLatitude(json.coord.lat);
+                location.setLatitude(json.coord.lon);
+                location.setZip(json.sys.country);
+                return entry;
             });
+            throw new TypeError('message 2');
+            throw new Error('ddd');
+            return entry;
         };
         return CurrentWeather;
     })();
@@ -127,6 +139,18 @@ var OpenWeatherJS;
             location.zip = zip;
             location.country = country;
             return location;
+        };
+        Location.prototype.equals = function (location) {
+            if ((location == null) || ((location instanceof Location) === false)) {
+                return false;
+            }
+            return location.getType() === this.type
+                && location.getId() === this.id
+                && location.getName() === this.name
+                && location.getLatitude() === this.latitude
+                && location.getLongitude() === this.longitude
+                && location.getZip() === this.zip
+                && location.getCountry() === this.country;
         };
         Location.prototype.getType = function () {
             return this.type;

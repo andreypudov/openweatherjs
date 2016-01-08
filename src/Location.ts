@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2016 The OpenWeatherJS Project
+ * Copyright (C) 2016 The OpenWeatherJS Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -117,6 +117,26 @@ module OpenWeatherJS {
 
 			return location;
 		}
+        
+        /**
+         * Indicates whether some other object is "equal to" this one.
+         * 
+         * @param location - the reference object with which to compare.
+         * @return true if this object is the same as the obj argument; false otherwise.
+         */
+        equals(location: Location) {
+            if ((location == null) || ((location instanceof Location) === false)) {
+                return false;
+            }
+            
+            return location.getType()      === this.type
+                && location.getId()        === this.id 
+                && location.getName()      === this.name
+                && location.getLatitude()  === this.latitude
+                && location.getLongitude() === this.longitude
+                && location.getZip()       === this.zip
+                && location.getCountry()   === this.country;
+        }
         
         /**
          * Returns a location type for this instance.

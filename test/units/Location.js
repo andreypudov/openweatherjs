@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2016 The OpenWeatherJS Project
+ * Copyright (C) 2016 The OpenWeatherJS Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -99,4 +99,9 @@ QUnit.test('Location', function(assert) {
 		'Location country type exception.');
     assert.strictEqual(OpenWeatherJS.Location.getByZip('428000', 'RU').getType(), 
         OpenWeatherJS.LocationType.ZIP, 'Location type is ZIP.');
+        
+    /* equals */
+    var location = OpenWeatherJS.Location.getById(6198442);
+    assert.ok(OpenWeatherJS.Location.getById(6198442).equals(location), 'Location equal to template location.');
+    assert.ok(OpenWeatherJS.Location.getByName('Cheboksary').equals(location) === false, 'Location is not equal to template location.');
 });

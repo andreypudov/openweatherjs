@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2016 The OpenWeatherJS Project
+ * Copyright (C) 2016 The OpenWeatherJS Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -97,6 +97,8 @@ module OpenWeatherJS {
         static isUrl(value: string, message: string): void {
             var URLValidationRegExp = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
             var matcher = URLValidationRegExp;
+            
+            Asserts.isString(value, message);
 
             var match = value.match(matcher);
             if (!match) {
@@ -119,7 +121,7 @@ module OpenWeatherJS {
                     throw new TypeError(message);
                 }
             } catch (e) {
-                throw new Error(message);
+                throw new TypeError(message);
             }
         }
         
@@ -131,8 +133,8 @@ module OpenWeatherJS {
          * @param type    - a type to compare.
          * @param message - a short description of the assertion.
          */
-        static isTypeOf(value: any, type: any, message: string): void {
-            if ((value instanceof type) === false) {
+        static isInstanceofOf(value: any, type: any, message: string): void {            
+            if ((value == null) || ((value instanceof type) === false)) {
                 throw new TypeError(message);
             }
         }
