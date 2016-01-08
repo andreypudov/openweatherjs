@@ -1,20 +1,20 @@
 {
-	"compilerOptions": {
-		"target":             "es3",
-		"module":             "amd",
-		"noImplicitAny":      true,
-		"removeComments":     true,
-		"preserveConstEnums": true,
-		"outFile":            "build/OpenWeatherJS.js",
-		"sourceMap":          true
+    "compilerOptions": {
+        "target":             "es3",
+        "module":             "amd",
+        "noImplicitAny":      true,
+        "removeComments":     true,
+        "preserveConstEnums": true,
+        "outFile":            "build/OpenWeatherJS.js",
+        "sourceMap":          true
 	},
-	"files": [
-		"src/Asserts.ts",
+    "files": [
+        "src/Asserts.ts",
         "src/CurrentWeather.ts",
-		"src/Location.ts",
-		"src/LocationType.ts",
-		"src/JSONParser.ts",
-		"src/OpenWeatherJS.ts",
+        "src/Location.ts",
+        "src/LocationType.ts",
+        "src/JSONParser.ts",
+        "src/OpenWeatherJS.ts",
         "src/WeatherCondition.ts",
         "src/WeatherEntry.ts"]
 }
