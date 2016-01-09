@@ -29,4 +29,5 @@
 module OpenWeatherJS {
     /* TODO set language */
     /* TODO set units */
+    /* TODO set API key */
 }

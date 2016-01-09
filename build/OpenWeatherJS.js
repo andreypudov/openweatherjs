@@ -60,40 +60,40 @@ var OpenWeatherJS;
     var CurrentWeather = (function () {
         function CurrentWeather() {
         }
-        CurrentWeather.getWeather = function (location) {
+        CurrentWeather.getWeather = function (location, success, error) {
             OpenWeatherJS.Asserts.isInstanceofOf(location, OpenWeatherJS.Location, 'Location type is invalid.');
-            var entry = new OpenWeatherJS.WeatherEntry();
+            var parser = new OpenWeatherJS.JSONParser();
             var url;
             switch (location.getType()) {
                 case OpenWeatherJS.LocationType.ID:
-                    url = 'api.openweathermap.org/data/2.5/weather?id=' + location.getId();
+                    url = 'http://api.openweathermap.org/data/2.5/weather?id=' + location.getId();
                     break;
                 case OpenWeatherJS.LocationType.NAME:
                     var country = location.getCountry();
-                    url = 'api.openweathermap.org/data/2.5/weather?q=' + location.getName()
+                    url = 'http://api.openweathermap.org/data/2.5/weather?q=' + location.getName()
                         + (country !== undefined) ? ', ' + country : '';
                     break;
                 case OpenWeatherJS.LocationType.COORDINATES:
-                    url = 'api.openweathermap.org/data/2.5/weather?lat=' + location.getLatitude()
+                    url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + location.getLatitude()
                         + '&lon=' + location.getLongitude();
                     break;
                 case OpenWeatherJS.LocationType.ZIP:
-                    url = 'api.openweathermap.org/data/2.5/weather?zip=' + location.getZip()
+                    url = 'http://api.openweathermap.org/data/2.5/weather?zip=' + location.getZip()
                         + ', ' + location.getCountry();
                     break;
             }
-            OpenWeatherJS.JSONParser.parse(url, function (json) {
+            parser.parse(url, function (response, request) {
+                var entry = new OpenWeatherJS.WeatherEntry();
                 var location = new OpenWeatherJS.Location();
-                location.setId(json.id);
-                location.setName(json.name);
-                location.setLatitude(json.coord.lat);
-                location.setLatitude(json.coord.lon);
-                location.setZip(json.sys.country);
-                return entry;
+                location.setId(response.id);
+                location.setName(response.name);
+                location.setLatitude(response.coord.lat);
+                location.setLatitude(response.coord.lon);
+                location.setZip(response.sys.country);
+                success(entry, request);
+            }, function (request) {
+                error(request);
             });
-            throw new TypeError('message 2');
-            throw new Error('ddd');
-            return entry;
         };
         return CurrentWeather;
     })();
@@ -218,31 +218,59 @@ var OpenWeatherJS;
 (function (OpenWeatherJS) {
     var JSONParser = (function () {
         function JSONParser() {
-        }
-        JSONParser.parse = function (url, done) {
-            OpenWeatherJS.Asserts.isUrl(url, 'URL is invalid.');
-            var xmlHttp = new XMLHttpRequest();
-            xmlHttp.onreadystatechange = function () {
-                if (xmlHttp.readyState == 4) {
-                    try {
-                        if (xmlHttp.status == 200) {
-                            var obj = JSON.parse(xmlHttp.responseText);
-                            OpenWeatherJS.Asserts.isJSONString(JSON.stringify(obj), 'Retrieved JSON is invalid.');
-                            done(obj);
-                        }
-                    }
-                    catch (err) {
-                        throw new Error("Error connecting: " + err);
-                    }
+            this.REQUEST_NOT_INITIALIZED = 0;
+            this.SERVER_CONNECTION_ESTABLISHED = 1;
+            this.REQUEST_RECEIVED = 2;
+            this.PROCESSING_REQUEST = 3;
+            this.REQUEST_FINISHED_AND_RESPONSE_IS_READY = 4;
+            this.OK = 200;
+            this.PAGE_NOT_FOUND = 404;
+            try {
+                this.request = new ActiveXObject("Msxml2.XMLHTTP");
+            }
+            catch (e) {
+                try {
+                    this.request = new ActiveXObject("Microsoft.XMLHTTP");
                 }
+                catch (E) {
+                    this.request = null;
+                }
+            }
+            if ((this.request == null) && (typeof XMLHttpRequest != 'undefined')) {
+                this.request = new XMLHttpRequest();
+            }
+        }
+        JSONParser.prototype.parse = function (url, success, error) {
+            OpenWeatherJS.Asserts.isUrl(url, 'URL is invalid.');
+            if (success) {
+                this.onSuccess(success);
+            }
+            if (error) {
+                this.onError(error);
+            }
+            this.request.open('GET', url, true);
+            this.request.timeout = 2000;
+            this.request.ontimeout = function () {
+                this.request.abort();
+                throw new Error("Request timed out.");
             };
-            xmlHttp.open('GET', url, true);
-            xmlHttp.timeout = 2000;
-            xmlHttp.ontimeout = function () {
-                xmlHttp.abort();
-                throw new Error("Request Timed Out.");
-            };
-            xmlHttp.send();
+            this.request.send();
+        };
+        JSONParser.prototype.onSuccess = function (success) {
+            this.request.onreadystatechange = function () {
+                if ((this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY)
+                    && (this.request.status === this.OK)) {
+                    success(this.request.response, this.request);
+                }
+            }.bind(this);
+        };
+        JSONParser.prototype.onError = function (error) {
+            this.request.onreadystatechange = function () {
+                if ((this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY)
+                    && (this.request.status !== this.OK)) {
+                    error(this.request);
+                }
+            }.bind(this);
         };
         return JSONParser;
     })();

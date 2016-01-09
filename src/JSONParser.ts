@@ -28,43 +28,100 @@
 
  module OpenWeatherJS {
     export class JSONParser {
+        
+        public REQUEST_NOT_INITIALIZED                = 0;
+        public SERVER_CONNECTION_ESTABLISHED          = 1;
+        public REQUEST_RECEIVED                       = 2;
+        public PROCESSING_REQUEST                     = 3;
+        public REQUEST_FINISHED_AND_RESPONSE_IS_READY = 4;
+        
+        public OK             = 200;
+        public PAGE_NOT_FOUND = 404;
+        
+        private request: XMLHttpRequest;
+        
+        /**
+         * Constructs and initializes an instance on JSONParser.
+         */
+        constructor() {
+            try {
+                this.request = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    this.request = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (E) {
+                    this.request = null;
+                }
+            }
+            
+            if ((this.request == null) && (typeof XMLHttpRequest != 'undefined')) {
+                this.request = new XMLHttpRequest();
+            }
+        }
+        
         /**
         * Sends a XMLHttpRequest to the given url returning the JSON
         * response from the url. Throws a TypeError if a bad url is placed in parameters,
         * throws Error on connection timeout and on internet connection failure.
         *
-        * @param url   - URL to send request to.
-        * @param done  - Callback function letting you use the parsed object.
-        *
-        * @return Object - JSON Object.
+        * @param url     - URL to send request to.
+        * @param success - a function to be run when an AJAX request is successfully completed.
+        * @param error   - a function to be run when an AJAX request fails.
+        * @param request - a value contains the XMLHttpRequest object.
         */
-        static parse(url: string, done: (obj: any) => void): void {
+        public parse(url: string, success?: (response: any, request: XMLHttpRequest) => void, 
+                error?: (request: XMLHttpRequest) => void): void {
             Asserts.isUrl(url, 'URL is invalid.');
-            var xmlHttp = new XMLHttpRequest();
             
-            xmlHttp.onreadystatechange = function() {
-                if (xmlHttp.readyState == 4) {
-                    try {
-                        if (xmlHttp.status == 200) {
-                            var obj = JSON.parse(xmlHttp.responseText);
-                            
-                            Asserts.isJSONString(JSON.stringify(obj), 'Retrieved JSON is invalid.');
-                            done(obj);
-                        }
-                    } catch (err) {
-                        throw new Error("Error connecting: " + err);
-                    }
-                }
-            };
+            /* specifies a function to be run when an AJAX request is successfully completed */
+            if (success) {
+                this.onSuccess(success);
+            }
+            
+            /* specifies a function to be run when an AJAX request fails */
+            if (error) {
+                this.onError(error);
+            }
 
-            xmlHttp.open('GET', url, true);
-            xmlHttp.timeout   = 2000;
-            xmlHttp.ontimeout = function () {
-                xmlHttp.abort();
-                throw new Error("Request Timed Out.");
+            this.request.open('GET', url, true);
+            this.request.timeout   = 2000;
+            this.request.ontimeout = function() {
+                this.request.abort();
+                throw new Error("Request timed out.");
             };
             
-            xmlHttp.send();
+            this.request.send();
         }
+        
+        /**
+         * This method specifies a function to be run when an AJAX request is successfully completed.
+         * 
+         * @param success  - a function to be run when an AJAX request is successfully completed.
+         * @param response - a value contains the response from XMLHttpRequest object.
+         * @param request  - a value contains the XMLHttpRequest object.
+         */
+        onSuccess(success: (response: any, request: XMLHttpRequest) => void): void {
+            this.request.onreadystatechange = function() {
+                if ((this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY) 
+                        && (this.request.status === this.OK)) {
+                    success(this.request.response, this.request);
+                }
+            }.bind(this)
+        }
+
+        /**
+         * This method specifies a function to be run when an AJAX request fails.
+         * 
+         * @param error   - a function to be run when an AJAX request fails.
+         * @param request - a value contains the XMLHttpRequest object.
+         */
+        onError(error: (request: XMLHttpRequest) => void): void {
+            this.request.onreadystatechange = function() {
+                if ((this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY) 
+                        && (this.request.status !== this.OK)) {
+                    error(this.request);
+                }
+            }.bind(this)
+        }   
     }
  }

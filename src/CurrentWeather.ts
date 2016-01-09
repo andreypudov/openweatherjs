@@ -33,50 +33,52 @@ module OpenWeatherJS {
          * Throws a new Error in case of connection failure and inavlid data recived.  
          *
          * @param location - a location value.
-         * @return a current weather trport for a given location.
+         * @param success  - a function to be run when an AJAX request is successfully completed.
+         * @param error    - a function to be run when an AJAX request fails.
+         * @param entry    - a current weather report for a given location
+         * @param request  - a value contains the XMLHttpRequest object.
          */
-        static getWeather(location: Location): WeatherEntry {
+        static getWeather(location: Location, success: (entry: WeatherEntry, request: XMLHttpRequest) => void, 
+                error: (request: XMLHttpRequest) => void): void {
             Asserts.isInstanceofOf(location, Location, 'Location type is invalid.');
             
-            var entry = new WeatherEntry();
+            var parser = new JSONParser();
             var url: string;
             
             /* generate an URL for API call */
             switch (location.getType()) {
             case LocationType.ID:
-                url = 'api.openweathermap.org/data/2.5/weather?id=' + location.getId();
+                url = 'http://api.openweathermap.org/data/2.5/weather?id=' + location.getId();
                 break;
             case LocationType.NAME:
                 var country = location.getCountry();
-                url = 'api.openweathermap.org/data/2.5/weather?q=' + location.getName() 
+                url = 'http://api.openweathermap.org/data/2.5/weather?q=' + location.getName() 
                     + (country !== undefined) ? ', ' + country : '';
             break;
                 case LocationType.COORDINATES:
-                url = 'api.openweathermap.org/data/2.5/weather?lat=' + location.getLatitude() 
+                url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + location.getLatitude() 
                     + '&lon=' + location.getLongitude();
                 break;
             case LocationType.ZIP:
-                url = 'api.openweathermap.org/data/2.5/weather?zip=' + location.getZip()
+                url = 'http://api.openweathermap.org/data/2.5/weather?zip=' + location.getZip()
                     + ', ' + location.getCountry();
                 break;
             }
-            
-            JSONParser.parse(url, function(json) {
+
+            parser.parse(url, function(response: any, request: XMLHttpRequest) {
+                var entry    = new WeatherEntry();
                 var location = new Location();
                 
-                location.setId(json.id);
-                location.setName(json.name)
-                location.setLatitude(json.coord.lat);
-                location.setLatitude(json.coord.lon);
-                location.setZip(json.sys.country);
+                location.setId(response.id);
+                location.setName(response.name)
+                location.setLatitude(response.coord.lat);
+                location.setLatitude(response.coord.lon);
+                location.setZip(response.sys.country);
                 
-                return entry;
+                success(entry, request);
+            }, function(request: XMLHttpRequest) {
+                error(request);
             });
-            
-            throw new TypeError('message 2');
-            throw new Error('ddd');
-            
-            return entry;
         }
     }
 }

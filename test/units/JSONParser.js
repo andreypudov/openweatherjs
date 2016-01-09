@@ -27,26 +27,35 @@
  */
 
 QUnit.test('JSONParser', function(assert) {
-    var url  = 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=2de143494c0b295cca9337e1e96b00e0';
-    var base = 'cmc stations';
-    var cityName    = 'London';
-    var countryName = 'GB';
+    var url     = 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=2de143494c0b295cca9337e1e96b00e0';
+    var base    = 'cmc stations';
+    var city    = 'London';
+    var country = 'GB';
 
     var done = assert.async();
 
     setTimeout(function() {
         assert.ok(true, 'Asynchronous UnitTest.');
+        
+        var parser = new OpenWeatherJS.JSONParser();
 
-        OpenWeatherJS.JSONParser.parse(url, function(json) {
-            assert.strictEqual(json.name, cityName, 'The city name is London');
-            assert.strictEqual(json.sys.country, countryName, 'The city name is GB');
+        /*parser.parse(url, function(json) {
+            assert.strictEqual(json.name, city, 'The city name is London');
+            assert.strictEqual(json.sys.country, country, 'The city name is GB');
             assert.strictEqual(json.base, base, 'The base is stations');
 
             assert.throws(function() {
                     OpenWeatherJS.JSONParser.parse('example')
                 },  new TypeError('URL is invalid.'),
                 'URL is invalid.');
-        });
+        });*/
+        
+        /*parser.parse(url, function(response, request) {
+            //assert.strictEqual(response.name, city, 'The city name is London');
+            //assert.strictEqual(response.sys.country, country, 'The city name is GB');
+            //assert.strictEqual(response.base, base, 'The base is stations');
+        }, function(request) {});*/
+        
         done();
     }, 250);
 });

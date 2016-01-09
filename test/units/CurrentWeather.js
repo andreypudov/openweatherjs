@@ -28,7 +28,16 @@
 
 QUnit.test('CurrentWeather', function(assert) {
     var location = OpenWeatherJS.Location.getById(6198442);
-	var report   = OpenWeatherJS.CurrentWeather.getWeather(location);
+    var done = assert.async();
     
-	assert.strictEqual(report.getLocation().getId(), 6198442, 'Location id is 6198442.');
+	var report   = OpenWeatherJS.CurrentWeather.getWeather(location, 
+        function(entry, request) {
+            assert.strictEqual(report.getLocation().getId(), 6198442, 'Location id is 6198442.');
+            
+            done();
+        }.bind(this), 
+        function(request) {
+            assert.strictEqual(6198442, 6198442, 'Location id is 6198442.');
+            done();
+        }.bind(this));
 });
