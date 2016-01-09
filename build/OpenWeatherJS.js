@@ -199,4 +199,27 @@ var OpenWeatherJS;
     })();
     OpenWeatherJS.JSONParser = JSONParser;
 })(OpenWeatherJS || (OpenWeatherJS = {}));
+var OpenWeatherJS;
+(function (OpenWeatherJS) {
+    var Forecast = (function () {
+        function Forecast() {
+        }
+        Forecast.getHourlyForecast = function (location) {
+            OpenWeatherJS.Asserts.isInstanceofOf(location, OpenWeatherJS.Location, 'Location type is invalid.');
+            var url;
+            switch (location.getType()) {
+                case OpenWeatherJS.LocationType.NAME:
+                    url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
+                    console.log(url);
+                    break;
+            }
+            OpenWeatherJS.JSONParser.Parse(url, function (json) {
+                console.log(json);
+            });
+            console.log('Forecast');
+        };
+        return Forecast;
+    })();
+    OpenWeatherJS.Forecast = Forecast;
+})(OpenWeatherJS || (OpenWeatherJS = {}));
 //# sourceMappingURL=OpenWeatherJS.js.map

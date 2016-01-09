@@ -42,13 +42,37 @@ module OpenWeatherJS {
             var url: string;
 
             switch (location.getType()) {
-                case LocationType.ID:
+                /*case LocationType.ID:
                     url = 'Id';
-                    break;
+                    console.log(url);
+                    break;*/
                 case LocationType.NAME:
-                    url = 'Name';
+                    url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
+                    console.log(url);
                     break;
+                /*case LocationType.COORDINATES:
+                    url = 'Cords';
+                    break;
+                case LocationType.ZIP:
+                    url = 'Zip';
+                    break;*/
             }
+
+            JSONParser.Parse(url, function(json) {
+                /*var location = new Location();
+
+                location.setId(json.id);
+                location.setName(json.name)
+                location.setLatitude(json.coord.lat);
+                location.setLatitude(json.coord.lon);
+                location.setZip(json.sys.country);
+                */
+                console.log(json);
+
+                //Here return an array for each count of result we got.
+            });
+
+            console.log('Forecast');
         }
     }
 }
