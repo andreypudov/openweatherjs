@@ -38,11 +38,16 @@ var OpenWeatherJS;
             try {
                 var o = JSON.parse(value);
                 if ((typeof o !== 'object') || (o == null)) {
-                    throw new Error(message);
+                    throw new TypeError(message);
                 }
             }
             catch (e) {
                 throw new Error(message);
+            }
+        };
+        Asserts.isInstanceofOf = function (value, type, message) {
+            if ((value == null) || ((value instanceof type) === false)) {
+                throw new TypeError(message);
             }
         };
         return Asserts;
@@ -85,6 +90,66 @@ var OpenWeatherJS;
             location.zip = zip;
             location.country = country;
             return location;
+        };
+        Location.prototype.equals = function (location) {
+            if ((location == null) || ((location instanceof Location) === false)) {
+                return false;
+            }
+            return location.getType() === this.type
+                && location.getId() === this.id
+                && location.getName() === this.name
+                && location.getLatitude() === this.latitude
+                && location.getLongitude() === this.longitude
+                && location.getZip() === this.zip
+                && location.getCountry() === this.country;
+        };
+        Location.prototype.getType = function () {
+            return this.type;
+        };
+        Location.prototype.getId = function () {
+            return this.id;
+        };
+        Location.prototype.getName = function () {
+            return this.name;
+        };
+        Location.prototype.getLatitude = function () {
+            return this.latitude;
+        };
+        Location.prototype.getLongitude = function () {
+            return this.longitude;
+        };
+        Location.prototype.getZip = function () {
+            return this.zip;
+        };
+        Location.prototype.getCountry = function () {
+            return this.country;
+        };
+        Location.prototype.setType = function (type) {
+            this.type = type;
+        };
+        Location.prototype.setId = function (id) {
+            OpenWeatherJS.Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999.');
+            this.id = id;
+        };
+        Location.prototype.setName = function (name) {
+            OpenWeatherJS.Asserts.isString(name, 'Location name is invalid.');
+            this.name = name;
+        };
+        Location.prototype.setLatitude = function (latitude) {
+            OpenWeatherJS.Asserts.isNumber(latitude, 'Location latitude is invalid.');
+            this.latitude = latitude;
+        };
+        Location.prototype.setLongitude = function (longitude) {
+            OpenWeatherJS.Asserts.isNumber(longitude, 'Location longitude is invalid.');
+            this.longitude = longitude;
+        };
+        Location.prototype.setZip = function (zip) {
+            OpenWeatherJS.Asserts.isString(zip, 'Location zip is invalid.');
+            this.zip = zip;
+        };
+        Location.prototype.setCountry = function (country) {
+            OpenWeatherJS.Asserts.isString(country, 'Location country is invalid.');
+            this.country = country;
         };
         return Location;
     })();

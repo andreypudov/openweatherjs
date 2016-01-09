@@ -111,5 +111,129 @@ module OpenWeatherJS {
 
 			return location;
 		}
+
+		/**
+         * Indicates whether some other object is "equal to" this one.
+         * 
+         * @param location - the reference object with which to compare.
+         * @return true if this object is the same as the obj argument; false otherwise.
+         */
+        equals(location: Location) {
+            if ((location == null) || ((location instanceof Location) === false)) {
+                return false;
+            }
+
+            return location.getType() === this.type
+                && location.getId() === this.id
+                && location.getName() === this.name
+                && location.getLatitude() === this.latitude
+                && location.getLongitude() === this.longitude
+                && location.getZip() === this.zip
+                && location.getCountry() === this.country;
+        }
+        
+        /**
+         * Returns a location type for this instance.
+         * 
+         * @return a location type for this instance.
+         */
+        getType(): LocationType {
+            return this.type;
+        }
+
+        /**
+         * Returns a location id for this instance.
+         * 
+         * @return a location id for this instance.
+         */
+        getId(): number {
+            return this.id;
+        }
+        
+        /**
+         * Returns a location name for this instance.
+         * 
+         * @return a location name for this instance.
+         */
+        getName(): string {
+            return this.name;
+        }
+        
+        /**
+         * Returns a location latitude for this instance.
+         * 
+         * @return a location latitude for this instance.
+         */
+        getLatitude(): number {
+            return this.latitude;
+        }
+        
+        /**
+         * Returns a location longitude for this instance.
+         * 
+         * @return a location longitude for this instance.
+         */
+        getLongitude(): number {
+            return this.longitude;
+        }
+        
+        /**
+         * Returns a location zip for this instance.
+         * 
+         * @return a location zip for this instance.
+         */
+        getZip(): string {
+            return this.zip;
+        }
+        
+        /**
+         * Returns a location country for this instance.
+         * 
+         * @return a location country for this instance.
+         */
+        getCountry(): string {
+            return this.country
+        }
+
+        setType(type: LocationType): void {
+
+            this.type = type;
+        }
+
+        setId(id: number): void {
+            Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999.');
+
+            this.id = id;
+        }
+
+        setName(name: string): void {
+            Asserts.isString(name, 'Location name is invalid.');
+
+            this.name = name;
+        }
+
+        setLatitude(latitude: number): void {
+            Asserts.isNumber(latitude, 'Location latitude is invalid.');
+
+            this.latitude = latitude;
+        }
+
+        setLongitude(longitude: number): void {
+            Asserts.isNumber(longitude, 'Location longitude is invalid.');
+
+            this.longitude = longitude;
+        }
+
+        setZip(zip: string): void {
+            Asserts.isString(zip, 'Location zip is invalid.');
+
+            this.zip = zip;
+        }
+
+        setCountry(country: string): void {
+            Asserts.isString(country, 'Location country is invalid.');
+
+            this.country = country;
+        }
 	}
 }

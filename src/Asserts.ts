@@ -122,5 +122,19 @@ module OpenWeatherJS {
                 throw new Error(message);
             }
         }
+
+        /**
+         * Validates provided value is instance of specified type, 
+         * and throws a new TypeError exception otherwise.
+         *
+         * @param value   - a value being tested.
+         * @param type    - a type to compare.
+         * @param message - a short description of the assertion.
+         */
+        static isInstanceofOf(value: any, type: any, message: string): void {
+            if ((value == null) || ((value instanceof type) === false)) {
+                throw new TypeError(message);
+            }
+        }
     }
 }
