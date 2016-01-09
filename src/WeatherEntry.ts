@@ -48,7 +48,27 @@ module OpenWeatherJS {
         private rainVolume:  number;           /* rain volume for the last 3 hours */
         private snowVolume:  number;           /* snow volume for the last 3 hours */
         
-        private location:    Location;         /* city id, name and coordinates */
+        private location:    Location;         /* city id, name, country code and coordinates */
         private time:        number;           /* time of data calculation, unix, UTC */
+        
+        /**
+         * Return city location including id, name, country code and coordinates.
+         * 
+         * @return city location including id, name, country code and coordinates.
+         */
+        public getLocation(): Location {
+            return this.location;
+        }
+        
+        /**
+         * Sets city location including id, name, country code and coordinates.
+         * 
+         * @param location - city location including id, name, country code and coordinates.
+         */
+        public setLocation(location: Location): void {
+            Asserts.isInstanceofOf(location, Location, 'Location value is invalid.');
+            
+            this.location = location;
+        }
     }
 }

@@ -61,8 +61,9 @@
         
         /**
         * Sends a XMLHttpRequest to the given url returning the JSON
-        * response from the url. Throws a TypeError if a bad url is placed in parameters,
-        * throws Error on connection timeout and on internet connection failure.
+        * response from the url. Throws a TypeError if a bad url is placed in parameters, 
+        * or invalid JSON is received from API provider. Throws Error on connection timeout 
+        * and on internet connection failure.
         *
         * @param url     - URL to send request to.
         * @param success - a function to be run when an AJAX request is successfully completed.
@@ -73,15 +74,17 @@
                 error?: (request: XMLHttpRequest) => void): void {
             Asserts.isUrl(url, 'URL is invalid.');
             
-            /* specifies a function to be run when an AJAX request is successfully completed */
-            if (success) {
-                this.onSuccess(success);
-            }
-            
-            /* specifies a function to be run when an AJAX request fails */
-            if (error) {
-                this.onError(error);
-            }
+            /* specifies a function to be run when an AJAX request is successfully completed or fails */
+            this.request.onreadystatechange = function() {
+                if (this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY) {
+                    if (this.request.status === this.OK) {
+                        Asserts.isJSON(this.request.responseText, 'JSON data is invalid.');
+                        success(JSON.parse(this.request.responseText), this.request);
+                    } else {
+                        error(this.request);
+                    }
+                }
+            }.bind(this)
 
             this.request.open('GET', url, true);
             this.request.timeout   = 2000;
@@ -91,37 +94,6 @@
             };
             
             this.request.send();
-        }
-        
-        /**
-         * This method specifies a function to be run when an AJAX request is successfully completed.
-         * 
-         * @param success  - a function to be run when an AJAX request is successfully completed.
-         * @param response - a value contains the response from XMLHttpRequest object.
-         * @param request  - a value contains the XMLHttpRequest object.
-         */
-        onSuccess(success: (response: any, request: XMLHttpRequest) => void): void {
-            this.request.onreadystatechange = function() {
-                if ((this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY) 
-                        && (this.request.status === this.OK)) {
-                    success(this.request.response, this.request);
-                }
-            }.bind(this)
-        }
-
-        /**
-         * This method specifies a function to be run when an AJAX request fails.
-         * 
-         * @param error   - a function to be run when an AJAX request fails.
-         * @param request - a value contains the XMLHttpRequest object.
-         */
-        onError(error: (request: XMLHttpRequest) => void): void {
-            this.request.onreadystatechange = function() {
-                if ((this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY) 
-                        && (this.request.status !== this.OK)) {
-                    error(this.request);
-                }
-            }.bind(this)
-        }   
+        } 
     }
  }

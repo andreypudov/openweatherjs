@@ -5,25 +5,25 @@ var OpenWeatherJS;
         }
         Asserts.isExists = function (value, message) {
             if (value == null) {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         };
         Asserts.isInRange = function (value, minimum, maximum, message) {
             if (typeof value !== 'number') {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@1', minimum.toString()).replace('@2', maximum.toString()).replace('@', value));
             }
             if ((value < minimum) || (value > maximum)) {
-                throw new RangeError(message);
+                throw new RangeError(message.replace('@1', minimum.toString()).replace('@2', maximum.toString()).replace('@', value));
             }
         };
         Asserts.isNumber = function (value, message) {
             if (typeof value !== 'number') {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         };
         Asserts.isString = function (value, message) {
             if (typeof value !== 'string') {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         };
         Asserts.isUrl = function (value, message) {
@@ -32,23 +32,23 @@ var OpenWeatherJS;
             Asserts.isString(value, message);
             var match = value.match(matcher);
             if (!match) {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         };
-        Asserts.isJSONString = function (value, message) {
+        Asserts.isJSON = function (value, message) {
             try {
                 var o = JSON.parse(value);
                 if ((typeof o !== 'object') || (o == null)) {
-                    throw new TypeError(message);
+                    throw new TypeError(message.replace('@', value));
                 }
             }
             catch (e) {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         };
         Asserts.isInstanceofOf = function (value, type, message) {
             if ((value == null) || ((value instanceof type) === false)) {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         };
         return Asserts;
@@ -63,6 +63,7 @@ var OpenWeatherJS;
         CurrentWeather.getWeather = function (location, success, error) {
             OpenWeatherJS.Asserts.isInstanceofOf(location, OpenWeatherJS.Location, 'Location type is invalid.');
             var parser = new OpenWeatherJS.JSONParser();
+            var options = OpenWeatherJS.Options.getInstance();
             var url;
             switch (location.getType()) {
                 case OpenWeatherJS.LocationType.ID:
@@ -82,14 +83,16 @@ var OpenWeatherJS;
                         + ', ' + location.getCountry();
                     break;
             }
+            url = url + '&appid=' + options.getKey();
             parser.parse(url, function (response, request) {
                 var entry = new OpenWeatherJS.WeatherEntry();
                 var location = new OpenWeatherJS.Location();
                 location.setId(response.id);
                 location.setName(response.name);
                 location.setLatitude(response.coord.lat);
-                location.setLatitude(response.coord.lon);
-                location.setZip(response.sys.country);
+                location.setLongitude(response.coord.lon);
+                location.setCountry(response.sys.country);
+                entry.setLocation(location);
                 success(entry, request);
             }, function (request) {
                 error(request);
@@ -177,7 +180,7 @@ var OpenWeatherJS;
             this.type = type;
         };
         Location.prototype.setId = function (id) {
-            OpenWeatherJS.Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999.');
+            OpenWeatherJS.Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999. [' + id + ']');
             this.id = id;
         };
         Location.prototype.setName = function (name) {
@@ -242,12 +245,17 @@ var OpenWeatherJS;
         }
         JSONParser.prototype.parse = function (url, success, error) {
             OpenWeatherJS.Asserts.isUrl(url, 'URL is invalid.');
-            if (success) {
-                this.onSuccess(success);
-            }
-            if (error) {
-                this.onError(error);
-            }
+            this.request.onreadystatechange = function () {
+                if (this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY) {
+                    if (this.request.status === this.OK) {
+                        OpenWeatherJS.Asserts.isJSON(this.request.responseText, 'JSON data is invalid.');
+                        success(JSON.parse(this.request.responseText), this.request);
+                    }
+                    else {
+                        error(this.request);
+                    }
+                }
+            }.bind(this);
             this.request.open('GET', url, true);
             this.request.timeout = 2000;
             this.request.ontimeout = function () {
@@ -256,25 +264,35 @@ var OpenWeatherJS;
             };
             this.request.send();
         };
-        JSONParser.prototype.onSuccess = function (success) {
-            this.request.onreadystatechange = function () {
-                if ((this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY)
-                    && (this.request.status === this.OK)) {
-                    success(this.request.response, this.request);
-                }
-            }.bind(this);
-        };
-        JSONParser.prototype.onError = function (error) {
-            this.request.onreadystatechange = function () {
-                if ((this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY)
-                    && (this.request.status !== this.OK)) {
-                    error(this.request);
-                }
-            }.bind(this);
-        };
         return JSONParser;
     })();
     OpenWeatherJS.JSONParser = JSONParser;
+})(OpenWeatherJS || (OpenWeatherJS = {}));
+var OpenWeatherJS;
+(function (OpenWeatherJS) {
+    var Options = (function () {
+        function Options(optionsEnforcer) {
+            if (optionsEnforcer !== OptionsEnforcer) {
+                throw new Error("Error: Instantiation failed: Use Options.getInstance() instead of new.");
+            }
+        }
+        Options.getInstance = function () {
+            if (Options.instance == null) {
+                Options.instance = new Options(OptionsEnforcer);
+            }
+            return Options.instance;
+        };
+        Options.prototype.getKey = function () {
+            return this.key;
+        };
+        Options.prototype.setKey = function (key) {
+            OpenWeatherJS.Asserts.isString(key, 'API key is invalid.');
+            this.key = key;
+        };
+        return Options;
+    })();
+    OpenWeatherJS.Options = Options;
+    function OptionsEnforcer() { }
 })(OpenWeatherJS || (OpenWeatherJS = {}));
 var OpenWeatherJS;
 (function (OpenWeatherJS) {
@@ -361,6 +379,13 @@ var OpenWeatherJS;
     var WeatherEntry = (function () {
         function WeatherEntry() {
         }
+        WeatherEntry.prototype.getLocation = function () {
+            return this.location;
+        };
+        WeatherEntry.prototype.setLocation = function (location) {
+            OpenWeatherJS.Asserts.isInstanceofOf(location, OpenWeatherJS.Location, 'Location value is invalid.');
+            this.location = location;
+        };
         return WeatherEntry;
     })();
     OpenWeatherJS.WeatherEntry = WeatherEntry;

@@ -42,7 +42,8 @@ module OpenWeatherJS {
                 error: (request: XMLHttpRequest) => void): void {
             Asserts.isInstanceofOf(location, Location, 'Location type is invalid.');
             
-            var parser = new JSONParser();
+            var parser  = new JSONParser();
+            var options = Options.getInstance();
             var url: string;
             
             /* generate an URL for API call */
@@ -64,6 +65,9 @@ module OpenWeatherJS {
                     + ', ' + location.getCountry();
                 break;
             }
+            
+            /* append API key to url */
+            url = url + '&appid=' + options.getKey();
 
             parser.parse(url, function(response: any, request: XMLHttpRequest) {
                 var entry    = new WeatherEntry();
@@ -72,8 +76,10 @@ module OpenWeatherJS {
                 location.setId(response.id);
                 location.setName(response.name)
                 location.setLatitude(response.coord.lat);
-                location.setLatitude(response.coord.lon);
-                location.setZip(response.sys.country);
+                location.setLongitude(response.coord.lon);
+                location.setCountry(response.sys.country);
+                
+                entry.setLocation(location);
                 
                 success(entry, request);
             }, function(request: XMLHttpRequest) {

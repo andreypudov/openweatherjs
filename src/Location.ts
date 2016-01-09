@@ -207,7 +207,7 @@ module OpenWeatherJS {
         }
         
         setId(id: number): void {
-            Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999.');
+            Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999. [' + id + ']');
             
             this.id = id;
         }

@@ -37,7 +37,7 @@ module OpenWeatherJS {
          */
         static isExists(value: any, message: string): void {
             if (value == null) {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         }
 
@@ -53,11 +53,15 @@ module OpenWeatherJS {
          */
         static isInRange(value: any, minimum: number, maximum: number, message: string): void {
             if (typeof value !== 'number') {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@1', minimum.toString()
+                    ).replace('@2', maximum.toString()
+                    ).replace('@', value));
             }
 
             if ((value < minimum) || (value > maximum)) {
-                throw new RangeError(message);
+                throw new RangeError(message.replace('@1', minimum.toString()
+                    ).replace('@2', maximum.toString()
+                    ).replace('@', value));
             }
         }
 
@@ -70,7 +74,7 @@ module OpenWeatherJS {
          */
         static isNumber(value: any, message: string): void {
             if (typeof value !== 'number') {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         }
 
@@ -83,7 +87,7 @@ module OpenWeatherJS {
          */
         static isString(value: any, message: string): void {
             if (typeof value !== 'string') {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         }
 
@@ -102,7 +106,7 @@ module OpenWeatherJS {
 
             var match = value.match(matcher);
             if (!match) {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         }
 
@@ -113,15 +117,15 @@ module OpenWeatherJS {
          * @param value   - a value being tested.
          * @param message - a short description of the assertion.
          */
-        static isJSONString(value: string, message: string): void {
+        static isJSON(value: string, message: string): void {
             try {
                 var o = JSON.parse(value);
                 
                 if ((typeof o !== 'object') || (o == null)) {
-                    throw new TypeError(message);
+                    throw new TypeError(message.replace('@', value));
                 }
             } catch (e) {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         }
         
@@ -135,7 +139,7 @@ module OpenWeatherJS {
          */
         static isInstanceofOf(value: any, type: any, message: string): void {            
             if ((value == null) || ((value instanceof type) === false)) {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         }
     }
