@@ -35,11 +35,13 @@ module OpenWeatherJS {
          * @param location - a location value.
          * @return a current weather report for a given location.
          */
-        static getHourlyForecast(location: Location): void {
+        static getHourlyForecast(location: Location, success: (entry: string, request: XMLHttpRequest) => void,
+                error: (request: XMLHttpRequest) => void): void {
             Asserts.isInstanceofOf(location, Location, 'Location type is invalid.');
 
             //var entry = new WeatherEntry();
             var url: string;
+            var parser = new JSONParser();
 
             switch (location.getType()) {
                 /*case LocationType.ID:
@@ -58,7 +60,18 @@ module OpenWeatherJS {
                     break;*/
             }
 
-            JSONParser.Parse(url, function(json) {
+            parser.parse(url, function(response: any, request: XMLHttpRequest) {
+                //var entry = new WeatherEntry;
+                var location = new Location();
+
+                console.log(response);
+
+                success(response.name, request);
+            }, function(request: XMLHttpRequest) {
+                error(request);
+            });
+
+            /*JSONParser.Parse(url, function(json) {
                 /*var location = new Location();
 
                 location.setId(json.id);
@@ -67,10 +80,10 @@ module OpenWeatherJS {
                 location.setLatitude(json.coord.lon);
                 location.setZip(json.sys.country);
                 */
-                console.log(json);
+              /*  console.log(json);
 
                 //Here return an array for each count of result we got.
-            });
+            });*/
 
             console.log('Forecast');
         }

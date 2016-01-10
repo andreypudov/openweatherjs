@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2016 The OpenWeatherJS Project
+ * Copyright (C) 2016 The OpenWeatherJS Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,10 +30,17 @@ QUnit.test('Forecast', function(assert) {
     var location = new OpenWeatherJS.Location.getByName('London,uk');
     //location.setId(123);
     //location.setName('Alibaba');
-
+    var done = assert.async();
     console.log(location.getName());
 
-    new OpenWeatherJS.Forecast.getHourlyForecast(location);
+    var report = new OpenWeatherJS.Forecast.getHourlyForecast(location, function(entry, request) {
+        assert.ok(true, 'API Call is success.');
 
-    assert.equal(1, 1, 'Equal');
+        done();
+    }.bind(this), 
+    function(request) {
+        assert.notOk(true, 'API Call has failed.');
+
+        done();
+    }.bind(this));
 });

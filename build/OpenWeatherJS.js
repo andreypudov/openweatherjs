@@ -34,15 +34,15 @@ var OpenWeatherJS;
                 throw new TypeError(message);
             }
         };
-        Asserts.isJSONString = function (value, message) {
+        Asserts.isJSON = function (value, message) {
             try {
                 var o = JSON.parse(value);
                 if ((typeof o !== 'object') || (o == null)) {
-                    throw new TypeError(message);
+                    throw new TypeError(message.replace('@', value));
                 }
             }
             catch (e) {
-                throw new Error(message);
+                throw new TypeError(message.replace('@', value));
             }
         };
         Asserts.isInstanceofOf = function (value, type, message) {
@@ -169,31 +169,48 @@ var OpenWeatherJS;
 (function (OpenWeatherJS) {
     var JSONParser = (function () {
         function JSONParser() {
+            this.REQUEST_NOT_INITIALIZED = 0;
+            this.SERVER_CONNECTION_ESTABLISHED = 1;
+            this.REQUEST_RECEIVED = 2;
+            this.PROCESSING_REQUEST = 3;
+            this.REQUEST_FINISHED_AND_RESPONSE_IS_READY = 4;
+            this.OK = 200;
+            this.PAGE_NOT_FOUND = 404;
+            try {
+                this.request = new ActiveXObject("Msxml2.XMLHTTP");
+            }
+            catch (e) {
+                try {
+                    this.request = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                catch (E) {
+                    this.request = null;
+                }
+            }
+            if ((this.request == null) && (typeof XMLHttpRequest != 'undefined')) {
+                this.request = new XMLHttpRequest();
+            }
         }
-        JSONParser.Parse = function (url, done) {
+        JSONParser.prototype.parse = function (url, success, error) {
             OpenWeatherJS.Asserts.isUrl(url, 'URL is invalid.');
-            var xmlHttp = new XMLHttpRequest();
-            xmlHttp.onreadystatechange = function () {
-                if (xmlHttp.readyState == 4) {
-                    try {
-                        if (xmlHttp.status == 200) {
-                            var obj = JSON.parse(xmlHttp.responseText);
-                            OpenWeatherJS.Asserts.isJSONString(JSON.stringify(obj), 'Retrieved JSON is invalid.');
-                            done(obj);
-                        }
+            this.request.onreadystatechange = function () {
+                if (this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY) {
+                    if (this.request.status === this.OK) {
+                        OpenWeatherJS.Asserts.isJSON(this.request.responseText, 'JSON data is invalid.');
+                        success(JSON.parse(this.request.responseText), this.request);
                     }
-                    catch (err) {
-                        throw new Error("Error connecting: " + err);
+                    else {
+                        error(this.request);
                     }
                 }
+            }.bind(this);
+            this.request.open('GET', url, true);
+            this.request.timeout = 2000;
+            this.request.ontimeout = function () {
+                this.request.abort();
+                throw new Error("Request timed out.");
             };
-            xmlHttp.open('GET', url, true);
-            xmlHttp.timeout = 2000;
-            xmlHttp.ontimeout = function () {
-                xmlHttp.abort();
-                throw new Error("Request Timed Out.");
-            };
-            xmlHttp.send();
+            this.request.send();
         };
         return JSONParser;
     })();
@@ -204,17 +221,22 @@ var OpenWeatherJS;
     var Forecast = (function () {
         function Forecast() {
         }
-        Forecast.getHourlyForecast = function (location) {
+        Forecast.getHourlyForecast = function (location, success, error) {
             OpenWeatherJS.Asserts.isInstanceofOf(location, OpenWeatherJS.Location, 'Location type is invalid.');
             var url;
+            var parser = new OpenWeatherJS.JSONParser();
             switch (location.getType()) {
                 case OpenWeatherJS.LocationType.NAME:
                     url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
                     console.log(url);
                     break;
             }
-            OpenWeatherJS.JSONParser.Parse(url, function (json) {
-                console.log(json);
+            parser.parse(url, function (response, request) {
+                var location = new OpenWeatherJS.Location();
+                console.log(response);
+                success(response.name, request);
+            }, function (request) {
+                error(request);
             });
             console.log('Forecast');
         };
