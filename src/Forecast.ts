@@ -44,20 +44,17 @@ module OpenWeatherJS {
             var parser = new JSONParser();
 
             switch (location.getType()) {
-                /*case LocationType.ID:
-                    url = 'Id';
+                case LocationType.ID:
+                    url = 'http://api.openweathermap.org/data/2.5/forecast?id=' + location.getId() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
                     console.log(url);
-                    break;*/
+                    break;
                 case LocationType.NAME:
                     url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
                     console.log(url);
                     break;
-                /*case LocationType.COORDINATES:
-                    url = 'Cords';
+                case LocationType.COORDINATES:
+                    url = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + location.getLatitude() + '&lon=' + location.getLongitude();
                     break;
-                case LocationType.ZIP:
-                    url = 'Zip';
-                    break;*/
             }
 
             parser.parse(url, function(response: any, request: XMLHttpRequest) {
@@ -66,24 +63,10 @@ module OpenWeatherJS {
 
                 console.log(response);
 
-                success(response.name, request);
+                success(response, request);
             }, function(request: XMLHttpRequest) {
                 error(request);
             });
-
-            /*JSONParser.Parse(url, function(json) {
-                /*var location = new Location();
-
-                location.setId(json.id);
-                location.setName(json.name)
-                location.setLatitude(json.coord.lat);
-                location.setLatitude(json.coord.lon);
-                location.setZip(json.sys.country);
-                */
-              /*  console.log(json);
-
-                //Here return an array for each count of result we got.
-            });*/
 
             console.log('Forecast');
         }

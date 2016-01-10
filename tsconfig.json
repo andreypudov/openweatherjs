@@ -14,5 +14,8 @@
 		"src/LocationType.ts",
 		"src/JSONParser.ts",
 		"src/Forecast.ts",
+		"src/WeatherCondition.ts",
+		"src/WeatherEntry.ts",
+		"src/WeatherReport.ts",
 		"src/OpenWeatherJS.ts"]
 }

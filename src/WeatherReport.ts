@@ -26,23 +26,29 @@
  * SOFTWARE.
  */
 
-QUnit.test('Forecast', function(assert) {
-    var location = new OpenWeatherJS.Location.getByName('London,uk');
-    var done = assert.async();
-    
-    console.log(location.getName());
+module OpenWeatherJS {
+    export class WeatherReport {
+        private entries: WeatherEntry[];
 
-    var report = new OpenWeatherJS.Forecast.getHourlyForecast(location, function(entry, request) {
-        assert.ok(true, 'API Call is success.');
+        /**
+         * Adds a new entry into the entries array of WeatherEntries.
+         * 
+         * @param location - A location object for the weather entry.
+         */
+        public addEntry(location: Location) {
+            var entry = new WeatherEntry();
 
-        assert.equal(entry.city.name, 'London', 'Forecast city is London.');
-        assert.equal(entry.city.country, 'GB', 'Forecast country is GB.');
+            entry.setLocation(location);
 
-        done();
-    }.bind(this), 
-    function(request) {
-        assert.notOk(true, 'API Call has failed.');
+        }
 
-        done();
-    }.bind(this));
-});
+        /**
+         * Returns an array of WeatherEntry used as a weather report.
+         * 
+         * @return entries - An array of WeatherEntries.
+         */
+        public getReport(): WeatherEntry[] {
+            return this.entries;
+        }
+    }
+}
