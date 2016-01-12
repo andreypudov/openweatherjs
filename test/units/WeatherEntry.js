@@ -33,14 +33,14 @@ QUnit.test('WeatherEntry', function(assert) {
 
     /* weather condition */
     weatherEntry.setWeatherCondition(condition);
-    assert.ok(true, 'Asserts method setWeatherCondition throws no error for valid value.');
+    assert.ok(true, 'setWeatherCondition method throws no error for valid value.');
     assert.throws(function() {
         weatherEntry.setWeatherCondition(9999)}, 
-        new TypeError('Weather condition value is invalid.'), 'Asserts method setWeatherCondition throws TypeError for invalid value.');
+        new TypeError('Weather condition value is invalid.'), 'setWeatherCondition method throws TypeError for invalid value.');
     assert.throws(function() {
         weatherEntry.setWeatherCondition(null)}, 
-        new TypeError('Weather condition value is invalid.'), 'Asserts method setWeatherCondition throws TypeError for null value.');
+        new TypeError('Weather condition value is invalid.'), 'setWeatherCondition method throws TypeError for null value.');
     assert.throws(function() {
         weatherEntry.setWeatherCondition(undefined)}, 
-        new TypeError('Weather condition value is invalid.'), 'Asserts method setWeatherCondition throws TypeError for undefined value.');
+        new TypeError('Weather condition value is invalid.'), 'setWeatherCondition method throws TypeError for undefined value.');
 });
