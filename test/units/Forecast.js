@@ -34,7 +34,7 @@ QUnit.test('Forecast', function(assert) {
 
     var report = new OpenWeatherJS.Forecast.getHourlyForecast(location, function(entry, request) {
         assert.ok(true, 'API Call is success.');
-        console.log(entry);
+        
         assert.equal(entry[0].location.id, 2643743, 'The city id is 2643743');
         assert.equal(entry[0].location.name, 'London', 'Forecast city is London.');
         assert.equal(entry[0].location.country, 'GB', 'Forecast country is GB.');

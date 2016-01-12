@@ -267,7 +267,7 @@ var OpenWeatherJS;
                     entry.setTime(response.list[x].dt);
                     report.addEntry(entry);
                 }
-                console.log(response);
+                console.log(report.getEntryByDay(3));
                 success(report.getReport(), request);
             }, function (request) {
                 error(request);
@@ -500,11 +500,29 @@ var OpenWeatherJS;
     var WeatherReport = (function () {
         function WeatherReport() {
         }
+        WeatherReport.prototype.sortEntriesBy = function (test) {
+        };
         WeatherReport.prototype.addEntry = function (entry) {
             if (this.entries === undefined) {
                 this.entries = new Array();
             }
             this.entries.push(entry);
+        };
+        WeatherReport.prototype.getEntry = function (entry) {
+            return this.entries[entry];
+        };
+        WeatherReport.prototype.getEntryByDay = function (day) {
+            var DailyEntries;
+            if (DailyEntries === undefined) {
+                DailyEntries = new Array();
+            }
+            for (var x = 0; x <= this.entries.length - 1; x++) {
+                var CurrentDate = new Date(this.entries[x].getTime() * 1000);
+                if (CurrentDate.getDay() == day) {
+                    DailyEntries.push(this.entries[x]);
+                }
+            }
+            return DailyEntries;
         };
         WeatherReport.prototype.getReport = function () {
             return this.entries;

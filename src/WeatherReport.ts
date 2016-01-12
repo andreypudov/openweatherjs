@@ -30,6 +30,10 @@ module OpenWeatherJS {
     export class WeatherReport {
         private entries: WeatherEntry[];
 
+        public sortEntriesBy(test: any): void {
+
+        }
+
         /**
          * Adds a new entry into the entries array of WeatherEntries.
          * 
@@ -41,6 +45,43 @@ module OpenWeatherJS {
             }
 
             this.entries.push(entry);
+        }
+
+        /**
+         * Gets target entry from the entries array. This lets you work
+         * with the target entry with selected id.
+         *
+         * @param entry - number that represents the index of target entry.
+         *
+         * @return a WeatherEntry from the entries array.
+         */
+        public getEntry(entry: number): WeatherEntry {
+            return this.entries[entry];
+        }
+
+        /**
+         * Gets all the WeatherEntries from the report that has the same specified
+         * day of the entry. This function returns a new array with all the entries in it.
+         *
+         * @param day - the day of the week the entries should be from.
+         *
+         * @return Array with WeatherEntries that share the specified day from the parameters.
+         */
+        public getEntryByDay(day: number): WeatherEntry[] {
+            var DailyEntries: WeatherEntry[];
+            
+            if(DailyEntries === undefined) {
+                DailyEntries = new Array();
+            }
+
+            for (var x = 0; x <= this.entries.length -1; x++) {
+                var CurrentDate = new Date(this.entries[x].getTime()*1000);
+                if (CurrentDate.getDay() == day) {
+                    DailyEntries.push(this.entries[x]);
+                }
+            }
+
+            return DailyEntries;
         }
 
         /**

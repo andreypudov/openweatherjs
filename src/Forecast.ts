@@ -94,7 +94,7 @@ module OpenWeatherJS {
 
                     report.addEntry(entry);
                 }
-                console.log(response);
+                console.log(report.getEntryByDay(3));
 
                 success(report.getReport(), request);
             }, function(request: XMLHttpRequest) {
