@@ -220,10 +220,10 @@ module OpenWeatherJS {
          * @param condition - a weather condition value.
          */
         public setWeatherCondition(condition: WeatherCondition): void {
-            Asserts.isInstanceofOf(condition, WeatherCondition, 'Condition value is invalid.');
+            Asserts.isNumber(condition, 'Weather condition value is invalid.');
             
             if (typeof WeatherCondition[condition] === 'undefined') {
-                throw new TypeError('Weather condition is an invalid.');
+                throw new TypeError('Weather condition value is invalid.');
             }
             
             this.condition = condition;
