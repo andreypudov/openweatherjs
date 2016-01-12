@@ -87,6 +87,7 @@ var OpenWeatherJS;
             parser.parse(url, function (response, request) {
                 var entry = new OpenWeatherJS.WeatherEntry();
                 var location = new OpenWeatherJS.Location();
+                entry.setWeatherCondition(response.weather.id);
                 location.setId(response.id);
                 location.setName(response.name);
                 location.setLatitude(response.coord.lat);
@@ -249,7 +250,12 @@ var OpenWeatherJS;
                 if (this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY) {
                     if (this.request.status === this.OK) {
                         OpenWeatherJS.Asserts.isJSON(this.request.responseText, 'JSON data is invalid.');
-                        success(JSON.parse(this.request.responseText), this.request);
+                        var json = JSON.parse(this.request.responseText);
+                        if (json.cod !== undefined) {
+                            error(this.request);
+                            return;
+                        }
+                        success(json, this.request);
                     }
                     else {
                         error(this.request);
@@ -379,8 +385,18 @@ var OpenWeatherJS;
     var WeatherEntry = (function () {
         function WeatherEntry() {
         }
+        WeatherEntry.prototype.getWeatherCondition = function () {
+            return this.condition;
+        };
         WeatherEntry.prototype.getLocation = function () {
             return this.location;
+        };
+        WeatherEntry.prototype.setWeatherCondition = function (condition) {
+            OpenWeatherJS.Asserts.isInstanceofOf(condition, OpenWeatherJS.WeatherCondition, 'Condition value is invalid.');
+            if (typeof OpenWeatherJS.WeatherCondition[condition] === 'undefined') {
+                throw new TypeError('Weather condition is an invalid.');
+            }
+            this.condition = condition;
         };
         WeatherEntry.prototype.setLocation = function (location) {
             OpenWeatherJS.Asserts.isInstanceofOf(location, OpenWeatherJS.Location, 'Location value is invalid.');

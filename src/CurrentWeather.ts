@@ -70,8 +70,10 @@ module OpenWeatherJS {
             url = url + '&appid=' + options.getKey();
 
             parser.parse(url, function(response: any, request: XMLHttpRequest) {
-                var entry    = new WeatherEntry();
-                var location = new Location();
+                var entry     = new WeatherEntry();
+                var location  = new Location();
+                
+                entry.setWeatherCondition(response.weather.id);
                 
                 location.setId(response.id);
                 location.setName(response.name)

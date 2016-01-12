@@ -79,7 +79,14 @@
                 if (this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY) {
                     if (this.request.status === this.OK) {
                         Asserts.isJSON(this.request.responseText, 'JSON data is invalid.');
-                        success(JSON.parse(this.request.responseText), this.request);
+                        
+                        var json = JSON.parse(this.request.responseText);
+                        if (json.cod !== undefined) {
+                            error(this.request);
+                            return;
+                        }
+                        
+                        success(json, this.request);
                     } else {
                         error(this.request);
                     }
