@@ -35,11 +35,10 @@ module OpenWeatherJS {
          * @param location - a location value.
          * @return a current weather report for a given location.
          */
-        static getHourlyForecast(location: Location, success: (entry: string, request: XMLHttpRequest) => void,
+        static getHourlyForecast(location: Location, success: (entry: WeatherEntry[], request: XMLHttpRequest) => void,
                 error: (request: XMLHttpRequest) => void): void {
             Asserts.isInstanceofOf(location, Location, 'Location type is invalid.');
 
-            //var entry = new WeatherEntry();
             var url: string;
             var parser = new JSONParser();
 
@@ -58,17 +57,39 @@ module OpenWeatherJS {
             }
 
             parser.parse(url, function(response: any, request: XMLHttpRequest) {
-                //var entry = new WeatherEntry;
+                var report = new WeatherReport();
                 var location = new Location();
 
+                for (var x = 0; x < response.cnt; x++) {    
+                    var entry = new WeatherEntry();
+                    //entry.setWeatherCondition(response.list[x].weather[0].id);
+                    entry.setWeatherParameters(response.list[x].weather[0].main);
+                    entry.setWeatherDescription(response.list[x].weather[0].description);
+                    entry.setWeatherIconId(response.list[x].weather[0].icon);
+
+                    entry.setTemperature(response.list[x].main.temp);
+                    entry.setPressure(response.list[x].main.pressure);
+                    entry.setHumidity(response.list[x].main.humidity);
+                    entry.setMinimum(response.list[x].main.temp_min);
+                    entry.setMaximum(response.list[x].main.temp_max);
+                    entry.setSeaLevelPressure(response.list[x].main.sea_level);
+                    entry.setGroundLevelPressure(response.list[x].main.grnd_level);
+
+                    entry.setWindSpeed(response.list[x].wind.speed);
+                    entry.setWindDirection(response.list[x].wind.deg);
+
+                    entry.setCloudine(response.list[x].clouds.all);
+                    //entry.setRainVolume(response.list[x].rain.3h);
+                    //entry.setSnowVolume(response.list[x].snow.3h);
+
+                    report.addEntry(entry);
+                }
                 console.log(response);
 
-                success(response, request);
+                success(report.getReport(), request);
             }, function(request: XMLHttpRequest) {
                 error(request);
             });
-
-            console.log('Forecast');
         }
     }
 }

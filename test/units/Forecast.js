@@ -34,9 +34,12 @@ QUnit.test('Forecast', function(assert) {
 
     var report = new OpenWeatherJS.Forecast.getHourlyForecast(location, function(entry, request) {
         assert.ok(true, 'API Call is success.');
-
+        console.log(entry);/*
+        assert.equal(entry.city.id, 2643743, 'The city id is 2643743');
         assert.equal(entry.city.name, 'London', 'Forecast city is London.');
         assert.equal(entry.city.country, 'GB', 'Forecast country is GB.');
+        assert.equal(entry.city.coord.lat, 51.50853, 'Location latitude is: 51.50853');
+        assert.equal(entry.city.coord.lon, -0.12574, 'Location longitude is: -0.12574');*/
 
         done();
     }.bind(this), 

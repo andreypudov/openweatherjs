@@ -35,11 +35,8 @@ module OpenWeatherJS {
          * 
          * @param location - A location object for the weather entry.
          */
-        public addEntry(location: Location) {
-            var entry = new WeatherEntry();
-
-            entry.setLocation(location);
-
+        public addEntry(entry: WeatherEntry): void {
+            this.entries.push(entry);
         }
 
         /**

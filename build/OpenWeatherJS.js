@@ -239,13 +239,29 @@ var OpenWeatherJS;
                     break;
             }
             parser.parse(url, function (response, request) {
+                var report = new OpenWeatherJS.WeatherReport();
                 var location = new OpenWeatherJS.Location();
+                for (var x = 0; x < response.cnt; x++) {
+                    var entry = new OpenWeatherJS.WeatherEntry();
+                    entry.setWeatherParameters(response.list[x].weather[0].main);
+                    entry.setWeatherDescription(response.list[x].weather[0].description);
+                    entry.setWeatherIconId(response.list[x].weather[0].icon);
+                    entry.setTemperature(response.list[x].main.temp);
+                    entry.setPressure(response.list[x].main.pressure);
+                    entry.setHumidity(response.list[x].main.humidity);
+                    entry.setMinimum(response.list[x].main.temp_min);
+                    entry.setMaximum(response.list[x].main.temp_max);
+                    entry.setSeaLevelPressure(response.list[x].main.sea_level);
+                    entry.setGroundLevelPressure(response.list[x].main.grnd_level);
+                    entry.setWindSpeed(response.list[x].wind.speed);
+                    entry.setWindDirection(response.list[x].wind.deg);
+                    entry.setCloudine(response.list[x].clouds.all);
+                }
                 console.log(response);
-                success(response, request);
+                success(report.getReport(), request);
             }, function (request) {
                 error(request);
             });
-            console.log('Forecast');
         };
         return Forecast;
     })();
@@ -336,12 +352,134 @@ var OpenWeatherJS;
     var WeatherEntry = (function () {
         function WeatherEntry() {
         }
+        WeatherEntry.prototype.getWeatherCondition = function () {
+            return this.condition;
+        };
+        WeatherEntry.prototype.getWeatherParameters = function () {
+            return this.main;
+        };
+        WeatherEntry.prototype.getWeatherDescription = function () {
+            return this.description;
+        };
+        WeatherEntry.prototype.getWeatherIconId = function () {
+            return this.icon;
+        };
+        WeatherEntry.prototype.getTemperature = function () {
+            return this.temperature;
+        };
+        WeatherEntry.prototype.getPressure = function () {
+            return this.pressure;
+        };
+        WeatherEntry.prototype.getHumidity = function () {
+            return this.humidity;
+        };
+        WeatherEntry.prototype.getMinimum = function () {
+            return this.minimum;
+        };
+        WeatherEntry.prototype.getMaximum = function () {
+            return this.maximum;
+        };
+        WeatherEntry.prototype.getSeaLevelPressure = function () {
+            return this.seaLevel;
+        };
+        WeatherEntry.prototype.getGroundLevelPressure = function () {
+            return this.grndLevel;
+        };
+        WeatherEntry.prototype.getWindSpeed = function () {
+            return this.windSpeed;
+        };
+        WeatherEntry.prototype.getWindDirection = function () {
+            return this.windDegree;
+        };
+        WeatherEntry.prototype.getCloudiness = function () {
+            return this.cloudiness;
+        };
+        WeatherEntry.prototype.getRainVolume = function () {
+            return this.rainVolume;
+        };
+        WeatherEntry.prototype.getSnowVolume = function () {
+            return this.snowVolume;
+        };
         WeatherEntry.prototype.getLocation = function () {
             return this.location;
+        };
+        WeatherEntry.prototype.getTime = function () {
+            return this.time;
+        };
+        WeatherEntry.prototype.setWeatherCondition = function (condition) {
+            OpenWeatherJS.Asserts.isNumber(condition, 'Weather condition value is invalid.');
+            if (typeof OpenWeatherJS.WeatherCondition[condition] === 'undefined') {
+                throw new TypeError('Weather condition value is invalid.');
+            }
+            this.condition = condition;
+        };
+        WeatherEntry.prototype.setWeatherParameters = function (main) {
+            OpenWeatherJS.Asserts.isString(main, 'Weather parameters value is invalid.');
+            this.main = main;
+        };
+        WeatherEntry.prototype.setWeatherDescription = function (description) {
+            OpenWeatherJS.Asserts.isString(description, 'Weather condition within the group is invalid.');
+            this.description = description;
+        };
+        WeatherEntry.prototype.setWeatherIconId = function (icon) {
+            OpenWeatherJS.Asserts.isString(icon, 'Weather icon id value is invalid.');
+            this.icon = icon;
+        };
+        WeatherEntry.prototype.setTemperature = function (temperature) {
+            OpenWeatherJS.Asserts.isNumber(temperature, 'Temperature value is invalid.');
+            this.temperature = temperature;
+        };
+        WeatherEntry.prototype.setPressure = function (pressure) {
+            OpenWeatherJS.Asserts.isNumber(pressure, 'Pressure value is invalid.');
+            this.pressure = pressure;
+        };
+        WeatherEntry.prototype.setHumidity = function (humidity) {
+            OpenWeatherJS.Asserts.isNumber(humidity, 'Humidity value is invalid.');
+            this.humidity = humidity;
+        };
+        WeatherEntry.prototype.setMinimum = function (minimum) {
+            OpenWeatherJS.Asserts.isNumber(minimum, 'Minimum temperature value is invalid.');
+            this.minimum = minimum;
+        };
+        WeatherEntry.prototype.setMaximum = function (maximum) {
+            OpenWeatherJS.Asserts.isNumber(maximum, 'Maximum temperature value is invalid.');
+            this.maximum = maximum;
+        };
+        WeatherEntry.prototype.setSeaLevelPressure = function (seaLevel) {
+            OpenWeatherJS.Asserts.isNumber(seaLevel, 'Sea level pressure value is invalid.');
+            this.seaLevel = seaLevel;
+        };
+        WeatherEntry.prototype.setGroundLevelPressure = function (grndLevel) {
+            OpenWeatherJS.Asserts.isNumber(grndLevel, 'Ground level pressure value is invalid.');
+            this.seaLevel = grndLevel;
+        };
+        WeatherEntry.prototype.setWindSpeed = function (windSpeed) {
+            OpenWeatherJS.Asserts.isNumber(windSpeed, 'Wind speed value is invalid.');
+            this.windSpeed = windSpeed;
+        };
+        WeatherEntry.prototype.setWindDirection = function (windDegree) {
+            OpenWeatherJS.Asserts.isNumber(windDegree, 'Wind direction value is invalid.');
+            this.windDegree = windDegree;
+        };
+        WeatherEntry.prototype.setCloudine = function (cloudiness) {
+            OpenWeatherJS.Asserts.isNumber(cloudiness, 'Cloudine value is invalid.');
+            this.cloudiness = cloudiness;
+        };
+        WeatherEntry.prototype.setRainVolume = function (rainVolume) {
+            OpenWeatherJS.Asserts.isNumber(rainVolume, 'Rain volume is invalid.');
+            this.rainVolume = rainVolume;
+        };
+        WeatherEntry.prototype.setSnowVolume = function (snowVolume) {
+            OpenWeatherJS.Asserts.isNumber(snowVolume, 'Snow volume is invalid.');
+            this.snowVolume = snowVolume;
         };
         WeatherEntry.prototype.setLocation = function (location) {
             OpenWeatherJS.Asserts.isInstanceofOf(location, OpenWeatherJS.Location, 'Location value is invalid.');
             this.location = location;
+        };
+        WeatherEntry.prototype.setTime = function (time) {
+            OpenWeatherJS.Asserts.isNumber(time, 'Time value is invalid.');
+            this.time = time;
         };
         return WeatherEntry;
     })();
@@ -352,9 +490,11 @@ var OpenWeatherJS;
     var WeatherReport = (function () {
         function WeatherReport() {
         }
-        WeatherReport.prototype.addEntry = function (location) {
-            var entry = new OpenWeatherJS.WeatherEntry();
-            entry.setLocation(location);
+        WeatherReport.prototype.addEntry = function (entry) {
+            this.entries.push(entry);
+        };
+        WeatherReport.prototype.getReport = function () {
+            return this.entries;
         };
         return WeatherReport;
     })();
