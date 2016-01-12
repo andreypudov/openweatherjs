@@ -36,6 +36,10 @@ module OpenWeatherJS {
          * @param location - A location object for the weather entry.
          */
         public addEntry(entry: WeatherEntry): void {
+            if (this.entries === undefined) {
+                this.entries = new Array();
+            }
+
             this.entries.push(entry);
         }
 

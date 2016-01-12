@@ -41,6 +41,7 @@ module OpenWeatherJS {
 
             var url: string;
             var parser = new JSONParser();
+            var report = new WeatherReport();
 
             switch (location.getType()) {
                 case LocationType.ID:
@@ -57,11 +58,10 @@ module OpenWeatherJS {
             }
 
             parser.parse(url, function(response: any, request: XMLHttpRequest) {
-                var report = new WeatherReport();
-                var location = new Location();
-
+                var location: any;
+                var entry: any;
                 for (var x = 0; x < response.cnt; x++) {    
-                    var entry = new WeatherEntry();
+                    entry = new WeatherEntry();
                     //entry.setWeatherCondition(response.list[x].weather[0].id);
                     entry.setWeatherParameters(response.list[x].weather[0].main);
                     entry.setWeatherDescription(response.list[x].weather[0].description);
@@ -81,6 +81,16 @@ module OpenWeatherJS {
                     entry.setCloudine(response.list[x].clouds.all);
                     //entry.setRainVolume(response.list[x].rain.3h);
                     //entry.setSnowVolume(response.list[x].snow.3h);
+
+                    location = new Location();
+                    location.setId(response.city.id);
+                    location.setName(response.city.name);
+                    location.setLatitude(response.city.coord.lat);
+                    location.setLongitude(response.city.coord.lon);
+                    location.setCountry(response.city.country);
+                    entry.setLocation(location);
+
+                    entry.setTime(response.list[x].dt);
 
                     report.addEntry(entry);
                 }
