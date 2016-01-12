@@ -33,9 +33,9 @@ module OpenWeatherJS {
          * Throws a new Error in case of connection failure and inavlid data recived.  
          *
          * @param location - a location value.
-         * @return a current weather report for a given location.
+         * @return a current WeatherReport for a given location.
          */
-        static getHourlyForecast(location: Location, success: (entry: WeatherEntry[], request: XMLHttpRequest) => void,
+        static getHourlyForecast(location: Location, success: (entry: WeatherReport, request: XMLHttpRequest) => void,
                 error: (request: XMLHttpRequest) => void): void {
             Asserts.isInstanceofOf(location, Location, 'Location type is invalid.');
 
@@ -94,9 +94,8 @@ module OpenWeatherJS {
 
                     report.addEntry(entry);
                 }
-                console.log(report.getEntryByDay(3));
 
-                success(report.getReport(), request);
+                success(report, request);
             }, function(request: XMLHttpRequest) {
                 error(request);
             });

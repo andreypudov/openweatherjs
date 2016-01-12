@@ -267,8 +267,7 @@ var OpenWeatherJS;
                     entry.setTime(response.list[x].dt);
                     report.addEntry(entry);
                 }
-                console.log(report.getEntryByDay(3));
-                success(report.getReport(), request);
+                success(report, request);
             }, function (request) {
                 error(request);
             });
@@ -511,7 +510,7 @@ var OpenWeatherJS;
         WeatherReport.prototype.getEntry = function (entry) {
             return this.entries[entry];
         };
-        WeatherReport.prototype.getEntryByDay = function (day) {
+        WeatherReport.prototype.getByDay = function (day) {
             var DailyEntries;
             if (DailyEntries === undefined) {
                 DailyEntries = new Array();

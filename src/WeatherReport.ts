@@ -67,7 +67,7 @@ module OpenWeatherJS {
          *
          * @return Array with WeatherEntries that share the specified day from the parameters.
          */
-        public getEntryByDay(day: number): WeatherEntry[] {
+        public getByDay(day: number): WeatherEntry[] {
             var DailyEntries: WeatherEntry[];
             
             if(DailyEntries === undefined) {

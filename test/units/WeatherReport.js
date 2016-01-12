@@ -26,19 +26,21 @@
  * SOFTWARE.
  */
 
-QUnit.test('Forecast', function(assert) {
+QUnit.test('WeatherReport', function(assert) {
     var location = new OpenWeatherJS.Location.getByName('London,uk');
     var done = assert.async();
 
-    var report = new OpenWeatherJS.Forecast.getHourlyForecast(location, function(entry, request) {
+    var report = new OpenWeatherJS.Forecast.getHourlyForecast(location, function(report, request) {
         assert.ok(true, 'API Call is success.');
         
-        assert.equal(entry.getReport()[0].location.id, 2643743, 'The city id is 2643743');
-        assert.equal(entry.getReport()[0].location.name, 'London', 'Forecast city is London.');
-        assert.equal(entry.getReport()[0].location.country, 'GB', 'Forecast country is GB.');
-        assert.equal(entry.getReport()[0].location.latitude, 51.50853, 'Location latitude is: 51.50853');
-        assert.equal(entry.getReport()[0].location.longitude, -0.12574, 'Location longitude is: -0.12574');
-        assert.equal(typeof entry.getReport()[0].description === 'string', true, 'Current weather is: ' + entry.getReport()[0].description);
+        assert.equal(typeof report.getReport() === 'object', true, 'WeatherReport.getReport() returns an Array of Entries.');
+        assert.equal(typeof report.getByDay(3).length === 'number', true, 'WeatherReport.getByDay(3) returns all Entries of the 3rd day in the week.');
+
+        dayEntries = report.getByDay(3);
+
+        for (var x = 0; x <= dayEntries.length-1; x++) {
+            assert.equal(typeof dayEntries[x].time === 'number', true, 'WeatherEntry of the 3rd day of the week at hour: ' + new Date(dayEntries[x].time * 1000).getHours());
+        }
 
         done();
     }.bind(this), 
