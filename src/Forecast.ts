@@ -42,15 +42,12 @@ module OpenWeatherJS {
             var url: string;
             var parser = new JSONParser();
             var report = new WeatherReport();
-
             switch (location.getType()) {
                 case LocationType.ID:
                     url = 'http://api.openweathermap.org/data/2.5/forecast?id=' + location.getId() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
-                    console.log(url);
                     break;
                 case LocationType.NAME:
                     url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
-                    console.log(url);
                     break;
                 case LocationType.COORDINATES:
                     url = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + location.getLatitude() + '&lon=' + location.getLongitude();
@@ -60,7 +57,7 @@ module OpenWeatherJS {
             parser.parse(url, function(response: any, request: XMLHttpRequest) {
                 var location: any;
                 var entry: any;
-                for (var x = 0; x < response.cnt; x++) {    
+                for (var x = 0; x < response.cnt; x++) {   
                     entry = new WeatherEntry();
                     entry.setWeatherCondition(response.list[x].weather[0].id);
                     entry.setWeatherParameters(response.list[x].weather[0].main);
@@ -83,7 +80,7 @@ module OpenWeatherJS {
                     entry.setWindSpeed(response.list[x].wind.speed);
                     entry.setWindDirection(response.list[x].wind.deg);
 
-                    entry.setCloudine(response.list[x].clouds.all);
+                    entry.setCloudiness(response.list[x].clouds.all);
                        
                     entry.setRainVolume(((response.list[x].rain !== undefined) && (response.list[x].rain['3h'] !== undefined))
                         ? response.list[x].rain['3h']
@@ -106,7 +103,7 @@ module OpenWeatherJS {
                 }
 
                 success(report, request);
-            }, function(request: XMLHttpRequest) {
+            }, function(request: XMLHttpRequest, message: string) {
                 error(request);
             });
         }

@@ -203,7 +203,7 @@ var OpenWeatherJS;
                     if (this.request.status === this.OK) {
                         OpenWeatherJS.Asserts.isJSON(this.request.responseText, 'JSON data is invalid.');
                         var json = JSON.parse(this.request.responseText);
-                        if ((json.cod === undefined) || (json.cod !== 200)) {
+                        if ((json.cod === undefined) || (parseInt(json.cod) !== 200)) {
                             error(this.request, 'Error code returned from API.');
                             return;
                         }
@@ -239,11 +239,9 @@ var OpenWeatherJS;
             switch (location.getType()) {
                 case OpenWeatherJS.LocationType.ID:
                     url = 'http://api.openweathermap.org/data/2.5/forecast?id=' + location.getId() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
-                    console.log(url);
                     break;
                 case OpenWeatherJS.LocationType.NAME:
                     url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
-                    console.log(url);
                     break;
                 case OpenWeatherJS.LocationType.COORDINATES:
                     url = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + location.getLatitude() + '&lon=' + location.getLongitude();
@@ -271,7 +269,7 @@ var OpenWeatherJS;
                         : response.list[x].main.pressure);
                     entry.setWindSpeed(response.list[x].wind.speed);
                     entry.setWindDirection(response.list[x].wind.deg);
-                    entry.setCloudine(response.list[x].clouds.all);
+                    entry.setCloudiness(response.list[x].clouds.all);
                     entry.setRainVolume(((response.list[x].rain !== undefined) && (response.list[x].rain['3h'] !== undefined))
                         ? response.list[x].rain['3h']
                         : 0);
@@ -289,7 +287,7 @@ var OpenWeatherJS;
                     report.addEntry(entry);
                 }
                 success(report, request);
-            }, function (request) {
+            }, function (request, message) {
                 error(request);
             });
         };

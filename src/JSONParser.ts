@@ -82,7 +82,7 @@
                         Asserts.isJSON(this.request.responseText, 'JSON data is invalid.');
                         
                         var json = JSON.parse(this.request.responseText);
-                        if ((json.cod === undefined) || (json.cod !== 200)) {
+                        if ((json.cod === undefined) || (parseInt(json.cod) !== 200)) {
                             error(this.request, 'Error code returned from API.');
                             return;
                         }

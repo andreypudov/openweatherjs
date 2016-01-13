@@ -27,7 +27,7 @@
  */
 
 QUnit.test('Forecast', function(assert) {
-    var location = new OpenWeatherJS.Location.getByName('London,uk');
+    var location = new OpenWeatherJS.Location.getByName('London','UK');
     var done = assert.async();
 
     var report = new OpenWeatherJS.Forecast.getHourlyForecast(location, function(entry, request) {
@@ -44,7 +44,7 @@ QUnit.test('Forecast', function(assert) {
     }.bind(this), 
     function(request) {
         assert.notOk(true, 'API Call has failed.');
-
+        
         done();
     }.bind(this));
 });
