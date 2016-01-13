@@ -62,7 +62,7 @@ module OpenWeatherJS {
                 var entry: any;
                 for (var x = 0; x < response.cnt; x++) {    
                     entry = new WeatherEntry();
-                    //entry.setWeatherCondition(response.list[x].weather[0].id);
+                    entry.setWeatherCondition(response.list[x].weather[0].id);
                     entry.setWeatherParameters(response.list[x].weather[0].main);
                     entry.setWeatherDescription(response.list[x].weather[0].description);
                     entry.setWeatherIconId(response.list[x].weather[0].icon);
@@ -72,15 +72,25 @@ module OpenWeatherJS {
                     entry.setHumidity(response.list[x].main.humidity);
                     entry.setMinimum(response.list[x].main.temp_min);
                     entry.setMaximum(response.list[x].main.temp_max);
-                    entry.setSeaLevelPressure(response.list[x].main.sea_level);
-                    entry.setGroundLevelPressure(response.list[x].main.grnd_level);
+
+                    entry.setSeaLevelPressure((response.list[x].main.sea_level !== undefined)
+                        ? response.list[x].main.sea_level
+                        : response.list[x].main.pressure);
+                    entry.setGroundLevelPressure((response.list[x].main.grnd_level !== undefined)
+                        ? response.list[x].main.grnd_level
+                        : response.list[x].main.pressure);
 
                     entry.setWindSpeed(response.list[x].wind.speed);
                     entry.setWindDirection(response.list[x].wind.deg);
 
                     entry.setCloudine(response.list[x].clouds.all);
-                    //entry.setRainVolume(response.list[x].rain.3h);
-                    //entry.setSnowVolume(response.list[x].snow.3h);
+                       
+                    entry.setRainVolume(((response.list[x].rain !== undefined) && (response.list[x].rain['3h'] !== undefined))
+                        ? response.list[x].rain['3h']
+                        : 0);
+                    entry.setSnowVolume(((response.list[x].snow !== undefined) && (response.list[x].snow['3h'] !== undefined))
+                        ? response.list[x].snow['3h']
+                        : 0);
 
                     location = new Location();
                     location.setId(response.city.id);
@@ -88,8 +98,8 @@ module OpenWeatherJS {
                     location.setLatitude(response.city.coord.lat);
                     location.setLongitude(response.city.coord.lon);
                     location.setCountry(response.city.country);
+                    
                     entry.setLocation(location);
-
                     entry.setTime(response.list[x].dt);
 
                     report.addEntry(entry);
