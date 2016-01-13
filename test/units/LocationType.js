@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2016 The OpenWeatherJS Project
+ * Copyright (C) 2016 The OpenWeatherJS Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,10 +27,10 @@
  */
 
 QUnit.test('LocationType', function(assert) {
-	var type = OpenWeatherJS.LocationType;
+    var type = OpenWeatherJS.LocationType;
 
-	assert.ok(type.hasOwnProperty('ID'), 'Type has property ID.');
-	assert.ok(type.hasOwnProperty('NAME'), 'Type has property NAME.');
-	assert.ok(type.hasOwnProperty('COORDINATES'), 'Type has property COORDINATES.');
-	assert.ok(type.hasOwnProperty('ZIP'), 'Type has property ZIP.');
+    assert.ok(type.hasOwnProperty('ID'), 'Type has property ID.');
+    assert.ok(type.hasOwnProperty('NAME'), 'Type has property NAME.');
+    assert.ok(type.hasOwnProperty('COORDINATES'), 'Type has property COORDINATES.');
+    assert.ok(type.hasOwnProperty('ZIP'), 'Type has property ZIP.');
 });

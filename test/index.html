@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2016 The OpenWeatherJS Project
+ * Copyright (C) 2016 The OpenWeatherJS Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,21 +28,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset='utf-8'>
-  	<title>The OpenWeatherJS Library Unit Tests</title>
-  	<link rel='stylesheet' href='../external/qunit/qunit-1.20.0.css'>
+    <meta charset='utf-8'>
+    <title>The OpenWeatherJS Library Unit Tests</title>
+    <link rel='stylesheet' href='../external/qunit/qunit-1.20.0.css'>
 </head>
 <body>
-  	<div id='qunit'></div>
-  	<div id='qunit-fixture'></div>
-  	<!-- qUnit Testing Framework -->
-  	<script src='../external/qunit/qunit-1.20.0.js'></script>
+    <div id='qunit'></div>
+    <div id='qunit-fixture'></div>
+    <!-- qUnit Testing Framework -->
+    <script src='../external/qunit/qunit-1.20.0.js'></script>
 
-  	<!-- OpenWeatherJS - target library -->
-  	<script src='../build/OpenWeatherJS.js'></script>
+    <!-- OpenWeatherJS - target library -->
+    <script src='../build/OpenWeatherJS.js'></script>
 
-  	<script src='units/LocationType.js'></script>
-  	<script src='units/Location.js'></script>
-		<script src='units/JSONParser.js'></script>
+    <script src='units/Asserts.js'></script>
+    <script src='units/CurrentWeather.js'></script>
+    <script src='units/JSONParser.js'></script>
+    <script src='units/Location.js'></script>
+    <script src='units/LocationType.js'></script>
+    <script src='units/WeatherEntry.js'></script>
 </body>
 </html>

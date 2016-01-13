@@ -1,6 +1,6 @@
 /**
  * The OpenWeatherJS Library.
- * The JavaScript library to work with weather information and forecasts data 
+ * The JavaScript library to work with weather information and forecasts data
  * provided by Open Weather Map. Built using TypeScript.
  *
  * The MIT License (MIT)
@@ -25,11 +25,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 module OpenWeatherJS {
-    export enum LocationType {
-        ID,
-        NAME,
-        COORDINATES,
-        ZIP
+    export class Options {
+        private static instance : Options;
+        
+        private key: string;
+
+        constructor(optionsEnforcer: () => void) {
+            if (optionsEnforcer !== OptionsEnforcer) {
+                throw new Error("Error: Instantiation failed: Use Options.getInstance() instead of new.");
+            }
+        }
+
+        public static getInstance(): Options {
+            if (Options.instance == null) {
+                Options.instance = new Options(OptionsEnforcer); 
+            }
+
+            return Options.instance;
+        }
+        
+        /**
+         * Returns an API key value.
+         * 
+         * @return an API key value.
+         */
+        public getKey(): string {
+            return this.key;
+        }
+        
+        /**
+         * Sets an API key value.
+         * 
+         * @param key - an API key value.
+         */
+        public setKey(key: string): void {
+            Asserts.isString(key, 'API key is invalid.')
+            
+            this.key = key;
+        }
     }
+
+    function OptionsEnforcer() {} 
 }

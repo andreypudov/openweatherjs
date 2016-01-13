@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2016 The OpenWeatherJS Project
+ * Copyright (C) 2016 The OpenWeatherJS Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@
 module OpenWeatherJS {
     export class Asserts {
         /**
-         * Validates provided value and throws a new type error whether the specified string
+         * Validates provided value and throws a new type error whether the specified value
          * is null or an undefined.
          *
          * @param value   - a value being tested.
@@ -37,7 +37,7 @@ module OpenWeatherJS {
          */
         static isExists(value: any, message: string): void {
             if (value == null) {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         }
 
@@ -47,17 +47,21 @@ module OpenWeatherJS {
          * a new TypeError.
          *
          * @param value   - a value being tested.
-         * @param minimum - a minimum value for specified number.
-         * @param maximum - a maximum value for specified number.
+         * @param minimum - a minimum value for specified number inclusively.
+         * @param maximum - a maximum value for specified number inclusively.
          * @param message - a short description of the assertion.
          */
         static isInRange(value: any, minimum: number, maximum: number, message: string): void {
             if (typeof value !== 'number') {
-                throw new TypeError('Value is not a number.');
+                throw new TypeError(message.replace('@1', minimum.toString()
+                    ).replace('@2', maximum.toString()
+                    ).replace('@', value));
             }
 
             if ((value < minimum) || (value > maximum)) {
-                throw new RangeError('Location id value should be between 1 and 99999999');
+                throw new RangeError(message.replace('@1', minimum.toString()
+                    ).replace('@2', maximum.toString()
+                    ).replace('@', value));
             }
         }
 
@@ -70,7 +74,7 @@ module OpenWeatherJS {
          */
         static isNumber(value: any, message: string): void {
             if (typeof value !== 'number') {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         }
 
@@ -83,7 +87,7 @@ module OpenWeatherJS {
          */
         static isString(value: any, message: string): void {
             if (typeof value !== 'string') {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         }
 
@@ -97,10 +101,12 @@ module OpenWeatherJS {
         static isUrl(value: string, message: string): void {
             var URLValidationRegExp = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
             var matcher = URLValidationRegExp;
+            
+            Asserts.isString(value, message);
 
             var match = value.match(matcher);
             if (!match) {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         }
 
@@ -111,15 +117,29 @@ module OpenWeatherJS {
          * @param value   - a value being tested.
          * @param message - a short description of the assertion.
          */
-        static isJSONString(value: string, message: string): void {
+        static isJSON(value: string, message: string): void {
             try {
                 var o = JSON.parse(value);
                 
                 if ((typeof o !== 'object') || (o == null)) {
-                    throw new TypeError(message);
+                    throw new TypeError(message.replace('@', value));
                 }
             } catch (e) {
-                throw new Error(message);
+                throw new TypeError(message.replace('@', value));
+            }
+        }
+        
+        /**
+         * Validates provided value is instance of specified type, 
+         * and throws a new TypeError exception otherwise.
+         *
+         * @param value   - a value being tested.
+         * @param type    - a type to compare.
+         * @param message - a short description of the assertion.
+         */
+        static isInstanceofOf(value: any, type: any, message: string): void {            
+            if ((value == null) || ((value instanceof type) === false)) {
+                throw new TypeError(message.replace('@', value));
             }
         }
     }
