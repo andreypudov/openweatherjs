@@ -28,28 +28,28 @@
 
 module OpenWeatherJS {
     export class WeatherEntry {
-        private condition: WeatherCondition; /* weather condition id */
-        private main: string;           /* group of weather parameters */
+        private condition:   WeatherCondition; /* weather condition id */
+        private main:        string;           /* group of weather parameters */
         private description: string;           /* weather condition within the group */
-        private icon: string;           /* weather icon id */
-
+        private icon:        string;           /* weather icon id */
+        
         private temperature: number;           /* temperature */
-        private pressure: number;           /* atmospheric pressure, hPa */
-        private humidity: number;           /* humidity, % */
-        private minimum: number;           /* minimum temperature at the moment */
-        private maximum: number;           /* maximum temperature at the moment */
-        private seaLevel: number;           /* atmospheric pressure on the sea level, hPa */
-        private grndLevel: number;           /* atmospheric pressure on the ground level, hPa */
-
-        private windSpeed: number;           /* wind speed */
-        private windDegree: number;           /* wind direction */
-
-        private cloudiness: number;           /* cloudiness, % */
-        private rainVolume: number;           /* rain volume for the last 3 hours */
-        private snowVolume: number;           /* snow volume for the last 3 hours */
-
-        private location: Location;         /* city id, name, country code and coordinates */
-        private time: number;           /* time of data calculation, unix, UTC */
+        private pressure:    number;           /* atmospheric pressure, hPa */
+        private humidity:    number;           /* humidity, % */
+        private minimum:     number;           /* minimum temperature at the moment */
+        private maximum:     number;           /* maximum temperature at the moment */
+        private seaLevel:    number;           /* atmospheric pressure on the sea level, hPa */
+        private grndLevel:   number;           /* atmospheric pressure on the ground level, hPa */
+        
+        private windSpeed:   number;           /* wind speed */
+        private windDegree:  number;           /* wind direction */
+        
+        private cloudiness:  number;           /* cloudiness, % */
+        private rainVolume:  number;           /* rain volume for the last 3 hours */
+        private snowVolume:  number;           /* snow volume for the last 3 hours */
+        
+        private location:    Location;         /* city id, name, country code and coordinates */
+        private time:        number;           /* time of data calculation, unix, UTC */
         
         /**
          * Returns weather condition value.
@@ -221,11 +221,11 @@ module OpenWeatherJS {
          */
         public setWeatherCondition(condition: WeatherCondition): void {
             Asserts.isNumber(condition, 'Weather condition value is invalid.');
-
+            
             if (typeof WeatherCondition[condition] === 'undefined') {
                 throw new TypeError('Weather condition value is invalid.');
             }
-
+            
             this.condition = condition;
         }
         
@@ -236,7 +236,7 @@ module OpenWeatherJS {
          */
         public setWeatherParameters(main: string): void {
             Asserts.isString(main, 'Weather parameters value is invalid.');
-
+            
             this.main = main;
         }
         
@@ -247,7 +247,7 @@ module OpenWeatherJS {
          */
         public setWeatherDescription(description: string): void {
             Asserts.isString(description, 'Weather condition within the group is invalid.');
-
+            
             this.description = description;
         }
         
@@ -258,7 +258,7 @@ module OpenWeatherJS {
          */
         public setWeatherIconId(icon: string): void {
             Asserts.isString(icon, 'Weather icon id value is invalid.')
-
+            
             this.icon = icon;
         }
         
@@ -269,7 +269,7 @@ module OpenWeatherJS {
          */
         public setTemperature(temperature: number): void {
             Asserts.isNumber(temperature, 'Temperature value is invalid.');
-
+            
             this.temperature = temperature;
         }
         
@@ -280,7 +280,7 @@ module OpenWeatherJS {
          */
         public setPressure(pressure: number): void {
             Asserts.isNumber(pressure, 'Pressure value is invalid.');
-
+            
             this.pressure = pressure;
         }
         
@@ -291,7 +291,7 @@ module OpenWeatherJS {
          */
         public setHumidity(humidity: number): void {
             Asserts.isNumber(humidity, 'Humidity value is invalid.');
-
+            
             this.humidity = humidity;
         }
         
@@ -302,7 +302,7 @@ module OpenWeatherJS {
          */
         public setMinimum(minimum: number): void {
             Asserts.isNumber(minimum, 'Minimum temperature value is invalid.');
-
+            
             this.minimum = minimum;
         }
         
@@ -313,7 +313,7 @@ module OpenWeatherJS {
          */
         public setMaximum(maximum: number): void {
             Asserts.isNumber(maximum, 'Maximum temperature value is invalid.');
-
+            
             this.maximum = maximum;
         }
         
@@ -324,7 +324,7 @@ module OpenWeatherJS {
          */
         public setSeaLevelPressure(seaLevel: number): void {
             Asserts.isNumber(seaLevel, 'Sea level pressure value is invalid.');
-
+            
             this.seaLevel = seaLevel;
         }
         
@@ -335,8 +335,8 @@ module OpenWeatherJS {
          */
         public setGroundLevelPressure(grndLevel: number): void {
             Asserts.isNumber(grndLevel, 'Ground level pressure value is invalid.');
-
-            this.seaLevel = grndLevel;
+            
+            this.grndLevel = grndLevel;
         }
         
         /**
@@ -346,7 +346,7 @@ module OpenWeatherJS {
          */
         public setWindSpeed(windSpeed: number): void {
             Asserts.isNumber(windSpeed, 'Wind speed value is invalid.');
-
+            
             this.windSpeed = windSpeed;
         }
         
@@ -357,7 +357,7 @@ module OpenWeatherJS {
          */
         public setWindDirection(windDegree: number): void {
             Asserts.isNumber(windDegree, 'Wind direction value is invalid.');
-
+            
             this.windDegree = windDegree;
         }
         
@@ -366,9 +366,9 @@ module OpenWeatherJS {
          * 
          * @param cloudiness - a cloudiness value.
          */
-        public setCloudine(cloudiness: number): void {
-            Asserts.isNumber(cloudiness, 'Cloudine value is invalid.');
-
+        public setCloudiness(cloudiness: number): void {
+            Asserts.isNumber(cloudiness, 'Cloudiness value is invalid.');
+            
             this.cloudiness = cloudiness;
         }
         
@@ -379,7 +379,7 @@ module OpenWeatherJS {
          */
         public setRainVolume(rainVolume: number): void {
             Asserts.isNumber(rainVolume, 'Rain volume is invalid.');
-
+            
             this.rainVolume = rainVolume;
         }
         
@@ -390,7 +390,7 @@ module OpenWeatherJS {
          */
         public setSnowVolume(snowVolume: number): void {
             Asserts.isNumber(snowVolume, 'Snow volume is invalid.');
-
+            
             this.snowVolume = snowVolume;
         }
         
@@ -402,7 +402,7 @@ module OpenWeatherJS {
          */
         public setLocation(location: Location): void {
             Asserts.isInstanceofOf(location, Location, 'Location value is invalid.');
-
+            
             this.location = location;
         }
         
@@ -413,7 +413,7 @@ module OpenWeatherJS {
          */
         public setTime(time: number): void {
             Asserts.isNumber(time, 'Time value is invalid.');
-
+            
             this.time = time;
         }
     }

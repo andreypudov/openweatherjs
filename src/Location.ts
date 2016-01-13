@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2016 The OpenWeatherJS Project
+ * Copyright (C) 2016 The OpenWeatherJS Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +45,7 @@ module OpenWeatherJS {
 		 * @param id - a location id value.
 		 */
 		static getById(id: number): Location {
-			Asserts.isInRange(id, 1, 99999999, 'Location id is invalid');
+			Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999.');
 
 			var location = new Location();
 
@@ -59,15 +59,21 @@ module OpenWeatherJS {
 		 * Constructs a new location instance by given name. 
 		 * Throws a new TypeError if name is not a string.
 		 *
-		 * @param name - a location name value.
+		 * @param name    - a location name value.
+         * @param country - a country name related to @name. An optional parameter.
 		 */
-		static getByName(name: string): Location {
-			Asserts.isString(name, 'Location name is invalid.');
+		static getByName(name: string, country?: string): Location {
+			Asserts.isString(name, 'Location name is invalid.'); 
 
 			var location = new Location();
 
 			location.type = LocationType.NAME;
 			location.name = name;
+            
+            if (country) {
+                Asserts.isString(country, 'Location country is invalid.');
+                location.country = country;
+            }
 
 			return location;
 		}
@@ -111,8 +117,8 @@ module OpenWeatherJS {
 
 			return location;
 		}
-
-		/**
+        
+        /**
          * Indicates whether some other object is "equal to" this one.
          * 
          * @param location - the reference object with which to compare.
@@ -122,14 +128,14 @@ module OpenWeatherJS {
             if ((location == null) || ((location instanceof Location) === false)) {
                 return false;
             }
-
-            return location.getType() === this.type
-                && location.getId() === this.id
-                && location.getName() === this.name
-                && location.getLatitude() === this.latitude
+            
+            return location.getType()      === this.type
+                && location.getId()        === this.id 
+                && location.getName()      === this.name
+                && location.getLatitude()  === this.latitude
                 && location.getLongitude() === this.longitude
-                && location.getZip() === this.zip
-                && location.getCountry() === this.country;
+                && location.getZip()       === this.zip
+                && location.getCountry()   === this.country;
         }
         
         /**
@@ -140,7 +146,7 @@ module OpenWeatherJS {
         getType(): LocationType {
             return this.type;
         }
-
+        
         /**
          * Returns a location id for this instance.
          * 
@@ -194,45 +200,45 @@ module OpenWeatherJS {
         getCountry(): string {
             return this.country
         }
-
+        
         setType(type: LocationType): void {
-
+            
             this.type = type;
         }
-
+        
         setId(id: number): void {
-            Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999.');
-
+            Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999. [' + id + ']');
+            
             this.id = id;
         }
 
         setName(name: string): void {
             Asserts.isString(name, 'Location name is invalid.');
-
+            
             this.name = name;
         }
 
         setLatitude(latitude: number): void {
             Asserts.isNumber(latitude, 'Location latitude is invalid.');
-
+            
             this.latitude = latitude;
         }
-
+        
         setLongitude(longitude: number): void {
             Asserts.isNumber(longitude, 'Location longitude is invalid.');
-
+            
             this.longitude = longitude;
         }
-
+        
         setZip(zip: string): void {
             Asserts.isString(zip, 'Location zip is invalid.');
-
+            
             this.zip = zip;
         }
-
+        
         setCountry(country: string): void {
             Asserts.isString(country, 'Location country is invalid.');
-
+            
             this.country = country;
         }
 	}

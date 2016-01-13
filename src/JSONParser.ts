@@ -26,18 +26,18 @@
  * SOFTWARE.
  */
 
-module OpenWeatherJS {
+ module OpenWeatherJS {
     export class JSONParser {
-
-        public REQUEST_NOT_INITIALIZED = 0;
-        public SERVER_CONNECTION_ESTABLISHED = 1;
-        public REQUEST_RECEIVED = 2;
-        public PROCESSING_REQUEST = 3;
+        
+        public REQUEST_NOT_INITIALIZED                = 0;
+        public SERVER_CONNECTION_ESTABLISHED          = 1;
+        public REQUEST_RECEIVED                       = 2;
+        public PROCESSING_REQUEST                     = 3;
         public REQUEST_FINISHED_AND_RESPONSE_IS_READY = 4;
-
-        public OK = 200;
+        
+        public OK             = 200;
         public PAGE_NOT_FOUND = 404;
-
+        
         private request: XMLHttpRequest;
         
         /**
@@ -53,7 +53,7 @@ module OpenWeatherJS {
                     this.request = null;
                 }
             }
-
+            
             if ((this.request == null) && (typeof XMLHttpRequest != 'undefined')) {
                 this.request = new XMLHttpRequest();
             }
@@ -69,9 +69,10 @@ module OpenWeatherJS {
         * @param success - a function to be run when an AJAX request is successfully completed.
         * @param error   - a function to be run when an AJAX request fails.
         * @param request - a value contains the XMLHttpRequest object.
+        * @param message - a mesage details of the exception.
         */
-        public parse(url: string, success?: (response: any, request: XMLHttpRequest) => void,
-            error?: (request: XMLHttpRequest) => void): void {
+        public parse(url: string, success?: (response: any, request: XMLHttpRequest) => void, 
+                error?: (request: XMLHttpRequest, message: string) => void): void {
             Asserts.isUrl(url, 'URL is invalid.');
             
             /* specifies a function to be run when an AJAX request is successfully completed or fails */
@@ -79,21 +80,28 @@ module OpenWeatherJS {
                 if (this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY) {
                     if (this.request.status === this.OK) {
                         Asserts.isJSON(this.request.responseText, 'JSON data is invalid.');
-                        success(JSON.parse(this.request.responseText), this.request);
+                        
+                        var json = JSON.parse(this.request.responseText);
+                        if ((json.cod === undefined) || (json.cod !== 200)) {
+                            error(this.request, 'Error code returned from API.');
+                            return;
+                        }
+                        
+                        success(json, this.request);
                     } else {
-                        error(this.request);
+                        error(this.request, 'Unable to make a connection.');
                     }
                 }
             }.bind(this)
 
             this.request.open('GET', url, true);
-            this.request.timeout = 2000;
+            this.request.timeout   = 2000;
             this.request.ontimeout = function() {
                 this.request.abort();
-                throw new Error("Request timed out.");
+                throw new Error('Request timed out.');
             };
-
+            
             this.request.send();
-        }
+        } 
     }
-}
+ }
