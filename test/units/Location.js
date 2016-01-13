@@ -31,11 +31,11 @@ QUnit.test('Location', function(assert) {
     assert.strictEqual(OpenWeatherJS.Location.getById(6198442).getId(), 6198442, 'Location id is 6198442.');
     assert.throws(function() {
             OpenWeatherJS.Location.getById(0)
-        }, new RangeError('Location id value should be between 1 and 99999999'), 
+        }, new RangeError('Location id value should be between 1 and 99999999.'), 
         'Location id is out of range exception.');
     assert.throws(function() {
             OpenWeatherJS.Location.getById(null)
-        }, new TypeError('Value is not a number.'), 
+        }, new TypeError('Location id value should be between 1 and 99999999.'), 
         'Location id type exception.');
     assert.strictEqual(new OpenWeatherJS.Location.getById(6198442).getType(), 
         OpenWeatherJS.LocationType.ID, 'Location type is ID.');

@@ -5,33 +5,34 @@ var OpenWeatherJS;
         }
         Asserts.isExists = function (value, message) {
             if (value == null) {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         };
         Asserts.isInRange = function (value, minimum, maximum, message) {
             if (typeof value !== 'number') {
-                throw new TypeError('Value is not a number.');
+                throw new TypeError(message.replace('@1', minimum.toString()).replace('@2', maximum.toString()).replace('@', value));
             }
             if ((value < minimum) || (value > maximum)) {
-                throw new RangeError('Location id value should be between 1 and 99999999');
+                throw new RangeError(message.replace('@1', minimum.toString()).replace('@2', maximum.toString()).replace('@', value));
             }
         };
         Asserts.isNumber = function (value, message) {
             if (typeof value !== 'number') {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         };
         Asserts.isString = function (value, message) {
             if (typeof value !== 'string') {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         };
         Asserts.isUrl = function (value, message) {
             var URLValidationRegExp = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
             var matcher = URLValidationRegExp;
+            Asserts.isString(value, message);
             var match = value.match(matcher);
             if (!match) {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         };
         Asserts.isJSON = function (value, message) {
@@ -47,7 +48,7 @@ var OpenWeatherJS;
         };
         Asserts.isInstanceofOf = function (value, type, message) {
             if ((value == null) || ((value instanceof type) === false)) {
-                throw new TypeError(message);
+                throw new TypeError(message.replace('@', value));
             }
         };
         return Asserts;
@@ -60,17 +61,21 @@ var OpenWeatherJS;
         function Location() {
         }
         Location.getById = function (id) {
-            OpenWeatherJS.Asserts.isInRange(id, 1, 99999999, 'Location id is invalid');
+            OpenWeatherJS.Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999.');
             var location = new Location();
             location.type = OpenWeatherJS.LocationType.ID;
             location.id = id;
             return location;
         };
-        Location.getByName = function (name) {
+        Location.getByName = function (name, country) {
             OpenWeatherJS.Asserts.isString(name, 'Location name is invalid.');
             var location = new Location();
             location.type = OpenWeatherJS.LocationType.NAME;
             location.name = name;
+            if (country) {
+                OpenWeatherJS.Asserts.isString(country, 'Location country is invalid.');
+                location.country = country;
+            }
             return location;
         };
         Location.getByCoordinates = function (latitude, longitude) {
@@ -128,7 +133,7 @@ var OpenWeatherJS;
             this.type = type;
         };
         Location.prototype.setId = function (id) {
-            OpenWeatherJS.Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999.');
+            OpenWeatherJS.Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999. [' + id + ']');
             this.id = id;
         };
         Location.prototype.setName = function (name) {
@@ -197,10 +202,15 @@ var OpenWeatherJS;
                 if (this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY) {
                     if (this.request.status === this.OK) {
                         OpenWeatherJS.Asserts.isJSON(this.request.responseText, 'JSON data is invalid.');
-                        success(JSON.parse(this.request.responseText), this.request);
+                        var json = JSON.parse(this.request.responseText);
+                        if ((json.cod === undefined) || (json.cod !== 200)) {
+                            error(this.request, 'Error code returned from API.');
+                            return;
+                        }
+                        success(json, this.request);
                     }
                     else {
-                        error(this.request);
+                        error(this.request, 'Unable to make a connection.');
                     }
                 }
             }.bind(this);
@@ -208,7 +218,7 @@ var OpenWeatherJS;
             this.request.timeout = 2000;
             this.request.ontimeout = function () {
                 this.request.abort();
-                throw new Error("Request timed out.");
+                throw new Error('Request timed out.');
             };
             this.request.send();
         };
@@ -471,7 +481,7 @@ var OpenWeatherJS;
         };
         WeatherEntry.prototype.setGroundLevelPressure = function (grndLevel) {
             OpenWeatherJS.Asserts.isNumber(grndLevel, 'Ground level pressure value is invalid.');
-            this.seaLevel = grndLevel;
+            this.grndLevel = grndLevel;
         };
         WeatherEntry.prototype.setWindSpeed = function (windSpeed) {
             OpenWeatherJS.Asserts.isNumber(windSpeed, 'Wind speed value is invalid.');
@@ -481,8 +491,8 @@ var OpenWeatherJS;
             OpenWeatherJS.Asserts.isNumber(windDegree, 'Wind direction value is invalid.');
             this.windDegree = windDegree;
         };
-        WeatherEntry.prototype.setCloudine = function (cloudiness) {
-            OpenWeatherJS.Asserts.isNumber(cloudiness, 'Cloudine value is invalid.');
+        WeatherEntry.prototype.setCloudiness = function (cloudiness) {
+            OpenWeatherJS.Asserts.isNumber(cloudiness, 'Cloudiness value is invalid.');
             this.cloudiness = cloudiness;
         };
         WeatherEntry.prototype.setRainVolume = function (rainVolume) {
