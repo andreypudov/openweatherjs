@@ -57,6 +57,147 @@ var OpenWeatherJS;
 })(OpenWeatherJS || (OpenWeatherJS = {}));
 var OpenWeatherJS;
 (function (OpenWeatherJS) {
+    var CurrentWeather = (function () {
+        function CurrentWeather() {
+        }
+        CurrentWeather.getWeather = function (location, success, error) {
+            OpenWeatherJS.Asserts.isInstanceofOf(location, OpenWeatherJS.Location, 'Location type is invalid.');
+            var parser = new OpenWeatherJS.JSONParser();
+            var options = OpenWeatherJS.Options.getInstance();
+            var url;
+            switch (location.getType()) {
+                case OpenWeatherJS.LocationType.ID:
+                    url = 'http://api.openweathermap.org/data/2.5/weather?id=' + location.getId();
+                    break;
+                case OpenWeatherJS.LocationType.NAME:
+                    var country = location.getCountry();
+                    url = 'http://api.openweathermap.org/data/2.5/weather?q=' + location.getName()
+                        + (country !== undefined) ? ', ' + country : '';
+                    break;
+                case OpenWeatherJS.LocationType.COORDINATES:
+                    url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + location.getLatitude()
+                        + '&lon=' + location.getLongitude();
+                    break;
+                case OpenWeatherJS.LocationType.ZIP:
+                    url = 'http://api.openweathermap.org/data/2.5/weather?zip=' + location.getZip()
+                        + ', ' + location.getCountry();
+                    break;
+            }
+            url = url + '&appid=' + options.getKey();
+            parser.parse(url, function (response, request) {
+                var entry = new OpenWeatherJS.WeatherEntry();
+                var location = new OpenWeatherJS.Location();
+                entry.setWeatherCondition(response.weather[0].id);
+                entry.setWeatherParameters(response.weather[0].main);
+                entry.setWeatherDescription(response.weather[0].description);
+                entry.setWeatherIconId(response.weather[0].icon);
+                entry.setTemperature(response.main.temp);
+                entry.setPressure(response.main.pressure);
+                entry.setHumidity(response.main.humidity);
+                entry.setMinimum(response.main.temp_min);
+                entry.setMaximum(response.main.temp_max);
+                entry.setSeaLevelPressure((response.main.sea_level !== undefined)
+                    ? response.main.sea_level
+                    : response.main.pressure);
+                entry.setGroundLevelPressure((response.main.grnd_level !== undefined)
+                    ? response.main.grnd_level
+                    : response.main.pressure);
+                entry.setWindSpeed(response.wind.speed);
+                entry.setWindDirection(response.wind.deg);
+                entry.setCloudiness(response.clouds.all);
+                entry.setRainVolume(((response.rain !== undefined) && (response.rain['3h'] !== undefined))
+                    ? response.rain['3h']
+                    : 0);
+                entry.setSnowVolume(((response.snow !== undefined) && (response.snow['3h'] !== undefined))
+                    ? response.snow['3h']
+                    : 0);
+                location.setId(response.id);
+                location.setName(response.name);
+                location.setLatitude(response.coord.lat);
+                location.setLongitude(response.coord.lon);
+                location.setCountry(response.sys.country);
+                entry.setLocation(location);
+                entry.setTime(response.dt);
+                success(entry, request);
+            }, function (request, message) {
+                error(request, message);
+            });
+        };
+        return CurrentWeather;
+    })();
+    OpenWeatherJS.CurrentWeather = CurrentWeather;
+})(OpenWeatherJS || (OpenWeatherJS = {}));
+var OpenWeatherJS;
+(function (OpenWeatherJS) {
+    var Forecast = (function () {
+        function Forecast() {
+        }
+        Forecast.getHourlyForecast = function (location, success, error) {
+            OpenWeatherJS.Asserts.isInstanceofOf(location, OpenWeatherJS.Location, 'Location type is invalid.');
+            var url;
+            var parser = new OpenWeatherJS.JSONParser();
+            var report = new OpenWeatherJS.WeatherReport();
+            switch (location.getType()) {
+                case OpenWeatherJS.LocationType.ID:
+                    url = 'http://api.openweathermap.org/data/2.5/forecast?id=' + location.getId() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
+                    break;
+                case OpenWeatherJS.LocationType.NAME:
+                    url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
+                    break;
+                case OpenWeatherJS.LocationType.COORDINATES:
+                    url = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + location.getLatitude() + '&lon=' + location.getLongitude();
+                    break;
+            }
+            parser.parse(url, function (response, request) {
+                var location;
+                var entry;
+                for (var x = 0; x < response.cnt; x++) {
+                    entry = new OpenWeatherJS.WeatherEntry();
+                    entry.setWeatherCondition(response.list[x].weather[0].id);
+                    entry.setWeatherParameters(response.list[x].weather[0].main);
+                    entry.setWeatherDescription(response.list[x].weather[0].description);
+                    entry.setWeatherIconId(response.list[x].weather[0].icon);
+                    entry.setTemperature(response.list[x].main.temp);
+                    entry.setPressure(response.list[x].main.pressure);
+                    entry.setHumidity(response.list[x].main.humidity);
+                    entry.setMinimum(response.list[x].main.temp_min);
+                    entry.setMaximum(response.list[x].main.temp_max);
+                    entry.setSeaLevelPressure((response.list[x].main.sea_level !== undefined)
+                        ? response.list[x].main.sea_level
+                        : response.list[x].main.pressure);
+                    entry.setGroundLevelPressure((response.list[x].main.grnd_level !== undefined)
+                        ? response.list[x].main.grnd_level
+                        : response.list[x].main.pressure);
+                    entry.setWindSpeed(response.list[x].wind.speed);
+                    entry.setWindDirection(response.list[x].wind.deg);
+                    entry.setCloudiness(response.list[x].clouds.all);
+                    entry.setRainVolume(((response.list[x].rain !== undefined) && (response.list[x].rain['3h'] !== undefined))
+                        ? response.list[x].rain['3h']
+                        : 0);
+                    entry.setSnowVolume(((response.list[x].snow !== undefined) && (response.list[x].snow['3h'] !== undefined))
+                        ? response.list[x].snow['3h']
+                        : 0);
+                    location = new OpenWeatherJS.Location();
+                    location.setId(response.city.id);
+                    location.setName(response.city.name);
+                    location.setLatitude(response.city.coord.lat);
+                    location.setLongitude(response.city.coord.lon);
+                    location.setCountry(response.city.country);
+                    entry.setLocation(location);
+                    entry.setTime(response.list[x].dt);
+                    report.addEntry(entry);
+                }
+                success(report, request);
+            }, function (request, message) {
+                error(request);
+            });
+        };
+        return Forecast;
+    })();
+    OpenWeatherJS.Forecast = Forecast;
+})(OpenWeatherJS || (OpenWeatherJS = {}));
+var OpenWeatherJS;
+(function (OpenWeatherJS) {
     var Location = (function () {
         function Location() {
         }
@@ -228,72 +369,29 @@ var OpenWeatherJS;
 })(OpenWeatherJS || (OpenWeatherJS = {}));
 var OpenWeatherJS;
 (function (OpenWeatherJS) {
-    var Forecast = (function () {
-        function Forecast() {
-        }
-        Forecast.getHourlyForecast = function (location, success, error) {
-            OpenWeatherJS.Asserts.isInstanceofOf(location, OpenWeatherJS.Location, 'Location type is invalid.');
-            var url;
-            var parser = new OpenWeatherJS.JSONParser();
-            var report = new OpenWeatherJS.WeatherReport();
-            switch (location.getType()) {
-                case OpenWeatherJS.LocationType.ID:
-                    url = 'http://api.openweathermap.org/data/2.5/forecast?id=' + location.getId() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
-                    break;
-                case OpenWeatherJS.LocationType.NAME:
-                    url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
-                    break;
-                case OpenWeatherJS.LocationType.COORDINATES:
-                    url = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + location.getLatitude() + '&lon=' + location.getLongitude();
-                    break;
+    var Options = (function () {
+        function Options(optionsEnforcer) {
+            if (optionsEnforcer !== OptionsEnforcer) {
+                throw new Error("Error: Instantiation failed: Use Options.getInstance() instead of new.");
             }
-            parser.parse(url, function (response, request) {
-                var location;
-                var entry;
-                for (var x = 0; x < response.cnt; x++) {
-                    entry = new OpenWeatherJS.WeatherEntry();
-                    entry.setWeatherCondition(response.list[x].weather[0].id);
-                    entry.setWeatherParameters(response.list[x].weather[0].main);
-                    entry.setWeatherDescription(response.list[x].weather[0].description);
-                    entry.setWeatherIconId(response.list[x].weather[0].icon);
-                    entry.setTemperature(response.list[x].main.temp);
-                    entry.setPressure(response.list[x].main.pressure);
-                    entry.setHumidity(response.list[x].main.humidity);
-                    entry.setMinimum(response.list[x].main.temp_min);
-                    entry.setMaximum(response.list[x].main.temp_max);
-                    entry.setSeaLevelPressure((response.list[x].main.sea_level !== undefined)
-                        ? response.list[x].main.sea_level
-                        : response.list[x].main.pressure);
-                    entry.setGroundLevelPressure((response.list[x].main.grnd_level !== undefined)
-                        ? response.list[x].main.grnd_level
-                        : response.list[x].main.pressure);
-                    entry.setWindSpeed(response.list[x].wind.speed);
-                    entry.setWindDirection(response.list[x].wind.deg);
-                    entry.setCloudiness(response.list[x].clouds.all);
-                    entry.setRainVolume(((response.list[x].rain !== undefined) && (response.list[x].rain['3h'] !== undefined))
-                        ? response.list[x].rain['3h']
-                        : 0);
-                    entry.setSnowVolume(((response.list[x].snow !== undefined) && (response.list[x].snow['3h'] !== undefined))
-                        ? response.list[x].snow['3h']
-                        : 0);
-                    location = new OpenWeatherJS.Location();
-                    location.setId(response.city.id);
-                    location.setName(response.city.name);
-                    location.setLatitude(response.city.coord.lat);
-                    location.setLongitude(response.city.coord.lon);
-                    location.setCountry(response.city.country);
-                    entry.setLocation(location);
-                    entry.setTime(response.list[x].dt);
-                    report.addEntry(entry);
-                }
-                success(report, request);
-            }, function (request, message) {
-                error(request);
-            });
+        }
+        Options.getInstance = function () {
+            if (Options.instance == null) {
+                Options.instance = new Options(OptionsEnforcer);
+            }
+            return Options.instance;
         };
-        return Forecast;
+        Options.prototype.getKey = function () {
+            return this.key;
+        };
+        Options.prototype.setKey = function (key) {
+            OpenWeatherJS.Asserts.isString(key, 'API key is invalid.');
+            this.key = key;
+        };
+        return Options;
     })();
-    OpenWeatherJS.Forecast = Forecast;
+    OpenWeatherJS.Options = Options;
+    function OptionsEnforcer() { }
 })(OpenWeatherJS || (OpenWeatherJS = {}));
 var OpenWeatherJS;
 (function (OpenWeatherJS) {

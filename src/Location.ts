@@ -27,96 +27,96 @@
  */
 
 module OpenWeatherJS {
-	export class Location {
-		private type: LocationType;
+    export class Location {
+        private type: LocationType;
 
-		private id:        number;
-		private name:      string;
-		private latitude:  number;
-		private longitude: number;
-		private zip:       string;
-		private country:   string;
+        private id:        number;
+        private name:      string;
+        private latitude:  number;
+        private longitude: number;
+        private zip:       string;
+        private country:   string;
 
-		/**
-		 * Constructs a new location instance by given id. 
-		 * Throws a new RangeError in case id is out of range of 1 and 99999999. 
-		 * Throws a new TypeError if id is not a number.
-		 *
-		 * @param id - a location id value.
-		 */
-		static getById(id: number): Location {
-			Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999.');
+        /**
+         * Constructs a new location instance by given id. 
+         * Throws a new RangeError in case id is out of range of 1 and 99999999. 
+         * Throws a new TypeError if id is not a number.
+         *
+         * @param id - a location id value.
+         */
+        static getById(id: number): Location {
+            Asserts.isInRange(id, 1, 99999999, 'Location id value should be between 1 and 99999999.');
 
-			var location = new Location();
+            var location = new Location();
 
-			location.type = LocationType.ID;
-			location.id   = id;
+            location.type = LocationType.ID;
+            location.id   = id;
 
-			return location;
-		}
+            return location;
+        }
 
-		/**
-		 * Constructs a new location instance by given name. 
-		 * Throws a new TypeError if name is not a string.
-		 *
-		 * @param name    - a location name value.
+        /**
+         * Constructs a new location instance by given name. 
+         * Throws a new TypeError if name is not a string.
+         *
+         * @param name    - a location name value.
          * @param country - a country name related to @name. An optional parameter.
-		 */
-		static getByName(name: string, country?: string): Location {
-			Asserts.isString(name, 'Location name is invalid.'); 
+         */
+        static getByName(name: string, country?: string): Location {
+            Asserts.isString(name, 'Location name is invalid.'); 
 
-			var location = new Location();
+            var location = new Location();
 
-			location.type = LocationType.NAME;
-			location.name = name;
+            location.type = LocationType.NAME;
+            location.name = name;
             
             if (country) {
                 Asserts.isString(country, 'Location country is invalid.');
                 location.country = country;
             }
 
-			return location;
-		}
+            return location;
+        }
 
-		/**
-		 * Constructs a new location instance by given latitude and longitude. 
-		 * Throws a new TypeError if latitude or longitude are not a nimber.
-		 *
-		 * @param latitude  - a location latitude value.
-		 * @param longitude - a location longitude value.
-		 */
-		static getByCoordinates(latitude: number, longitude: number): Location {
-			Asserts.isNumber(latitude, 'Location latitude is invalid.');
-			Asserts.isNumber(longitude, 'Location longitude is invalid.');
+        /**
+         * Constructs a new location instance by given latitude and longitude. 
+         * Throws a new TypeError if latitude or longitude are not a nimber.
+         *
+         * @param latitude  - a location latitude value.
+         * @param longitude - a location longitude value.
+         */
+        static getByCoordinates(latitude: number, longitude: number): Location {
+            Asserts.isNumber(latitude, 'Location latitude is invalid.');
+            Asserts.isNumber(longitude, 'Location longitude is invalid.');
 
-			var location = new Location();
+            var location = new Location();
 
-			location.type = LocationType.COORDINATES;
-			location.latitude  = latitude;
-			location.longitude = longitude;
+            location.type = LocationType.COORDINATES;
+            location.latitude  = latitude;
+            location.longitude = longitude;
 
-			return location;
-		}
+            return location;
+        }
 
-		/**
-		 * Constructs a new location instance by given zip and country. 
-		 * Throws a new TypeError if zip or country are not a string.
-		 *
-		 * @param zip     - a location zip value.
-		 * @param country - a location country value, coresponding to zip.
-		 */
-		static getByZip(zip: string, country: string): Location {
-			Asserts.isString(zip, 'Location zip is invalid.');
-			Asserts.isString(country, 'Location country is invalid.');
+        /**
+         * Constructs a new location instance by given zip and country. 
+         * Throws a new TypeError if zip or country are not a string.
+         *
+         * @param zip     - a location zip value.
+         * @param country - a location country value, coresponding to zip.
+         */
+        static getByZip(zip: string, country: string): Location {
+            Asserts.isString(zip, 'Location zip is invalid.');
+            Asserts.isString(country, 'Location country is invalid.');
 
-			var location = new Location();
+            var location = new Location();
 
-			location.type = LocationType.ZIP;
-			location.zip     = zip;
-			location.country = country;
+            location.type = LocationType.ZIP;
+            location.zip     = zip;
+            location.country = country;
 
-			return location;
-		}
+            return location;
+        }
         
         /**
          * Indicates whether some other object is "equal to" this one.
@@ -241,5 +241,5 @@ module OpenWeatherJS {
             
             this.country = country;
         }
-	}
+    }
 }
