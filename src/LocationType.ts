@@ -26,10 +26,10 @@
  * SOFTWARE.
  */
 module OpenWeatherJS {
-	export enum LocationType {
-		ID,
-		NAME,
-		COORDINATES,
-		ZIP
-	}
+    export enum LocationType {
+        ID,
+        NAME,
+        COORDINATES,
+        ZIP
+    }
 }

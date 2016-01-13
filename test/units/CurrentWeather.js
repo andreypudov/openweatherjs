@@ -33,7 +33,7 @@ QUnit.test('CurrentWeather', function(assert) {
     var location = OpenWeatherJS.Location.getById(6198442);
     var done     = assert.async();
     
-	var report = OpenWeatherJS.CurrentWeather.getWeather(location, 
+    var report = OpenWeatherJS.CurrentWeather.getWeather(location, 
         function(entry, request) {
             assert.ok(true, 'API call is success.')
             

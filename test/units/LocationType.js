@@ -27,10 +27,10 @@
  */
 
 QUnit.test('LocationType', function(assert) {
-	var type = OpenWeatherJS.LocationType;
+    var type = OpenWeatherJS.LocationType;
 
-	assert.ok(type.hasOwnProperty('ID'), 'Type has property ID.');
-	assert.ok(type.hasOwnProperty('NAME'), 'Type has property NAME.');
-	assert.ok(type.hasOwnProperty('COORDINATES'), 'Type has property COORDINATES.');
-	assert.ok(type.hasOwnProperty('ZIP'), 'Type has property ZIP.');
+    assert.ok(type.hasOwnProperty('ID'), 'Type has property ID.');
+    assert.ok(type.hasOwnProperty('NAME'), 'Type has property NAME.');
+    assert.ok(type.hasOwnProperty('COORDINATES'), 'Type has property COORDINATES.');
+    assert.ok(type.hasOwnProperty('ZIP'), 'Type has property ZIP.');
 });
