@@ -37,9 +37,10 @@ module OpenWeatherJS {
          * @param error    - a function to be run when an AJAX request fails.
          * @param entry    - a current weather report for a given location
          * @param request  - a value contains the XMLHttpRequest object.
+         * @param message  - a mesage details of the exception.
          */
         static getWeather(location: Location, success: (entry: WeatherEntry, request: XMLHttpRequest) => void, 
-                error: (request: XMLHttpRequest) => void): void {
+                error: (request: XMLHttpRequest, message: string) => void): void {
             Asserts.isInstanceofOf(location, Location, 'Location type is invalid.');
             
             var parser  = new JSONParser();
@@ -73,7 +74,34 @@ module OpenWeatherJS {
                 var entry     = new WeatherEntry();
                 var location  = new Location();
                 
-                entry.setWeatherCondition(response.weather.id);
+                entry.setWeatherCondition(response.weather[0].id);
+                entry.setWeatherParameters(response.weather[0].main);
+                entry.setWeatherDescription(response.weather[0].description);
+                entry.setWeatherIconId(response.weather[0].icon);
+
+                entry.setTemperature(response.main.temp);
+                entry.setPressure(response.main.pressure);
+                entry.setHumidity(response.main.humidity);
+                entry.setMinimum(response.main.temp_min);
+                entry.setMaximum(response.main.temp_max);
+
+                entry.setSeaLevelPressure((response.main.sea_level !== undefined) 
+                    ? response.main.sea_level 
+                    : response.main.pressure);
+                entry.setGroundLevelPressure((response.main.grnd_level !== undefined) 
+                    ? response.main.grnd_level 
+                    : response.main.pressure);
+                    
+                entry.setWindSpeed(response.wind.speed);
+                entry.setWindDirection(response.wind.deg);
+                entry.setCloudiness(response.clouds.all);
+                
+                entry.setRainVolume(((response.rain !== undefined) && (response.rain['3h'] !== undefined))
+                    ? response.rain['3h']
+                    : 0);
+                entry.setSnowVolume(((response.snow !== undefined) && (response.snow['3h'] !== undefined))
+                    ? response.snow['3h']
+                    : 0);
                 
                 location.setId(response.id);
                 location.setName(response.name)
@@ -82,10 +110,11 @@ module OpenWeatherJS {
                 location.setCountry(response.sys.country);
                 
                 entry.setLocation(location);
+                entry.setTime(response.dt);
                 
                 success(entry, request);
-            }, function(request: XMLHttpRequest) {
-                error(request);
+            }, function(request: XMLHttpRequest, message: string) {
+                error(request, message);
             });
         }
     }

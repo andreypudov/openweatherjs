@@ -69,9 +69,10 @@
         * @param success - a function to be run when an AJAX request is successfully completed.
         * @param error   - a function to be run when an AJAX request fails.
         * @param request - a value contains the XMLHttpRequest object.
+        * @param message - a mesage details of the exception.
         */
         public parse(url: string, success?: (response: any, request: XMLHttpRequest) => void, 
-                error?: (request: XMLHttpRequest) => void): void {
+                error?: (request: XMLHttpRequest, message: string) => void): void {
             Asserts.isUrl(url, 'URL is invalid.');
             
             /* specifies a function to be run when an AJAX request is successfully completed or fails */
@@ -81,14 +82,14 @@
                         Asserts.isJSON(this.request.responseText, 'JSON data is invalid.');
                         
                         var json = JSON.parse(this.request.responseText);
-                        if (json.cod !== undefined) {
-                            error(this.request);
+                        if ((json.cod === undefined) || (json.cod !== 200)) {
+                            error(this.request, 'Error code returned from API.');
                             return;
                         }
                         
                         success(json, this.request);
                     } else {
-                        error(this.request);
+                        error(this.request, 'Unable to make a connection.');
                     }
                 }
             }.bind(this)
@@ -97,7 +98,7 @@
             this.request.timeout   = 2000;
             this.request.ontimeout = function() {
                 this.request.abort();
-                throw new Error("Request timed out.");
+                throw new Error('Request timed out.');
             };
             
             this.request.send();

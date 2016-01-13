@@ -336,7 +336,7 @@ module OpenWeatherJS {
         public setGroundLevelPressure(grndLevel: number): void {
             Asserts.isNumber(grndLevel, 'Ground level pressure value is invalid.');
             
-            this.seaLevel = grndLevel;
+            this.grndLevel = grndLevel;
         }
         
         /**
@@ -366,8 +366,8 @@ module OpenWeatherJS {
          * 
          * @param cloudiness - a cloudiness value.
          */
-        public setCloudine(cloudiness: number): void {
-            Asserts.isNumber(cloudiness, 'Cloudine value is invalid.');
+        public setCloudiness(cloudiness: number): void {
+            Asserts.isNumber(cloudiness, 'Cloudiness value is invalid.');
             
             this.cloudiness = cloudiness;
         }
