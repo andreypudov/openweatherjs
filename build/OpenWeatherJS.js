@@ -129,6 +129,77 @@ var OpenWeatherJS;
 })(OpenWeatherJS || (OpenWeatherJS = {}));
 var OpenWeatherJS;
 (function (OpenWeatherJS) {
+    var Forecast = (function () {
+        function Forecast() {
+        }
+        Forecast.getHourlyForecast = function (location, success, error) {
+            OpenWeatherJS.Asserts.isInstanceofOf(location, OpenWeatherJS.Location, 'Location type is invalid.');
+            var url;
+            var options = OpenWeatherJS.Options.getInstance();
+            var parser = new OpenWeatherJS.JSONParser();
+            var report = new OpenWeatherJS.WeatherReport();
+            switch (location.getType()) {
+                case OpenWeatherJS.LocationType.ID:
+                    url = 'http://api.openweathermap.org/data/2.5/forecast?id=' + location.getId() + '&mode=json';
+                    break;
+                case OpenWeatherJS.LocationType.NAME:
+                    url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json';
+                    break;
+                case OpenWeatherJS.LocationType.COORDINATES:
+                    url = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + location.getLatitude() + '&lon=' + location.getLongitude();
+                    break;
+            }
+            url = url + '&appid=' + options.getKey();
+            parser.parse(url, function (response, request) {
+                var location;
+                var entry;
+                for (var x = 0; x < response.cnt; x++) {
+                    entry = new OpenWeatherJS.WeatherEntry();
+                    entry.setWeatherCondition(response.list[x].weather[0].id);
+                    entry.setWeatherParameters(response.list[x].weather[0].main);
+                    entry.setWeatherDescription(response.list[x].weather[0].description);
+                    entry.setWeatherIconId(response.list[x].weather[0].icon);
+                    entry.setTemperature(response.list[x].main.temp);
+                    entry.setPressure(response.list[x].main.pressure);
+                    entry.setHumidity(response.list[x].main.humidity);
+                    entry.setMinimum(response.list[x].main.temp_min);
+                    entry.setMaximum(response.list[x].main.temp_max);
+                    entry.setSeaLevelPressure((response.list[x].main.sea_level !== undefined)
+                        ? response.list[x].main.sea_level
+                        : response.list[x].main.pressure);
+                    entry.setGroundLevelPressure((response.list[x].main.grnd_level !== undefined)
+                        ? response.list[x].main.grnd_level
+                        : response.list[x].main.pressure);
+                    entry.setWindSpeed(response.list[x].wind.speed);
+                    entry.setWindDirection(response.list[x].wind.deg);
+                    entry.setCloudiness(response.list[x].clouds.all);
+                    entry.setRainVolume(((response.list[x].rain !== undefined) && (response.list[x].rain['3h'] !== undefined))
+                        ? response.list[x].rain['3h']
+                        : 0);
+                    entry.setSnowVolume(((response.list[x].snow !== undefined) && (response.list[x].snow['3h'] !== undefined))
+                        ? response.list[x].snow['3h']
+                        : 0);
+                    location = new OpenWeatherJS.Location();
+                    location.setId(response.city.id);
+                    location.setName(response.city.name);
+                    location.setLatitude(response.city.coord.lat);
+                    location.setLongitude(response.city.coord.lon);
+                    location.setCountry(response.city.country);
+                    entry.setLocation(location);
+                    entry.setTime(response.list[x].dt);
+                    report.addEntry(entry);
+                }
+                success(report, request);
+            }, function (request, message) {
+                error(request);
+            });
+        };
+        return Forecast;
+    })();
+    OpenWeatherJS.Forecast = Forecast;
+})(OpenWeatherJS || (OpenWeatherJS = {}));
+var OpenWeatherJS;
+(function (OpenWeatherJS) {
     var Location = (function () {
         function Location() {
         }
@@ -275,7 +346,7 @@ var OpenWeatherJS;
                     if (this.request.status === this.OK) {
                         OpenWeatherJS.Asserts.isJSON(this.request.responseText, 'JSON data is invalid.');
                         var json = JSON.parse(this.request.responseText);
-                        if ((json.cod === undefined) || (json.cod !== 200)) {
+                        if ((json.cod === undefined) || (parseInt(json.cod) !== 200)) {
                             error(this.request, 'Error code returned from API.');
                             return;
                         }
@@ -541,5 +612,41 @@ var OpenWeatherJS;
         return WeatherEntry;
     })();
     OpenWeatherJS.WeatherEntry = WeatherEntry;
+})(OpenWeatherJS || (OpenWeatherJS = {}));
+var OpenWeatherJS;
+(function (OpenWeatherJS) {
+    var WeatherReport = (function () {
+        function WeatherReport() {
+        }
+        WeatherReport.prototype.addEntry = function (entry) {
+            if (this.entries === undefined) {
+                this.entries = new Array();
+            }
+            OpenWeatherJS.Asserts.isInstanceofOf(entry, OpenWeatherJS.WeatherEntry, 'Invalid type in parameters, expected WeatherEntry');
+            this.entries.push(entry);
+        };
+        WeatherReport.prototype.getEntry = function (index) {
+            return this.entries[index];
+        };
+        WeatherReport.prototype.getByDay = function (day) {
+            var dailyEntries;
+            if (dailyEntries === undefined) {
+                dailyEntries = new Array();
+            }
+            OpenWeatherJS.Asserts.isNumber(day, 'Invalid type used, Expected a number.');
+            for (var x = 0; x <= this.entries.length - 1; x++) {
+                var currentDate = new Date(this.entries[x].getTime() * 1000);
+                if (currentDate.getDay() == day) {
+                    dailyEntries.push(this.entries[x]);
+                }
+            }
+            return dailyEntries;
+        };
+        WeatherReport.prototype.getReport = function () {
+            return this.entries;
+        };
+        return WeatherReport;
+    })();
+    OpenWeatherJS.WeatherReport = WeatherReport;
 })(OpenWeatherJS || (OpenWeatherJS = {}));
 //# sourceMappingURL=OpenWeatherJS.js.map
