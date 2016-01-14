@@ -51,8 +51,8 @@ QUnit.test('Forecast', function(assert) {
 
         done();
     }.bind(this), 
-    function(request) {
-        assert.notOk(true, 'API Call has failed.');
+    function(request, message) {
+        assert.notOk(true, 'API Call has failed. ' + message);
         
         done();
     }.bind(this));

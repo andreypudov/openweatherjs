@@ -622,11 +622,11 @@ var OpenWeatherJS;
             if (this.entries === undefined) {
                 this.entries = new Array();
             }
-            OpenWeatherJS.Asserts.isInstanceofOf(entry, OpenWeatherJS.WeatherEntry, 'Invalid type used for WeatherReport.');
+            OpenWeatherJS.Asserts.isInstanceofOf(entry, OpenWeatherJS.WeatherEntry, 'Invalid type in parameters, expected WeatherEntry');
             this.entries.push(entry);
         };
-        WeatherReport.prototype.getEntry = function (entry) {
-            return this.entries[entry];
+        WeatherReport.prototype.getEntry = function (index) {
+            return this.entries[index];
         };
         WeatherReport.prototype.getByDay = function (day) {
             var dailyEntries;
@@ -635,8 +635,8 @@ var OpenWeatherJS;
             }
             OpenWeatherJS.Asserts.isNumber(day, 'Invalid type used, Expected a number.');
             for (var x = 0; x <= this.entries.length - 1; x++) {
-                var CurrentDate = new Date(this.entries[x].getTime() * 1000);
-                if (CurrentDate.getDay() == day) {
+                var currentDate = new Date(this.entries[x].getTime() * 1000);
+                if (currentDate.getDay() == day) {
                     dailyEntries.push(this.entries[x]);
                 }
             }

@@ -39,7 +39,7 @@ module OpenWeatherJS {
             if (this.entries === undefined) {
                 this.entries = new Array();
             }
-            Asserts.isInstanceofOf(entry, WeatherEntry, 'Invalid type used for WeatherReport.');
+            Asserts.isInstanceofOf(entry, WeatherEntry, 'Invalid type in parameters, expected WeatherEntry');
 
             this.entries.push(entry);
         }
@@ -48,12 +48,13 @@ module OpenWeatherJS {
          * Gets target entry from the entries array. This lets you work
          * with the target entry with selected id.
          *
-         * @param entry - number that represents the index of target entry.
+         * @param index - number that represents the index of target entry.
          *
-         * @return a WeatherEntry from the entries array.
+         * @return a WeatherEntry from the entries array at index from parameters and
+         * returns undefined if index is out of range.
          */
-        public getEntry(entry: number): WeatherEntry {
-            return this.entries[entry];
+        public getEntry(index: number): WeatherEntry {
+            return this.entries[index];
         }
 
         /**
@@ -74,8 +75,8 @@ module OpenWeatherJS {
             Asserts.isNumber(day, 'Invalid type used, Expected a number.');
 
             for (var x = 0; x <= this.entries.length -1; x++) {
-                var CurrentDate = new Date(this.entries[x].getTime()*1000);
-                if (CurrentDate.getDay() == day) {
+                var currentDate = new Date(this.entries[x].getTime()*1000);
+                if (currentDate.getDay() == day) {
                     dailyEntries.push(this.entries[x]);
                 }
             }
