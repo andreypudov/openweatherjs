@@ -27,6 +27,9 @@
  */
 
 QUnit.test('Forecast', function(assert) {
+    var options = OpenWeatherJS.Options.getInstance();
+    options.setKey('2de143494c0b295cca9337e1e96b00e0');
+
     var location = new OpenWeatherJS.Location.getByName('London','UK');
     var done = assert.async();
 
@@ -39,6 +42,12 @@ QUnit.test('Forecast', function(assert) {
         assert.equal(entry.getReport()[0].location.latitude, 51.50853, 'Location latitude is: 51.50853');
         assert.equal(entry.getReport()[0].location.longitude, -0.12574, 'Location longitude is: -0.12574');
         assert.equal(typeof entry.getReport()[0].description === 'string', true, 'Current weather is: ' + entry.getReport()[0].description);
+
+        dayEntries = entry.getByDay(1);
+
+        for (var x = 0; x <= dayEntries.length-1; x++) {
+            assert.equal(typeof dayEntries[x].time === 'number', true, 'WeatherEntry of the first day of the week at hour: ' + new Date(dayEntries[x].time * 1000).getHours());
+        }
 
         done();
     }.bind(this), 

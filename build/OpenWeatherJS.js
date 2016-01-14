@@ -135,19 +135,21 @@ var OpenWeatherJS;
         Forecast.getHourlyForecast = function (location, success, error) {
             OpenWeatherJS.Asserts.isInstanceofOf(location, OpenWeatherJS.Location, 'Location type is invalid.');
             var url;
+            var options = OpenWeatherJS.Options.getInstance();
             var parser = new OpenWeatherJS.JSONParser();
             var report = new OpenWeatherJS.WeatherReport();
             switch (location.getType()) {
                 case OpenWeatherJS.LocationType.ID:
-                    url = 'http://api.openweathermap.org/data/2.5/forecast?id=' + location.getId() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
+                    url = 'http://api.openweathermap.org/data/2.5/forecast?id=' + location.getId() + '&mode=json';
                     break;
                 case OpenWeatherJS.LocationType.NAME:
-                    url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
+                    url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json';
                     break;
                 case OpenWeatherJS.LocationType.COORDINATES:
                     url = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + location.getLatitude() + '&lon=' + location.getLongitude();
                     break;
             }
+            url = url + '&appid=' + options.getKey();
             parser.parse(url, function (response, request) {
                 var location;
                 var entry;
@@ -616,29 +618,29 @@ var OpenWeatherJS;
     var WeatherReport = (function () {
         function WeatherReport() {
         }
-        WeatherReport.prototype.sortEntriesBy = function (test) {
-        };
         WeatherReport.prototype.addEntry = function (entry) {
             if (this.entries === undefined) {
                 this.entries = new Array();
             }
+            OpenWeatherJS.Asserts.isInstanceofOf(entry, OpenWeatherJS.WeatherEntry, 'Invalid type used for WeatherReport.');
             this.entries.push(entry);
         };
         WeatherReport.prototype.getEntry = function (entry) {
             return this.entries[entry];
         };
         WeatherReport.prototype.getByDay = function (day) {
-            var DailyEntries;
-            if (DailyEntries === undefined) {
-                DailyEntries = new Array();
+            var dailyEntries;
+            if (dailyEntries === undefined) {
+                dailyEntries = new Array();
             }
+            OpenWeatherJS.Asserts.isNumber(day, 'Invalid type used, Expected a number.');
             for (var x = 0; x <= this.entries.length - 1; x++) {
                 var CurrentDate = new Date(this.entries[x].getTime() * 1000);
                 if (CurrentDate.getDay() == day) {
-                    DailyEntries.push(this.entries[x]);
+                    dailyEntries.push(this.entries[x]);
                 }
             }
-            return DailyEntries;
+            return dailyEntries;
         };
         WeatherReport.prototype.getReport = function () {
             return this.entries;

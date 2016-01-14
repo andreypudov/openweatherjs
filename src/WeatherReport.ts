@@ -30,10 +30,6 @@ module OpenWeatherJS {
     export class WeatherReport {
         private entries: WeatherEntry[];
 
-        public sortEntriesBy(test: any): void {
-
-        }
-
         /**
          * Adds a new entry into the entries array of WeatherEntries.
          * 
@@ -43,6 +39,7 @@ module OpenWeatherJS {
             if (this.entries === undefined) {
                 this.entries = new Array();
             }
+            Asserts.isInstanceofOf(entry, WeatherEntry, 'Invalid type used for WeatherReport.');
 
             this.entries.push(entry);
         }
@@ -68,20 +65,22 @@ module OpenWeatherJS {
          * @return Array with WeatherEntries that share the specified day from the parameters.
          */
         public getByDay(day: number): WeatherEntry[] {
-            var DailyEntries: WeatherEntry[];
+            var dailyEntries: WeatherEntry[];
             
-            if(DailyEntries === undefined) {
-                DailyEntries = new Array();
+            if (dailyEntries === undefined) {
+                dailyEntries = new Array();
             }
+
+            Asserts.isNumber(day, 'Invalid type used, Expected a number.');
 
             for (var x = 0; x <= this.entries.length -1; x++) {
                 var CurrentDate = new Date(this.entries[x].getTime()*1000);
                 if (CurrentDate.getDay() == day) {
-                    DailyEntries.push(this.entries[x]);
+                    dailyEntries.push(this.entries[x]);
                 }
             }
 
-            return DailyEntries;
+            return dailyEntries;
         }
 
         /**

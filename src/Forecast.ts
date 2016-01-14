@@ -40,19 +40,24 @@ module OpenWeatherJS {
             Asserts.isInstanceofOf(location, Location, 'Location type is invalid.');
 
             var url: string;
+            var options = Options.getInstance();
             var parser = new JSONParser();
             var report = new WeatherReport();
+
             switch (location.getType()) {
                 case LocationType.ID:
-                    url = 'http://api.openweathermap.org/data/2.5/forecast?id=' + location.getId() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
+                    url = 'http://api.openweathermap.org/data/2.5/forecast?id=' + location.getId() + '&mode=json';
                     break;
                 case LocationType.NAME:
-                    url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json&appid=5aed8cbbc1e19c962a8e514f59f8fe52';
+                    url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json';
                     break;
                 case LocationType.COORDINATES:
                     url = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + location.getLatitude() + '&lon=' + location.getLongitude();
                     break;
             }
+
+            /* append API key to url */
+            url = url + '&appid=' + options.getKey();
 
             parser.parse(url, function(response: any, request: XMLHttpRequest) {
                 var location: any;
