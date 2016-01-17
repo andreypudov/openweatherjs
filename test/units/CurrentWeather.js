@@ -29,13 +29,14 @@
 QUnit.test('CurrentWeather', function(assert) {
     var options = OpenWeatherJS.Options.getInstance();
     options.setKey('2de143494c0b295cca9337e1e96b00e0');
+    options.setUnits(OpenWeatherJS.Units.DEFAULT);
     
     var location = OpenWeatherJS.Location.getById(6198442);
     var done     = assert.async();
     
     var report = OpenWeatherJS.CurrentWeather.getWeather(location, 
         function(entry, request) {
-            assert.ok(true, 'API call is success.')
+            assert.ok(true, 'API call is success.');
             
             assert.ok(OpenWeatherJS.WeatherCondition[entry.getWeatherCondition()], 'Weather condition value is valid.');
             entry.getWeatherDescription();
@@ -69,5 +70,39 @@ QUnit.test('CurrentWeather', function(assert) {
         function(request, message) {
             assert.notOk(true, 'API call is failed: ' + request.responseText + ' ' + message);
             done();
+        }.bind(this));
+        
+    /* Metrics */
+    var doneMetric = assert.async();
+    options.setUnits(OpenWeatherJS.Units.METRIC);
+    report = OpenWeatherJS.CurrentWeather.getWeather(location, 
+        function(entry, request) {
+            assert.ok((entry.getTemperature() >= -43) && (entry.getTemperature() <= 46), 'Temperature value is in the range');
+            assert.ok((entry.getMinimum() >= -43) && (entry.getMinimum() <= 46), 'Minimum value is in the range');
+            assert.ok((entry.getMaximum() >= -43) && (entry.getMaximum() <= 46), 'Maximum value is in the range');
+            assert.ok((entry.getWindSpeed() >= 0) && (entry.getWindSpeed() <= 16), 'Wind speed value is in the range');
+            
+            doneMetric();
+        }.bind(this), 
+        function(request, message) {
+            assert.notOk(true, 'API call is failed: ' + request.responseText + ' ' + message);
+            doneMetric();
+        }.bind(this));
+        
+    /* Imperial */
+    var doneImperial = assert.async();
+    options.setUnits(OpenWeatherJS.Units.IMPERIAL);
+    report = OpenWeatherJS.CurrentWeather.getWeather(location, 
+        function(entry, request) {
+            assert.ok((entry.getTemperature() >= -45) && (entry.getTemperature() <= 116), 'Temperature value is in the range');
+            assert.ok((entry.getMinimum() >= -45) && (entry.getMinimum() <= 116), 'Minimum value is in the range');
+            assert.ok((entry.getMaximum() >= -45) && (entry.getMaximum() <= 116), 'Maximum value is in the range');
+            assert.ok((entry.getWindSpeed() >= 0) && (entry.getWindSpeed() <= 35), 'Wind speed value is in the range');
+            
+            doneImperial();
+        }.bind(this), 
+        function(request, message) {
+            assert.notOk(true, 'API call is failed: ' + request.responseText + ' ' + message);
+            doneImperial();
         }.bind(this));
 });

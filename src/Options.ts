@@ -30,7 +30,9 @@ module OpenWeatherJS {
     export class Options {
         private static instance : Options;
         
-        private key: string;
+        private key:      string;
+        private language: Languages;
+        private units:    Units;
 
         constructor(optionsEnforcer: () => void) {
             if (optionsEnforcer !== OptionsEnforcer) {
@@ -47,16 +49,40 @@ module OpenWeatherJS {
         }
         
         /**
-         * Returns an API key value.
+         * Returns an API key value or emptry string if undefined.
          * 
          * @return an API key value.
          */
         public getKey(): string {
-            return this.key;
+            return (this.key !== undefined)
+                ? this.key
+                : '';
         }
         
         /**
-         * Sets an API key value.
+         * Returns an API language value or English if undefined.
+         * 
+         * @return an API language value.
+         */
+        public getLanguage(): Languages {
+            return (this.language !== undefined)
+                ? this.language
+                : Languages.EN;
+        }
+        
+        /**
+         * Returns an API units value or Kelvin if undefined.
+         * 
+         * @return an API units value.
+         */
+        public getUnits(): Units {
+            return (this.units !== undefined)
+                ? this.units
+                : Units.DEFAULT;
+        }
+        
+        /**
+         * Sets an API key value. Throws TypeError if given parameter is invalid.
          * 
          * @param key - an API key value.
          */
@@ -65,6 +91,36 @@ module OpenWeatherJS {
             
             this.key = key;
         }
+        
+        /**
+         * Sets language value for API. Throws TypeError if given parameter is invalid.
+         * 
+         * @param language - a language value for API.
+         */
+        public setLanguage(language: Languages): void {
+            Asserts.isNumber(language, 'API language is invalid.');
+            
+            if (typeof Languages[language] === 'undefined') {
+                throw new TypeError('API language is invalid.');
+            }
+            
+            this.language = language;
+        }
+        
+        /**
+         * Sets unit value for API. Throws TypeError if given parameter is invalid.
+         * 
+         * @param unit - a unit value for API.
+         */
+        public setUnits(units: Units): void {
+            Asserts.isNumber(units, 'API units is invalid.');
+            
+            if (typeof Units[units] === 'undefined') {
+                throw new TypeError('API units is invalid.');
+            }
+            
+            this.units = units;
+        } 
     }
 
     function OptionsEnforcer() {} 

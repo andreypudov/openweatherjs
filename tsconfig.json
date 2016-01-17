@@ -13,11 +13,13 @@
         "src/Asserts.ts",
         "src/CurrentWeather.ts",
         "src/Forecast.ts",
+        "src/Languages.ts",
         "src/Location.ts",
         "src/LocationType.ts",
         "src/JSONParser.ts",
         "src/OpenWeatherJS.ts",
         "src/Options.ts",
+        "src/Units.ts",
         "src/WeatherCondition.ts",
         "src/WeatherEntry.ts",
         "src/WeatherReport.ts"]
