@@ -1,6 +1,6 @@
 /**
  * The OpenWeatherJS Library.
- * The JavaScript library to work with weather information and forecasts data 
+ * The JavaScript library to work with weather information and forecasts data
  * provided by Open Weather Map. Built using TypeScript.
  *
  * The MIT License (MIT)
@@ -27,32 +27,9 @@
  */
 
 module OpenWeatherJS {
-    export class OpenWeatherJS {
-        /**
-         * Sets key value for an API. Throws TypeError if given parameter is invalid.
-         * 
-         * @param key - a key value for an API.
-         */
-        public setKey(key: string) {
-            Options.getInstance().setKey(key);
-        }
-    
-        /**
-         * Sets language value for API. Throws TypeError if given parameter is invalid.
-         * 
-         * @param language - a language value for API.
-         */
-        public setLanguage(language: Languages): void {
-            Options.getInstance().setLanguage(language);
-        }
-        
-        /**
-         * Sets unit value for API. Throws TypeError if given parameter is invalid.
-         * 
-         * @param unit - a unit value for API.
-         */
-        public setUnits(unit: Units): void {
-            Options.getInstance().setUnits(unit);
-        } 
+    export enum Units {
+        DEFAULT  = 0, /* Kelvin */
+        IMPERIAL = 1, /* Fahrenheit */
+        METRIC   = 2 /* Celsius */
     }
 }

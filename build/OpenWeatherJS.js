@@ -83,6 +83,8 @@ var OpenWeatherJS;
                         + ', ' + location.getCountry();
                     break;
             }
+            url = url + '&lang=' + OpenWeatherJS.Languages[options.getLanguage()].toLowerCase();
+            url = url + '&units=' + OpenWeatherJS.Units[options.getUnits()].toLowerCase();
             url = url + '&appid=' + options.getKey();
             parser.parse(url, function (response, request) {
                 var entry = new OpenWeatherJS.WeatherEntry();
@@ -197,6 +199,31 @@ var OpenWeatherJS;
         return Forecast;
     })();
     OpenWeatherJS.Forecast = Forecast;
+})(OpenWeatherJS || (OpenWeatherJS = {}));
+var OpenWeatherJS;
+(function (OpenWeatherJS) {
+    (function (Languages) {
+        Languages[Languages["EN"] = 0] = "EN";
+        Languages[Languages["RU"] = 1] = "RU";
+        Languages[Languages["IT"] = 3] = "IT";
+        Languages[Languages["ES"] = 4] = "ES";
+        Languages[Languages["UK"] = 5] = "UK";
+        Languages[Languages["DE"] = 6] = "DE";
+        Languages[Languages["PT"] = 7] = "PT";
+        Languages[Languages["RO"] = 8] = "RO";
+        Languages[Languages["PL"] = 9] = "PL";
+        Languages[Languages["FI"] = 10] = "FI";
+        Languages[Languages["NL"] = 11] = "NL";
+        Languages[Languages["FR"] = 12] = "FR";
+        Languages[Languages["BG"] = 13] = "BG";
+        Languages[Languages["SV"] = 14] = "SV";
+        Languages[Languages["ZH_TV"] = 15] = "ZH_TV";
+        Languages[Languages["ZH_CN"] = 16] = "ZH_CN";
+        Languages[Languages["TR"] = 17] = "TR";
+        Languages[Languages["HR"] = 18] = "HR";
+        Languages[Languages["CA"] = 19] = "CA";
+    })(OpenWeatherJS.Languages || (OpenWeatherJS.Languages = {}));
+    var Languages = OpenWeatherJS.Languages;
 })(OpenWeatherJS || (OpenWeatherJS = {}));
 var OpenWeatherJS;
 (function (OpenWeatherJS) {
@@ -370,6 +397,24 @@ var OpenWeatherJS;
     OpenWeatherJS.JSONParser = JSONParser;
 })(OpenWeatherJS || (OpenWeatherJS = {}));
 var OpenWeatherJS;
+(function (OpenWeatherJS_1) {
+    var OpenWeatherJS = (function () {
+        function OpenWeatherJS() {
+        }
+        OpenWeatherJS.prototype.setKey = function (key) {
+            OpenWeatherJS_1.Options.getInstance().setKey(key);
+        };
+        OpenWeatherJS.prototype.setLanguage = function (language) {
+            OpenWeatherJS_1.Options.getInstance().setLanguage(language);
+        };
+        OpenWeatherJS.prototype.setUnits = function (unit) {
+            OpenWeatherJS_1.Options.getInstance().setUnits(unit);
+        };
+        return OpenWeatherJS;
+    })();
+    OpenWeatherJS_1.OpenWeatherJS = OpenWeatherJS;
+})(OpenWeatherJS || (OpenWeatherJS = {}));
+var OpenWeatherJS;
 (function (OpenWeatherJS) {
     var Options = (function () {
         function Options(optionsEnforcer) {
@@ -384,16 +429,51 @@ var OpenWeatherJS;
             return Options.instance;
         };
         Options.prototype.getKey = function () {
-            return this.key;
+            return (this.key !== undefined)
+                ? this.key
+                : '';
+        };
+        Options.prototype.getLanguage = function () {
+            return (this.language !== undefined)
+                ? this.language
+                : OpenWeatherJS.Languages.EN;
+        };
+        Options.prototype.getUnits = function () {
+            return (this.units !== undefined)
+                ? this.units
+                : OpenWeatherJS.Units.DEFAULT;
         };
         Options.prototype.setKey = function (key) {
             OpenWeatherJS.Asserts.isString(key, 'API key is invalid.');
             this.key = key;
         };
+        Options.prototype.setLanguage = function (language) {
+            OpenWeatherJS.Asserts.isNumber(language, 'API language is invalid.');
+            if (typeof OpenWeatherJS.Languages[language] === 'undefined') {
+                throw new TypeError('API language is invalid.');
+            }
+            this.language = language;
+        };
+        Options.prototype.setUnits = function (units) {
+            OpenWeatherJS.Asserts.isNumber(units, 'API units is invalid.');
+            if (typeof OpenWeatherJS.Units[units] === 'undefined') {
+                throw new TypeError('API units is invalid.');
+            }
+            this.units = units;
+        };
         return Options;
     })();
     OpenWeatherJS.Options = Options;
     function OptionsEnforcer() { }
+})(OpenWeatherJS || (OpenWeatherJS = {}));
+var OpenWeatherJS;
+(function (OpenWeatherJS) {
+    (function (Units) {
+        Units[Units["DEFAULT"] = 0] = "DEFAULT";
+        Units[Units["IMPERIAL"] = 1] = "IMPERIAL";
+        Units[Units["METRIC"] = 2] = "METRIC";
+    })(OpenWeatherJS.Units || (OpenWeatherJS.Units = {}));
+    var Units = OpenWeatherJS.Units;
 })(OpenWeatherJS || (OpenWeatherJS = {}));
 var OpenWeatherJS;
 (function (OpenWeatherJS) {

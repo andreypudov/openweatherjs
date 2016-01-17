@@ -26,33 +26,10 @@
  * SOFTWARE.
  */
 
-module OpenWeatherJS {
-    export class OpenWeatherJS {
-        /**
-         * Sets key value for an API. Throws TypeError if given parameter is invalid.
-         * 
-         * @param key - a key value for an API.
-         */
-        public setKey(key: string) {
-            Options.getInstance().setKey(key);
-        }
-    
-        /**
-         * Sets language value for API. Throws TypeError if given parameter is invalid.
-         * 
-         * @param language - a language value for API.
-         */
-        public setLanguage(language: Languages): void {
-            Options.getInstance().setLanguage(language);
-        }
-        
-        /**
-         * Sets unit value for API. Throws TypeError if given parameter is invalid.
-         * 
-         * @param unit - a unit value for API.
-         */
-        public setUnits(unit: Units): void {
-            Options.getInstance().setUnits(unit);
-        } 
-    }
-}
+QUnit.test('Units', function(assert) {
+    var type = OpenWeatherJS.Units;
+
+    assert.ok(type.hasOwnProperty('DEFAULT'), 'Type has property DEFAULT.');
+    assert.ok(type.hasOwnProperty('IMPERIAL'), 'Type has property IMPERIAL.');
+    assert.ok(type.hasOwnProperty('METRIC'), 'Type has property METRIC.');
+});

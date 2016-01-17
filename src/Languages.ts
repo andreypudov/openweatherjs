@@ -1,6 +1,6 @@
 /**
  * The OpenWeatherJS Library.
- * The JavaScript library to work with weather information and forecasts data 
+ * The JavaScript library to work with weather information and forecasts data
  * provided by Open Weather Map. Built using TypeScript.
  *
  * The MIT License (MIT)
@@ -27,32 +27,25 @@
  */
 
 module OpenWeatherJS {
-    export class OpenWeatherJS {
-        /**
-         * Sets key value for an API. Throws TypeError if given parameter is invalid.
-         * 
-         * @param key - a key value for an API.
-         */
-        public setKey(key: string) {
-            Options.getInstance().setKey(key);
-        }
-    
-        /**
-         * Sets language value for API. Throws TypeError if given parameter is invalid.
-         * 
-         * @param language - a language value for API.
-         */
-        public setLanguage(language: Languages): void {
-            Options.getInstance().setLanguage(language);
-        }
-        
-        /**
-         * Sets unit value for API. Throws TypeError if given parameter is invalid.
-         * 
-         * @param unit - a unit value for API.
-         */
-        public setUnits(unit: Units): void {
-            Options.getInstance().setUnits(unit);
-        } 
+    export enum Languages {
+        EN    = 0,  /* English */
+        RU    = 1,  /* Russian */
+        IT    = 3,  /* Italian */
+        ES    = 4,  /* Spanish */
+        UK    = 5,  /* Ukrainian */
+        DE    = 6,  /* German */
+        PT    = 7,  /* Portuguese */
+        RO    = 8,  /* Romanian */
+        PL    = 9,  /* Polish */
+        FI    = 10, /* Finnish */
+        NL    = 11, /* Dutch */
+        FR    = 12, /* French */
+        BG    = 13, /* Bulgarian */
+        SV    = 14, /* Swedish */
+        ZH_TV = 15, /* Chinese Traditional */
+        ZH_CN = 16, /* Chinese Simplified */
+        TR    = 17, /* Turkish */
+        HR    = 18, /* Croatian */
+        CA    = 19, /* Catalan*/
     }
 }
