@@ -151,6 +151,8 @@ var OpenWeatherJS;
                     url = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + location.getLatitude() + '&lon=' + location.getLongitude();
                     break;
             }
+            url = url + '&lang=' + OpenWeatherJS.Languages[options.getLanguage()].toLowerCase();
+            url = url + '&units=' + OpenWeatherJS.Units[options.getUnits()].toLowerCase();
             url = url + '&appid=' + options.getKey();
             parser.parse(url, function (response, request) {
                 var location;
