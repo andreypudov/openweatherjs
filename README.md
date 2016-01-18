@@ -63,3 +63,6 @@ var report = OpenWeatherJS.CurrentWeather.getWeather(location,
         }.bind(this));
 ```
 You can use the values freely as you'd like, as you see there is alot of coverage so if you would like to for example display a complete weather report on your website this would be a great choice since it covers everything from temperature to pressure and cloudiness.
+
+#Learn More
+Visit our wiki: [OpenWeatherJS Wiki](https://github.com/andreypudov/OpenWeatherJS/wiki)
