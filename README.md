@@ -4,7 +4,7 @@ Built using TypeScript.
 
 #Usage
 We start initialization of the library by setting the options. To set the options we call the Options class like this:
-```
+```typescript
 	//New Options object
 	var options = OpenWeatherJS.Options.getInstance();
 	//Set the api key the library should use
@@ -13,7 +13,7 @@ We start initialization of the library by setting the options. To set the option
     options.setUnits(OpenWeatherJS.Units.DEFAULT);
 ```
 After we set the options we get the desired location
-```
+```typescript
  // City id list can be downloaded here: http://openweathermap.org/current
  var location = OpenWeatherJS.Location.getById(6198442);
 
@@ -21,7 +21,7 @@ After we set the options we get the desired location
  var location = OpenWeatherJS.Location.getByName('London','UK');
 ```
 After that we can use the location object to get the current weather for that location: 
-```
+```typescript
 var report = OpenWeatherJS.CurrentWeather.getWeather(location, 
         function(entry, request) {
             //API Call success
