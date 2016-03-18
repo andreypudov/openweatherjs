@@ -38,7 +38,7 @@ QUnit.test('WeatherReport', function(assert) {
 
         dayEntries = report.getByDay(3);
 
-        for (var x = 0; x <= dayEntries.length-1; x++) {
+        for (var x = 0; x <= dayEntries.length - 1; ++x) {
             assert.equal(typeof dayEntries[x].time === 'number', true, 'WeatherEntry of the 3rd day of the week at hour: ' + new Date(dayEntries[x].time * 1000).getHours());
         }
 
@@ -46,7 +46,6 @@ QUnit.test('WeatherReport', function(assert) {
     }.bind(this), 
     function(request) {
         assert.notOk(true, 'API Call has failed.');
-
         done();
     }.bind(this));
 });

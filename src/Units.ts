@@ -30,6 +30,6 @@ module OpenWeatherJS {
     export enum Units {
         DEFAULT  = 0, /* Kelvin */
         IMPERIAL = 1, /* Fahrenheit */
-        METRIC   = 2 /* Celsius */
+        METRIC   = 2  /* Celsius */
     }
 }

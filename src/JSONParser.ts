@@ -74,6 +74,8 @@
         public parse(url: string, success?: (response: any, request: XMLHttpRequest) => void, 
                 error?: (request: XMLHttpRequest, message: string) => void): void {
             Asserts.isUrl(url, 'URL is invalid.');
+
+            var options = Options.getInstance();
             
             /* specifies a function to be run when an AJAX request is successfully completed or fails */
             this.request.onreadystatechange = function() {
@@ -95,11 +97,11 @@
             }.bind(this)
 
             this.request.open('GET', url, true);
-            this.request.timeout   = 2000;
+            this.request.timeout   = options.getTimeout();
             this.request.ontimeout = function() {
                 this.request.abort();
                 throw new Error('Request timed out.');
-            };
+            }.bind(this);
             
             this.request.send();
         } 

@@ -50,6 +50,8 @@ module OpenWeatherJS {
         
         private location:    Location;         /* city id, name, country code and coordinates */
         private time:        number;           /* time of data calculation, unix, UTC */
+        private sunrise:     number;           /* sunrise time */
+        private sunset:      number;           /* sunset time */
         
         /**
          * Returns weather condition value.
@@ -211,6 +213,24 @@ module OpenWeatherJS {
          */
         public getTime(): number {
             return this.time;
+        }
+
+        /**
+         * Returns time of sunrise.
+         * 
+         * @return time of sunrise.
+         */
+        public getSunrise(): number {
+            return this.sunrise;
+        }
+
+        /**
+         * Returns time of sunset.
+         * 
+         * @return time of sunset.
+         */
+        public getSunset(): number {
+            return this.sunset;
         }
         
         /**
@@ -415,6 +435,28 @@ module OpenWeatherJS {
             Asserts.isNumber(time, 'Time value is invalid.');
             
             this.time = time;
+        }
+
+        /**
+         * Sets time of sunrise.
+         * 
+         * @param time - a time of sunrise
+         */
+        public setSunrise(sunrise: number): void {
+            Asserts.isNumber(sunrise, 'Sunrise value is invalid.');
+
+            this.sunrise = sunrise;
+        }
+
+        /**
+         * Sets time of sunset.
+         * 
+         * @param time - a time of sunset
+         */
+        public setSunset(sunset: number): void {
+            Asserts.isNumber(sunset, 'Sunset value is invalid.');
+
+            this.sunset = sunset;
         }
     }
 }

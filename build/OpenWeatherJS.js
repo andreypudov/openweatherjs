@@ -120,6 +120,8 @@ var OpenWeatherJS;
                 location.setCountry(response.sys.country);
                 entry.setLocation(location);
                 entry.setTime(response.dt);
+                entry.setSunrise(response.sys.sunrise);
+                entry.setSunset(response.sys.sunset);
                 success(entry, request);
             }, function (request, message) {
                 error(request, message);
@@ -155,31 +157,31 @@ var OpenWeatherJS;
             parser.parse(url, function (response, request) {
                 var location;
                 var entry;
-                for (var x = 0; x < response.cnt; x++) {
+                for (var index = 0; index < response.cnt; ++index) {
                     entry = new OpenWeatherJS.WeatherEntry();
-                    entry.setWeatherCondition(response.list[x].weather[0].id);
-                    entry.setWeatherParameters(response.list[x].weather[0].main);
-                    entry.setWeatherDescription(response.list[x].weather[0].description);
-                    entry.setWeatherIconId(response.list[x].weather[0].icon);
-                    entry.setTemperature(response.list[x].main.temp);
-                    entry.setPressure(response.list[x].main.pressure);
-                    entry.setHumidity(response.list[x].main.humidity);
-                    entry.setMinimum(response.list[x].main.temp_min);
-                    entry.setMaximum(response.list[x].main.temp_max);
-                    entry.setSeaLevelPressure((response.list[x].main.sea_level !== undefined)
-                        ? response.list[x].main.sea_level
-                        : response.list[x].main.pressure);
-                    entry.setGroundLevelPressure((response.list[x].main.grnd_level !== undefined)
-                        ? response.list[x].main.grnd_level
-                        : response.list[x].main.pressure);
-                    entry.setWindSpeed(response.list[x].wind.speed);
-                    entry.setWindDirection(response.list[x].wind.deg);
-                    entry.setCloudiness(response.list[x].clouds.all);
-                    entry.setRainVolume(((response.list[x].rain !== undefined) && (response.list[x].rain['3h'] !== undefined))
-                        ? response.list[x].rain['3h']
+                    entry.setWeatherCondition(response.list[index].weather[0].id);
+                    entry.setWeatherParameters(response.list[index].weather[0].main);
+                    entry.setWeatherDescription(response.list[index].weather[0].description);
+                    entry.setWeatherIconId(response.list[index].weather[0].icon);
+                    entry.setTemperature(response.list[index].main.temp);
+                    entry.setPressure(response.list[index].main.pressure);
+                    entry.setHumidity(response.list[index].main.humidity);
+                    entry.setMinimum(response.list[index].main.temp_min);
+                    entry.setMaximum(response.list[index].main.temp_max);
+                    entry.setSeaLevelPressure((response.list[index].main.sea_level !== undefined)
+                        ? response.list[index].main.sea_level
+                        : response.list[index].main.pressure);
+                    entry.setGroundLevelPressure((response.list[index].main.grnd_level !== undefined)
+                        ? response.list[index].main.grnd_level
+                        : response.list[index].main.pressure);
+                    entry.setWindSpeed(response.list[index].wind.speed);
+                    entry.setWindDirection(response.list[index].wind.deg);
+                    entry.setCloudiness(response.list[index].clouds.all);
+                    entry.setRainVolume(((response.list[index].rain !== undefined) && (response.list[index].rain['3h'] !== undefined))
+                        ? response.list[index].rain['3h']
                         : 0);
-                    entry.setSnowVolume(((response.list[x].snow !== undefined) && (response.list[x].snow['3h'] !== undefined))
-                        ? response.list[x].snow['3h']
+                    entry.setSnowVolume(((response.list[index].snow !== undefined) && (response.list[index].snow['3h'] !== undefined))
+                        ? response.list[index].snow['3h']
                         : 0);
                     location = new OpenWeatherJS.Location();
                     location.setId(response.city.id);
@@ -188,12 +190,12 @@ var OpenWeatherJS;
                     location.setLongitude(response.city.coord.lon);
                     location.setCountry(response.city.country);
                     entry.setLocation(location);
-                    entry.setTime(response.list[x].dt);
+                    entry.setTime(response.list[index].dt);
                     report.addEntry(entry);
                 }
                 success(report, request);
             }, function (request, message) {
-                error(request);
+                error(request, message);
             });
         };
         return Forecast;
@@ -368,6 +370,7 @@ var OpenWeatherJS;
         }
         JSONParser.prototype.parse = function (url, success, error) {
             OpenWeatherJS.Asserts.isUrl(url, 'URL is invalid.');
+            var options = OpenWeatherJS.Options.getInstance();
             this.request.onreadystatechange = function () {
                 if (this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY) {
                     if (this.request.status === this.OK) {
@@ -385,11 +388,11 @@ var OpenWeatherJS;
                 }
             }.bind(this);
             this.request.open('GET', url, true);
-            this.request.timeout = 2000;
+            this.request.timeout = options.getTimeout();
             this.request.ontimeout = function () {
                 this.request.abort();
                 throw new Error('Request timed out.');
-            };
+            }.bind(this);
             this.request.send();
         };
         return JSONParser;
@@ -443,6 +446,11 @@ var OpenWeatherJS;
                 ? this.units
                 : OpenWeatherJS.Units.DEFAULT;
         };
+        Options.prototype.getTimeout = function () {
+            return (this.timeout !== undefined)
+                ? this.timeout
+                : 4096;
+        };
         Options.prototype.setKey = function (key) {
             OpenWeatherJS.Asserts.isString(key, 'API key is invalid.');
             this.key = key;
@@ -460,6 +468,10 @@ var OpenWeatherJS;
                 throw new TypeError('API units is invalid.');
             }
             this.units = units;
+        };
+        Options.prototype.setTimeout = function (timeout) {
+            OpenWeatherJS.Asserts.isNumber(timeout, 'API key is invalid.');
+            this.timeout = timeout;
         };
         return Options;
     })();
@@ -614,6 +626,12 @@ var OpenWeatherJS;
         WeatherEntry.prototype.getTime = function () {
             return this.time;
         };
+        WeatherEntry.prototype.getSunrise = function () {
+            return this.sunrise;
+        };
+        WeatherEntry.prototype.getSunset = function () {
+            return this.sunset;
+        };
         WeatherEntry.prototype.setWeatherCondition = function (condition) {
             OpenWeatherJS.Asserts.isNumber(condition, 'Weather condition value is invalid.');
             if (typeof OpenWeatherJS.WeatherCondition[condition] === 'undefined') {
@@ -689,6 +707,14 @@ var OpenWeatherJS;
             OpenWeatherJS.Asserts.isNumber(time, 'Time value is invalid.');
             this.time = time;
         };
+        WeatherEntry.prototype.setSunrise = function (sunrise) {
+            OpenWeatherJS.Asserts.isNumber(sunrise, 'Sunrise value is invalid.');
+            this.sunrise = sunrise;
+        };
+        WeatherEntry.prototype.setSunset = function (sunset) {
+            OpenWeatherJS.Asserts.isNumber(sunset, 'Sunset value is invalid.');
+            this.sunset = sunset;
+        };
         return WeatherEntry;
     })();
     OpenWeatherJS.WeatherEntry = WeatherEntry;
@@ -699,10 +725,10 @@ var OpenWeatherJS;
         function WeatherReport() {
         }
         WeatherReport.prototype.addEntry = function (entry) {
+            OpenWeatherJS.Asserts.isInstanceofOf(entry, OpenWeatherJS.WeatherEntry, 'Invalid type in parameters, expected WeatherEntry');
             if (this.entries === undefined) {
                 this.entries = new Array();
             }
-            OpenWeatherJS.Asserts.isInstanceofOf(entry, OpenWeatherJS.WeatherEntry, 'Invalid type in parameters, expected WeatherEntry');
             this.entries.push(entry);
         };
         WeatherReport.prototype.getEntry = function (index) {

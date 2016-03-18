@@ -28,6 +28,7 @@
 
 module OpenWeatherJS {
     export class WeatherReport {
+
         private entries: WeatherEntry[];
 
         /**
@@ -36,10 +37,10 @@ module OpenWeatherJS {
          * @param location - A location object for the weather entry.
          */
         public addEntry(entry: WeatherEntry): void {
+            Asserts.isInstanceofOf(entry, WeatherEntry, 'Invalid type in parameters, expected WeatherEntry');
             if (this.entries === undefined) {
                 this.entries = new Array();
             }
-            Asserts.isInstanceofOf(entry, WeatherEntry, 'Invalid type in parameters, expected WeatherEntry');
 
             this.entries.push(entry);
         }

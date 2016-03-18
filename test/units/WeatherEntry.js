@@ -320,7 +320,7 @@ QUnit.test('WeatherEntry', function(assert) {
         new TypeError('Location value is invalid.'), 
         'setLocation method throws TypeError for undefined value.');
 
-    /* setSnowVolume */
+    /* setTime */
     weatherEntry.setTime(1452607200);
     assert.ok(weatherEntry.getTime() === 1452607200, 
         'setTime method throws no error for valid value.');
@@ -336,4 +336,38 @@ QUnit.test('WeatherEntry', function(assert) {
         weatherEntry.setTime(undefined)}, 
         new TypeError('Time value is invalid.'), 
         'setTime method throws TypeError for undefined value.');
+
+    /* setSunrise */
+    weatherEntry.setSunrise(1452607200);
+    assert.ok(weatherEntry.getSunrise() === 1452607200, 
+        'setSunrise method throws no error for valid value.');
+    assert.throws(function() {
+        weatherEntry.setSunrise('0')}, 
+        new TypeError('Sunrise value is invalid.'), 
+        'setSunrise method throws TypeError for invalid value.');
+    assert.throws(function() {
+        weatherEntry.setSunrise(null)}, 
+        new TypeError('Sunrise value is invalid.'), 
+        'setSunrise method throws TypeError for null value.');
+    assert.throws(function() {
+        weatherEntry.setSunrise(undefined)}, 
+        new TypeError('Sunrise value is invalid.'), 
+        'setSunrise method throws TypeError for undefined value.');
+
+    /* setSunset */
+    weatherEntry.setSunset(1452607200);
+    assert.ok(weatherEntry.getSunset() === 1452607200, 
+        'setSunset method throws no error for valid value.');
+    assert.throws(function() {
+        weatherEntry.setSunset('0')}, 
+        new TypeError('Sunset value is invalid.'), 
+        'setSunset method throws TypeError for invalid value.');
+    assert.throws(function() {
+        weatherEntry.setSunset(null)}, 
+        new TypeError('Sunset value is invalid.'), 
+        'setSunset method throws TypeError for null value.');
+    assert.throws(function() {
+        weatherEntry.setSunset(undefined)}, 
+        new TypeError('Sunset value is invalid.'), 
+        'setSunset method throws TypeError for undefined value.');
 });

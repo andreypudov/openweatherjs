@@ -33,6 +33,7 @@ module OpenWeatherJS {
         private key:      string;
         private language: Languages;
         private units:    Units;
+        private timeout:  number;
 
         constructor(optionsEnforcer: () => void) {
             if (optionsEnforcer !== OptionsEnforcer) {
@@ -80,6 +81,17 @@ module OpenWeatherJS {
                 ? this.units
                 : Units.DEFAULT;
         }
+
+        /**
+         * Returns an API timeout value or 4096 if undefined.
+         * 
+         * @return an API timeout value.
+         */
+        public getTimeout(): number {
+            return (this.timeout !== undefined)
+                ? this.timeout
+                : 4096
+        }
         
         /**
          * Sets an API key value. Throws TypeError if given parameter is invalid.
@@ -121,6 +133,17 @@ module OpenWeatherJS {
             
             this.units = units;
         } 
+
+        /**
+         * Sets an API timeout value. Throws TypeError if given parameter is invalid.
+         * 
+         * @param timeout - an API timeout value.
+         */
+        public setTimeout(timeout: number): void {
+            Asserts.isNumber(timeout, 'API key is invalid.')
+
+            this.timeout = timeout;
+        }
     }
 
     function OptionsEnforcer() {} 

@@ -117,6 +117,8 @@ module OpenWeatherJS {
                 
                 entry.setLocation(location);
                 entry.setTime(response.dt);
+                entry.setSunrise(response.sys.sunrise);
+                entry.setSunset(response.sys.sunset);
                 
                 success(entry, request);
             }, function(request: XMLHttpRequest, message: string) {

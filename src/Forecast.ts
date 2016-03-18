@@ -36,7 +36,7 @@ module OpenWeatherJS {
          * @return a current WeatherReport for a given location.
          */
         static getHourlyForecast(location: Location, success: (entry: WeatherReport, request: XMLHttpRequest) => void,
-                error: (request: XMLHttpRequest) => void): void {
+                error: (request: XMLHttpRequest, message: string) => void): void {
             Asserts.isInstanceofOf(location, Location, 'Location type is invalid.');
 
             var url: string;
@@ -61,37 +61,38 @@ module OpenWeatherJS {
 
             parser.parse(url, function(response: any, request: XMLHttpRequest) {
                 var location: any;
-                var entry: any;
-                for (var x = 0; x < response.cnt; x++) {   
+                var entry:    any;
+
+                for (var index = 0; index < response.cnt; ++index) {   
                     entry = new WeatherEntry();
-                    entry.setWeatherCondition(response.list[x].weather[0].id);
-                    entry.setWeatherParameters(response.list[x].weather[0].main);
-                    entry.setWeatherDescription(response.list[x].weather[0].description);
-                    entry.setWeatherIconId(response.list[x].weather[0].icon);
+                    entry.setWeatherCondition(response.list[index].weather[0].id);
+                    entry.setWeatherParameters(response.list[index].weather[0].main);
+                    entry.setWeatherDescription(response.list[index].weather[0].description);
+                    entry.setWeatherIconId(response.list[index].weather[0].icon);
 
-                    entry.setTemperature(response.list[x].main.temp);
-                    entry.setPressure(response.list[x].main.pressure);
-                    entry.setHumidity(response.list[x].main.humidity);
-                    entry.setMinimum(response.list[x].main.temp_min);
-                    entry.setMaximum(response.list[x].main.temp_max);
+                    entry.setTemperature(response.list[index].main.temp);
+                    entry.setPressure(response.list[index].main.pressure);
+                    entry.setHumidity(response.list[index].main.humidity);
+                    entry.setMinimum(response.list[index].main.temp_min);
+                    entry.setMaximum(response.list[index].main.temp_max);
 
-                    entry.setSeaLevelPressure((response.list[x].main.sea_level !== undefined)
-                        ? response.list[x].main.sea_level
-                        : response.list[x].main.pressure);
-                    entry.setGroundLevelPressure((response.list[x].main.grnd_level !== undefined)
-                        ? response.list[x].main.grnd_level
-                        : response.list[x].main.pressure);
+                    entry.setSeaLevelPressure((response.list[index].main.sea_level !== undefined)
+                        ? response.list[index].main.sea_level
+                        : response.list[index].main.pressure);
+                    entry.setGroundLevelPressure((response.list[index].main.grnd_level !== undefined)
+                        ? response.list[index].main.grnd_level
+                        : response.list[index].main.pressure);
 
-                    entry.setWindSpeed(response.list[x].wind.speed);
-                    entry.setWindDirection(response.list[x].wind.deg);
+                    entry.setWindSpeed(response.list[index].wind.speed);
+                    entry.setWindDirection(response.list[index].wind.deg);
 
-                    entry.setCloudiness(response.list[x].clouds.all);
+                    entry.setCloudiness(response.list[index].clouds.all);
                        
-                    entry.setRainVolume(((response.list[x].rain !== undefined) && (response.list[x].rain['3h'] !== undefined))
-                        ? response.list[x].rain['3h']
+                    entry.setRainVolume(((response.list[index].rain !== undefined) && (response.list[index].rain['3h'] !== undefined))
+                        ? response.list[index].rain['3h']
                         : 0);
-                    entry.setSnowVolume(((response.list[x].snow !== undefined) && (response.list[x].snow['3h'] !== undefined))
-                        ? response.list[x].snow['3h']
+                    entry.setSnowVolume(((response.list[index].snow !== undefined) && (response.list[index].snow['3h'] !== undefined))
+                        ? response.list[index].snow['3h']
                         : 0);
 
                     location = new Location();
@@ -102,14 +103,14 @@ module OpenWeatherJS {
                     location.setCountry(response.city.country);
                     
                     entry.setLocation(location);
-                    entry.setTime(response.list[x].dt);
+                    entry.setTime(response.list[index].dt);
 
                     report.addEntry(entry);
                 }
 
                 success(report, request);
             }, function(request: XMLHttpRequest, message: string) {
-                error(request);
+                error(request, message);
             });
         }
     }

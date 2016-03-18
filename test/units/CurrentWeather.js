@@ -28,13 +28,13 @@
 
 QUnit.test('CurrentWeather', function(assert) {
     var options = OpenWeatherJS.Options.getInstance();
-    options.setKey('2de143494c0b295cca9337e1e96b00e0');
+    options.setKey('1d334b0f0f23fccba1cee7d3f4934ea7');
     options.setUnits(OpenWeatherJS.Units.DEFAULT);
     
     var location = OpenWeatherJS.Location.getById(6198442);
     var done     = assert.async();
     
-    var report = OpenWeatherJS.CurrentWeather.getWeather(location, 
+    OpenWeatherJS.CurrentWeather.getWeather(location, 
         function(entry, request) {
             assert.ok(true, 'API call is success.');
             
@@ -75,7 +75,7 @@ QUnit.test('CurrentWeather', function(assert) {
     /* Metrics */
     var doneMetric = assert.async();
     options.setUnits(OpenWeatherJS.Units.METRIC);
-    report = OpenWeatherJS.CurrentWeather.getWeather(location, 
+    OpenWeatherJS.CurrentWeather.getWeather(location, 
         function(entry, request) {
             assert.ok((entry.getTemperature() >= -43) && (entry.getTemperature() <= 46), 'Temperature value is in the range');
             assert.ok((entry.getMinimum() >= -43) && (entry.getMinimum() <= 46), 'Minimum value is in the range');
@@ -92,7 +92,7 @@ QUnit.test('CurrentWeather', function(assert) {
     /* Imperial */
     var doneImperial = assert.async();
     options.setUnits(OpenWeatherJS.Units.IMPERIAL);
-    report = OpenWeatherJS.CurrentWeather.getWeather(location, 
+    OpenWeatherJS.CurrentWeather.getWeather(location, 
         function(entry, request) {
             assert.ok((entry.getTemperature() >= -45) && (entry.getTemperature() <= 116), 'Temperature value is in the range');
             assert.ok((entry.getMinimum() >= -45) && (entry.getMinimum() <= 116), 'Minimum value is in the range');
