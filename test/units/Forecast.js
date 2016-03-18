@@ -33,6 +33,7 @@ QUnit.test('Forecast', function(assert) {
     var location = new OpenWeatherJS.Location.getByName('London','UK');
     var done     = assert.async();
 
+<<<<<<< HEAD
     var report = new OpenWeatherJS.Forecast.getHourlyForecast(location, 
         function(entry, request) {
             assert.ok(true, 'API Call is success.');
@@ -43,6 +44,28 @@ QUnit.test('Forecast', function(assert) {
             assert.equal(entry.getReport()[0].location.latitude, 51.50853, 'Location latitude is: 51.50853');
             assert.equal(entry.getReport()[0].location.longitude, -0.12574, 'Location longitude is: -0.12574');
             assert.equal(typeof entry.getReport()[0].description === 'string', true, 'Current weather is: ' + entry.getReport()[0].description);
+=======
+    var report = new OpenWeatherJS.Forecast.getHourlyForecast(location, function(entry, request) {
+        assert.ok(true, 'API Call is success.');
+        
+        assert.equal(entry.getReport()[0].location.id, 2643743, 'The city id is 2643743');
+        assert.equal(entry.getReport()[0].location.name, 'London', 'Forecast city is London.');
+        assert.equal(entry.getReport()[0].location.country, 'GB', 'Forecast country is GB.');
+        assert.equal(entry.getReport()[0].location.latitude, 51.50853, 'Location latitude is: 51.50853');
+        assert.equal(entry.getReport()[0].location.longitude, -0.12574, 'Location longitude is: -0.12574');
+        assert.equal(typeof entry.getReport()[0].description === 'string', true, 'Current weather is: ' + entry.getReport()[0].description);
+        assert.ok((entry.getReport()[0].getPressure() >= 980) && (entry.getReport()[0].getPressure() <= 1050), 'Pressure value is in the range');
+        assert.ok((entry.getReport()[0].getHumidity() >= 0) && (entry.getReport()[0].getHumidity() <= 100), 'Humidity value is in the range');
+        assert.ok((entry.getReport()[0].getSeaLevelPressure() >= 980) && (entry.getReport()[0].getSeaLevelPressure() <= 1050), 'Sea level pressure value is in the range');
+        assert.ok((entry.getReport()[0].getGroundLevelPressure() >= 980) && (entry.getReport()[0].getGroundLevelPressure() <= 1050), 'Ground level pressure value is in the range');
+        
+        assert.ok((entry.getReport()[0].getWindSpeed() >= 0) && (entry.getReport()[0].getWindSpeed() <= 16), 'Wind speed value is in the range');
+        assert.ok((entry.getReport()[0].getWindDirection() >= 0) && (entry.getReport()[0].getWindDirection() <= 360), 'Wind direction value is in the range');
+        
+        assert.ok((entry.getReport()[0].getCloudiness() >= 0) && (entry.getReport()[0].getCloudiness() <= 100), 'Cloudiness value is in the range');
+        assert.ok((entry.getReport()[0].getRainVolume() >= 0) && (entry.getReport()[0].getRainVolume() <= 10), 'Rain volume is in the range');
+        assert.ok((entry.getReport()[0].getSnowVolume() >= 0) && (entry.getReport()[0].getSnowVolume() <= 10), 'Snow volume value is in the range');
+>>>>>>> a86226a1aa892861eabd2605e60f418b810d8c4f
 
             dayEntries = entry.getByDay(1);
 
@@ -50,10 +73,53 @@ QUnit.test('Forecast', function(assert) {
                 assert.equal(typeof dayEntries[x].time === 'number', true, 'WeatherEntry of the first day of the week at hour: ' + new Date(dayEntries[x].time * 1000).getHours());
             }
 
+<<<<<<< HEAD
             done();
         }.bind(this), 
         function(request, message) {
             assert.notOk(true, 'API Call has failed. ' + message);
             done();
+=======
+        done();
+    }.bind(this), 
+    function(request, message) {
+        assert.notOk(true, 'API Call has failed. ' + message);
+        
+        done();
+    }.bind(this));
+
+/* Metrics */
+    var doneMetric = assert.async();
+    options.setUnits(OpenWeatherJS.Units.METRIC);
+    report = OpenWeatherJS.Forecast.getHourlyForecast(location, 
+        function(entry, request) {
+            assert.ok((entry.getReport()[0].getTemperature() >= -43) && (entry.getReport()[0].getTemperature() <= 46), 'Temperature value is in the range');
+            assert.ok((entry.getReport()[0].getMinimum() >= -43) && (entry.getReport()[0].getMinimum() <= 46), 'Minimum value is in the range');
+            assert.ok((entry.getReport()[0].getMaximum() >= -43) && (entry.getReport()[0].getMaximum() <= 46), 'Maximum value is in the range');
+            assert.ok((entry.getReport()[0].getWindSpeed() >= 0) && (entry.getReport()[0].getWindSpeed() <= 16), 'Wind speed value is in the range');
+            
+            doneMetric();
+        }.bind(this), 
+        function(request, message) {
+            assert.notOk(true, 'API call is failed: ' + request.responseText + ' ' + message);
+            doneMetric();
+        }.bind(this));
+        
+    /* Imperial */
+    var doneImperial = assert.async();
+    options.setUnits(OpenWeatherJS.Units.IMPERIAL);
+    report = OpenWeatherJS.Forecast.getHourlyForecast(location, 
+        function(entry, request) {
+            assert.ok((entry.getReport()[0].getTemperature() >= -45) && (entry.getReport()[0].getTemperature() <= 116), 'Temperature value is in the range');
+            assert.ok((entry.getReport()[0].getMinimum() >= -45) && (entry.getReport()[0].getMinimum() <= 116), 'Minimum value is in the range');
+            assert.ok((entry.getReport()[0].getMaximum() >= -45) && (entry.getReport()[0].getMaximum() <= 116), 'Maximum value is in the range');
+            assert.ok((entry.getReport()[0].getWindSpeed() >= 0) && (entry.getReport()[0].getWindSpeed() <= 35), 'Wind speed value is in the range');
+            
+            doneImperial();
+        }.bind(this), 
+        function(request, message) {
+            assert.notOk(true, 'API call is failed: ' + request.responseText + ' ' + message);
+            doneImperial();
+>>>>>>> a86226a1aa892861eabd2605e60f418b810d8c4f
         }.bind(this));
 });

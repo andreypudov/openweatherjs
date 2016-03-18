@@ -56,6 +56,12 @@ module OpenWeatherJS {
                     break;
             }
 
+            /* set API language value */
+            url = url + '&lang=' + Languages[options.getLanguage()].toLowerCase();
+            
+            /* set API units value */
+            url = url + '&units=' + Units[options.getUnits()].toLowerCase();
+
             /* append API key to url */
             url = url + '&appid=' + options.getKey();
 
