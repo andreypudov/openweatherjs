@@ -65,6 +65,8 @@ module OpenWeatherJS {
             /* append API key to url */
             url = url + '&appid=' + options.getKey();
 
+            console.log(options.getKey());
+
             parser.parse(url, function(response: any, request: XMLHttpRequest) {
                 var location: any;
                 var entry:    any;

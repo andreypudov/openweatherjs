@@ -38,14 +38,16 @@ QUnit.test('WeatherReport', function(assert) {
 
         dayEntries = report.getByDay(3);
 
-        for (var x = 0; x <= dayEntries.length - 1; ++x) {
-            assert.equal(typeof dayEntries[x].time === 'number', true, 'WeatherEntry of the 3rd day of the week at hour: ' + new Date(dayEntries[x].time * 1000).getHours());
+        for (var index = 0; index < dayEntries.length; ++index) {
+            assert.equal(typeof dayEntries[index].time === 'number', true, 
+                'WeatherEntry of the 3rd day of the week at hour: ' 
+                + new Date(dayEntries[index].time * 1000).getHours());
         }
 
         done();
     }.bind(this), 
-    function(request) {
-        assert.notOk(true, 'API Call has failed.');
+    function(request, message) {
+        assert.notOk(true, 'API call is failed: ' + request.responseText + ' ' + message);
         done();
     }.bind(this));
 });

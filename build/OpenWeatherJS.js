@@ -156,6 +156,7 @@ var OpenWeatherJS;
             url = url + '&lang=' + OpenWeatherJS.Languages[options.getLanguage()].toLowerCase();
             url = url + '&units=' + OpenWeatherJS.Units[options.getUnits()].toLowerCase();
             url = url + '&appid=' + options.getKey();
+            console.log(options.getKey());
             parser.parse(url, function (response, request) {
                 var location;
                 var entry;

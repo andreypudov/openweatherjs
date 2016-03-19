@@ -27,7 +27,7 @@
  */
 
 QUnit.test('JSONParser', function(assert) {
-    var url     = 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=2de143494c0b295cca9337e1e96b00e0';
+    var url     = 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=1d334b0f0f23fccba1cee7d3f4934ea7';
     var base    = 'cmc stations';
     var city    = 'London';
     var country = 'GB';

@@ -80,7 +80,7 @@ QUnit.test('Asserts', function(assert) {
     /* isUrl */
     OpenWeatherJS.Asserts.isUrl('https://github.com/andreypudov/OpenWeatherJS', 'message');
     assert.ok(true, 'Asserts method isUrl throws no error for valid value.');
-    OpenWeatherJS.Asserts.isUrl('http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=2de143494c0b295cca9337e1e96b00e0', 'message');
+    OpenWeatherJS.Asserts.isUrl('http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=1d334b0f0f23fccba1cee7d3f4934ea7', 'message');
     assert.ok(true, 'Asserts method isUrl throws no error for valid advanced value.');
     assert.throws(function() {
         OpenWeatherJS.Asserts.isUrl(null, 'message [@]')}, 

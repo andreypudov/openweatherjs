@@ -29,12 +29,12 @@
 QUnit.test('Options', function(assert) {
     var options = OpenWeatherJS.Options.getInstance();
     
-    options.setKey('2de143494c0b295cca9337e1e96b00e0');
+    options.setKey('1d334b0f0f23fccba1cee7d3f4934ea7');
     options.setLanguage(OpenWeatherJS.Languages.RU);
     options.setUnits(OpenWeatherJS.Units.METRIC);
     assert.ok(true, 'Options throws no error for valid values.');
     
-    assert.strictEqual(options.getKey(), '2de143494c0b295cca9337e1e96b00e0', 'Key key is valid.');
+    assert.strictEqual(options.getKey(), '1d334b0f0f23fccba1cee7d3f4934ea7', 'Key key is valid.');
     assert.strictEqual(options.getLanguage(), OpenWeatherJS.Languages.RU, 'Langauge value is Russian.');
     assert.strictEqual(options.getUnits(), OpenWeatherJS.Units.METRIC, 'Default units value is Celsius.');
     
@@ -42,7 +42,7 @@ QUnit.test('Options', function(assert) {
         'setKey method throws TypeError exception for null value');
     assert.throws(function() {options.setKey(undefined)}, new TypeError('API key is invalid.'), 
         'setKey method throws TypeError exception for undefined value');
-    assert.throws(function() {options.setKey(0x2de143494c0b295cca9337e1e96b00e0)}, new TypeError('API key is invalid.'), 
+    assert.throws(function() {options.setKey(0x1d334b0f0f23fccba1cee7d3f4934ea7)}, new TypeError('API key is invalid.'), 
         'setKey method throws TypeError exception for number value');
         
     assert.throws(function() {options.setLanguage(null)}, new TypeError('API language is invalid.'), 
