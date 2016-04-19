@@ -29,11 +29,15 @@
 module OpenWeatherJS {
     export class Options {
         private static instance : Options;
+
+        public TIMEOUT_DEFAULT  = 4096;
+        public ATTEMPTS_DEFAULT = 3;
         
         private key:      string;
         private language: Languages;
         private units:    Units;
         private timeout:  number;
+        private attempts: number;
 
         constructor(optionsEnforcer: () => void) {
             if (optionsEnforcer !== OptionsEnforcer) {
@@ -90,7 +94,18 @@ module OpenWeatherJS {
         public getTimeout(): number {
             return (this.timeout !== undefined)
                 ? this.timeout
-                : 4096
+                : this.TIMEOUT_DEFAULT
+        }
+
+        /**
+         * Returns an API attempts value or 3 if undefined.
+         * 
+         * @return an API attempts value.
+         */
+        public getAttempts(): number {
+            return (this.attempts !== undefined)
+                ? this.attempts
+                : this.ATTEMPTS_DEFAULT;
         }
         
         /**
@@ -143,6 +158,17 @@ module OpenWeatherJS {
             Asserts.isNumber(timeout, 'API key is invalid.')
 
             this.timeout = timeout;
+        }
+
+        /**
+         * Sets an API attempts value. Throws TypeError if given parameter is invalid.
+         * 
+         * @param attempts - an API attempts value.
+         */
+        public setAttempts(attempts: number): void {
+            Asserts.isNumber(attempts, 'API key is invalid.')
+
+            this.attempts = attempts;
         }
     }
 

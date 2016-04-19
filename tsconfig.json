@@ -6,7 +6,7 @@
         "removeComments":     true,
         "preserveConstEnums": true,
         "outFile":            "build/OpenWeatherJS.js",
-        "sourceMap":          true
+        "sourceMap":          false
 	},
 
     "files": [

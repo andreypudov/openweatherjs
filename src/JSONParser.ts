@@ -82,19 +82,19 @@
                 if (this.request.readyState === this.REQUEST_FINISHED_AND_RESPONSE_IS_READY) {
                     if (this.request.status === this.OK) {
                         Asserts.isJSON(this.request.responseText, 'JSON data is invalid.');
-                        
+
                         var json = JSON.parse(this.request.responseText);
                         if ((json.cod === undefined) || (parseInt(json.cod) !== 200)) {
                             error(this.request, 'Error code returned from API.');
                             return;
                         }
-                        
+
                         success(json, this.request);
                     } else {
                         error(this.request, 'Unable to make a connection.');
                     }
                 }
-            }.bind(this)
+            }.bind(this);
 
             this.request.open('GET', url, true);
             this.request.timeout   = options.getTimeout();
