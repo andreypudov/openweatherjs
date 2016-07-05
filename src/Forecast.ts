@@ -84,22 +84,26 @@ module OpenWeatherJS {
                     entry.setMinimum(response.list[index].main.temp_min);
                     entry.setMaximum(response.list[index].main.temp_max);
 
-                    entry.setSeaLevelPressure((response.list[index].main.sea_level !== undefined)
+                    entry.setSeaLevelPressure((response.list[index].main.sea_level != undefined)
                         ? response.list[index].main.sea_level
                         : response.list[index].main.pressure);
-                    entry.setGroundLevelPressure((response.list[index].main.grnd_level !== undefined)
+                    entry.setGroundLevelPressure((response.list[index].main.grnd_level != undefined)
                         ? response.list[index].main.grnd_level
                         : response.list[index].main.pressure);
 
-                    entry.setWindSpeed(response.list[index].wind.speed);
-                    entry.setWindDirection(response.list[index].wind.deg);
+                    entry.setWindSpeed((response.list[index].wind != undefined) 
+                        ? response.list[index].wind.speed 
+                        : 0);
+                    entry.setWindDirection((response.list[index].wind != undefined) 
+                        ? response.list[index].wind.deg 
+                        : 0);
 
                     entry.setCloudiness(response.list[index].clouds.all);
                        
-                    entry.setRainVolume(((response.list[index].rain !== undefined) && (response.list[index].rain['3h'] !== undefined))
+                    entry.setRainVolume(((response.list[index].rain != undefined) && (response.list[index].rain['3h'] != undefined))
                         ? response.list[index].rain['3h']
                         : 0);
-                    entry.setSnowVolume(((response.list[index].snow !== undefined) && (response.list[index].snow['3h'] !== undefined))
+                    entry.setSnowVolume(((response.list[index].snow != undefined) && (response.list[index].snow['3h'] != undefined))
                         ? response.list[index].snow['3h']
                         : 0);
 

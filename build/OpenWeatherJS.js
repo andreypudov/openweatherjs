@@ -72,7 +72,7 @@ var OpenWeatherJS;
                 case OpenWeatherJS.LocationType.NAME:
                     var country = location.getCountry();
                     url = 'http://api.openweathermap.org/data/2.5/weather?q=' + location.getName()
-                        + (country !== undefined) ? ', ' + country : '';
+                        + (country != undefined) ? ', ' + country : '';
                     break;
                 case OpenWeatherJS.LocationType.COORDINATES:
                     url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + location.getLatitude()
@@ -98,19 +98,19 @@ var OpenWeatherJS;
                 entry.setHumidity(response.main.humidity);
                 entry.setMinimum(response.main.temp_min);
                 entry.setMaximum(response.main.temp_max);
-                entry.setSeaLevelPressure((response.main.sea_level !== undefined)
+                entry.setSeaLevelPressure((response.main.sea_level != undefined)
                     ? response.main.sea_level
                     : response.main.pressure);
-                entry.setGroundLevelPressure((response.main.grnd_level !== undefined)
+                entry.setGroundLevelPressure((response.main.grnd_level != undefined)
                     ? response.main.grnd_level
                     : response.main.pressure);
-                entry.setWindSpeed(response.wind.speed);
-                entry.setWindDirection(response.wind.deg);
+                entry.setWindSpeed((response.wind != undefined) ? response.wind.speed : 0);
+                entry.setWindDirection((response.wind != undefined) ? response.wind.deg : 0);
                 entry.setCloudiness(response.clouds.all);
-                entry.setRainVolume(((response.rain !== undefined) && (response.rain['3h'] !== undefined))
+                entry.setRainVolume(((response.rain != undefined) && (response.rain['3h'] != undefined))
                     ? response.rain['3h']
                     : 0);
-                entry.setSnowVolume(((response.snow !== undefined) && (response.snow['3h'] !== undefined))
+                entry.setSnowVolume(((response.snow != undefined) && (response.snow['3h'] != undefined))
                     ? response.snow['3h']
                     : 0);
                 location.setId(response.id);
@@ -171,19 +171,23 @@ var OpenWeatherJS;
                     entry.setHumidity(response.list[index].main.humidity);
                     entry.setMinimum(response.list[index].main.temp_min);
                     entry.setMaximum(response.list[index].main.temp_max);
-                    entry.setSeaLevelPressure((response.list[index].main.sea_level !== undefined)
+                    entry.setSeaLevelPressure((response.list[index].main.sea_level != undefined)
                         ? response.list[index].main.sea_level
                         : response.list[index].main.pressure);
-                    entry.setGroundLevelPressure((response.list[index].main.grnd_level !== undefined)
+                    entry.setGroundLevelPressure((response.list[index].main.grnd_level != undefined)
                         ? response.list[index].main.grnd_level
                         : response.list[index].main.pressure);
-                    entry.setWindSpeed(response.list[index].wind.speed);
-                    entry.setWindDirection(response.list[index].wind.deg);
+                    entry.setWindSpeed((response.list[index].wind != undefined)
+                        ? response.list[index].wind.speed
+                        : 0);
+                    entry.setWindDirection((response.list[index].wind != undefined)
+                        ? response.list[index].wind.deg
+                        : 0);
                     entry.setCloudiness(response.list[index].clouds.all);
-                    entry.setRainVolume(((response.list[index].rain !== undefined) && (response.list[index].rain['3h'] !== undefined))
+                    entry.setRainVolume(((response.list[index].rain != undefined) && (response.list[index].rain['3h'] != undefined))
                         ? response.list[index].rain['3h']
                         : 0);
-                    entry.setSnowVolume(((response.list[index].snow !== undefined) && (response.list[index].snow['3h'] !== undefined))
+                    entry.setSnowVolume(((response.list[index].snow != undefined) && (response.list[index].snow['3h'] != undefined))
                         ? response.list[index].snow['3h']
                         : 0);
                     location = new OpenWeatherJS.Location();
@@ -437,27 +441,27 @@ var OpenWeatherJS;
             return Options.instance;
         };
         Options.prototype.getKey = function () {
-            return (this.key !== undefined)
+            return (this.key != undefined)
                 ? this.key
                 : '';
         };
         Options.prototype.getLanguage = function () {
-            return (this.language !== undefined)
+            return (this.language != undefined)
                 ? this.language
                 : OpenWeatherJS.Languages.EN;
         };
         Options.prototype.getUnits = function () {
-            return (this.units !== undefined)
+            return (this.units != undefined)
                 ? this.units
                 : OpenWeatherJS.Units.DEFAULT;
         };
         Options.prototype.getTimeout = function () {
-            return (this.timeout !== undefined)
+            return (this.timeout != undefined)
                 ? this.timeout
                 : this.TIMEOUT_DEFAULT;
         };
         Options.prototype.getAttempts = function () {
-            return (this.attempts !== undefined)
+            return (this.attempts != undefined)
                 ? this.attempts
                 : this.ATTEMPTS_DEFAULT;
         };

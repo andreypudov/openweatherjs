@@ -55,7 +55,7 @@ module OpenWeatherJS {
             case LocationType.NAME:
                 var country = location.getCountry();
                 url = 'http://api.openweathermap.org/data/2.5/weather?q=' + location.getName() 
-                    + (country !== undefined) ? ', ' + country : '';
+                    + (country != undefined) ? ', ' + country : '';
             break;
                 case LocationType.COORDINATES:
                 url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + location.getLatitude() 
@@ -91,21 +91,21 @@ module OpenWeatherJS {
                 entry.setMinimum(response.main.temp_min);
                 entry.setMaximum(response.main.temp_max);
 
-                entry.setSeaLevelPressure((response.main.sea_level !== undefined) 
+                entry.setSeaLevelPressure((response.main.sea_level != undefined) 
                     ? response.main.sea_level 
                     : response.main.pressure);
-                entry.setGroundLevelPressure((response.main.grnd_level !== undefined) 
+                entry.setGroundLevelPressure((response.main.grnd_level != undefined) 
                     ? response.main.grnd_level 
                     : response.main.pressure);
                     
-                entry.setWindSpeed(response.wind.speed);
-                entry.setWindDirection(response.wind.deg);
+                entry.setWindSpeed((response.wind != undefined) ? response.wind.speed : 0);
+                entry.setWindDirection((response.wind != undefined) ? response.wind.deg : 0);
                 entry.setCloudiness(response.clouds.all);
                 
-                entry.setRainVolume(((response.rain !== undefined) && (response.rain['3h'] !== undefined))
+                entry.setRainVolume(((response.rain != undefined) && (response.rain['3h'] != undefined))
                     ? response.rain['3h']
                     : 0);
-                entry.setSnowVolume(((response.snow !== undefined) && (response.snow['3h'] !== undefined))
+                entry.setSnowVolume(((response.snow != undefined) && (response.snow['3h'] != undefined))
                     ? response.snow['3h']
                     : 0);
                 

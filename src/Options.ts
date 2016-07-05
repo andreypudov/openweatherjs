@@ -59,7 +59,7 @@ module OpenWeatherJS {
          * @return an API key value.
          */
         public getKey(): string {
-            return (this.key !== undefined)
+            return (this.key != undefined)
                 ? this.key
                 : '';
         }
@@ -70,7 +70,7 @@ module OpenWeatherJS {
          * @return an API language value.
          */
         public getLanguage(): Languages {
-            return (this.language !== undefined)
+            return (this.language != undefined)
                 ? this.language
                 : Languages.EN;
         }
@@ -81,7 +81,7 @@ module OpenWeatherJS {
          * @return an API units value.
          */
         public getUnits(): Units {
-            return (this.units !== undefined)
+            return (this.units != undefined)
                 ? this.units
                 : Units.DEFAULT;
         }
@@ -92,7 +92,7 @@ module OpenWeatherJS {
          * @return an API timeout value.
          */
         public getTimeout(): number {
-            return (this.timeout !== undefined)
+            return (this.timeout != undefined)
                 ? this.timeout
                 : this.TIMEOUT_DEFAULT
         }
@@ -103,7 +103,7 @@ module OpenWeatherJS {
          * @return an API attempts value.
          */
         public getAttempts(): number {
-            return (this.attempts !== undefined)
+            return (this.attempts != undefined)
                 ? this.attempts
                 : this.ATTEMPTS_DEFAULT;
         }
