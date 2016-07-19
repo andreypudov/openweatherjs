@@ -156,7 +156,6 @@ var OpenWeatherJS;
             url = url + '&lang=' + OpenWeatherJS.Languages[options.getLanguage()].toLowerCase();
             url = url + '&units=' + OpenWeatherJS.Units[options.getUnits()].toLowerCase();
             url = url + '&appid=' + options.getKey();
-            console.log(options.getKey());
             parser.parse(url, function (response, request) {
                 var location;
                 var entry;
@@ -767,6 +766,9 @@ var OpenWeatherJS;
             return dailyEntries;
         };
         WeatherReport.prototype.getReport = function () {
+            if (this.entries === undefined) {
+                this.entries = new Array();
+            }
             return this.entries;
         };
         return WeatherReport;

@@ -41,8 +41,8 @@ module OpenWeatherJS {
 
             var url: string;
             var options = Options.getInstance();
-            var parser = new JSONParser();
-            var report = new WeatherReport();
+            var parser  = new JSONParser();
+            var report  = new WeatherReport();
 
             switch (location.getType()) {
                 case LocationType.ID:
@@ -65,14 +65,13 @@ module OpenWeatherJS {
             /* append API key to url */
             url = url + '&appid=' + options.getKey();
 
-            console.log(options.getKey());
-
             parser.parse(url, function(response: any, request: XMLHttpRequest) {
                 var location: any;
                 var entry:    any;
 
                 for (var index = 0; index < response.cnt; ++index) {   
                     entry = new WeatherEntry();
+                    
                     entry.setWeatherCondition(response.list[index].weather[0].id);
                     entry.setWeatherParameters(response.list[index].weather[0].main);
                     entry.setWeatherDescription(response.list[index].weather[0].description);

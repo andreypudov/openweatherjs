@@ -91,6 +91,10 @@ module OpenWeatherJS {
          * @return entries - An array of WeatherEntries.
          */
         public getReport(): WeatherEntry[] {
+            if (this.entries === undefined) {
+                this.entries = new Array();
+            }
+            
             return this.entries;
         }
     }
