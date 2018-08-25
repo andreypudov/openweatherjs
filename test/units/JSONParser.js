@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (C) 2016 The OpenWeatherJS Project
+ * Copyright (C) 2018 The OpenWeatherJS Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@
  */
 
 QUnit.test('JSONParser', function(assert) {
-    var url     = 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=1d334b0f0f23fccba1cee7d3f4934ea7';
+    var url     = 'https://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=1d334b0f0f23fccba1cee7d3f4934ea7';
     var base    = 'cmc stations';
     var city    = 'London';
     var country = 'GB';

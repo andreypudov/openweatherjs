@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (C) 2016 The OpenWeatherJS Project
+ * Copyright (C) 2018 The OpenWeatherJS Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,19 +50,19 @@ module OpenWeatherJS {
             /* generate an URL for API call */
             switch (location.getType()) {
             case LocationType.ID:
-                url = 'http://api.openweathermap.org/data/2.5/weather?id=' + location.getId();
+                url = 'https://api.openweathermap.org/data/2.5/weather?id=' + location.getId();
                 break;
             case LocationType.NAME:
                 var country = location.getCountry();
-                url = 'http://api.openweathermap.org/data/2.5/weather?q=' + location.getName() 
+                url = 'https://api.openweathermap.org/data/2.5/weather?q=' + location.getName() 
                     + (country != undefined) ? ', ' + country : '';
             break;
                 case LocationType.COORDINATES:
-                url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + location.getLatitude() 
+                url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + location.getLatitude() 
                     + '&lon=' + location.getLongitude();
                 break;
             case LocationType.ZIP:
-                url = 'http://api.openweathermap.org/data/2.5/weather?zip=' + location.getZip()
+                url = 'https://api.openweathermap.org/data/2.5/weather?zip=' + location.getZip()
                     + ', ' + location.getCountry();
                 break;
             }

@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (C) 2016 The OpenWeatherJS Project
+ * Copyright (C) 2018 The OpenWeatherJS Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -80,7 +80,7 @@ QUnit.test('Asserts', function(assert) {
     /* isUrl */
     OpenWeatherJS.Asserts.isUrl('https://github.com/andreypudov/OpenWeatherJS', 'message');
     assert.ok(true, 'Asserts method isUrl throws no error for valid value.');
-    OpenWeatherJS.Asserts.isUrl('http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=1d334b0f0f23fccba1cee7d3f4934ea7', 'message');
+    OpenWeatherJS.Asserts.isUrl('https://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=1d334b0f0f23fccba1cee7d3f4934ea7', 'message');
     assert.ok(true, 'Asserts method isUrl throws no error for valid advanced value.');
     assert.throws(function() {
         OpenWeatherJS.Asserts.isUrl(null, 'message [@]')}, 

@@ -67,19 +67,19 @@ var OpenWeatherJS;
             var url;
             switch (location.getType()) {
                 case OpenWeatherJS.LocationType.ID:
-                    url = 'http://api.openweathermap.org/data/2.5/weather?id=' + location.getId();
+                    url = 'https://api.openweathermap.org/data/2.5/weather?id=' + location.getId();
                     break;
                 case OpenWeatherJS.LocationType.NAME:
                     var country = location.getCountry();
-                    url = 'http://api.openweathermap.org/data/2.5/weather?q=' + location.getName()
+                    url = 'https://api.openweathermap.org/data/2.5/weather?q=' + location.getName()
                         + (country != undefined) ? ', ' + country : '';
                     break;
                 case OpenWeatherJS.LocationType.COORDINATES:
-                    url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + location.getLatitude()
+                    url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + location.getLatitude()
                         + '&lon=' + location.getLongitude();
                     break;
                 case OpenWeatherJS.LocationType.ZIP:
-                    url = 'http://api.openweathermap.org/data/2.5/weather?zip=' + location.getZip()
+                    url = 'https://api.openweathermap.org/data/2.5/weather?zip=' + location.getZip()
                         + ', ' + location.getCountry();
                     break;
             }
@@ -144,13 +144,13 @@ var OpenWeatherJS;
             var report = new OpenWeatherJS.WeatherReport();
             switch (location.getType()) {
                 case OpenWeatherJS.LocationType.ID:
-                    url = 'http://api.openweathermap.org/data/2.5/forecast?id=' + location.getId() + '&mode=json';
+                    url = 'https://api.openweathermap.org/data/2.5/forecast?id=' + location.getId() + '&mode=json';
                     break;
                 case OpenWeatherJS.LocationType.NAME:
-                    url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json';
+                    url = 'https://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json';
                     break;
                 case OpenWeatherJS.LocationType.COORDINATES:
-                    url = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + location.getLatitude() + '&lon=' + location.getLongitude();
+                    url = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + location.getLatitude() + '&lon=' + location.getLongitude();
                     break;
             }
             url = url + '&lang=' + OpenWeatherJS.Languages[options.getLanguage()].toLowerCase();

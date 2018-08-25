@@ -5,7 +5,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (C) 2016 The OpenWeatherJS Project
+ * Copyright (C) 2018 The OpenWeatherJS Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,13 +46,13 @@ module OpenWeatherJS {
 
             switch (location.getType()) {
                 case LocationType.ID:
-                    url = 'http://api.openweathermap.org/data/2.5/forecast?id=' + location.getId() + '&mode=json';
+                    url = 'https://api.openweathermap.org/data/2.5/forecast?id=' + location.getId() + '&mode=json';
                     break;
                 case LocationType.NAME:
-                    url = 'http://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json';
+                    url = 'https://api.openweathermap.org/data/2.5/forecast?q=' + location.getName() + '&mode=json';
                     break;
                 case LocationType.COORDINATES:
-                    url = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + location.getLatitude() + '&lon=' + location.getLongitude();
+                    url = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + location.getLatitude() + '&lon=' + location.getLongitude();
                     break;
             }
 
