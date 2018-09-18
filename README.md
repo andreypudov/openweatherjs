@@ -2,12 +2,12 @@
 The JavaScript library to work with weather information and forecasts data provided by Open Weather Map.
 Built using TypeScript.
 
-#Usage
+## Usage
 We start initialization of the library by setting the options. To set the options we call the Options class like this:
 ```typescript
-	//New Options object
-	var options = OpenWeatherJS.Options.getInstance();
-	//Set the api key the library should use
+    //New Options object
+    var options = OpenWeatherJS.Options.getInstance();
+    //Set the api key the library should use
     options.setKey('2de143494c0b295cca9337e1e96b00e0');
     //Set which temperature units to use (Default is Kelvin)
     options.setUnits(OpenWeatherJS.Units.DEFAULT);
@@ -64,5 +64,5 @@ var report = OpenWeatherJS.CurrentWeather.getWeather(location,
 ```
 You can use the values freely as you'd like, as you see there is alot of coverage so if you would like to for example display a complete weather report on your website this would be a great choice since it covers everything from temperature to pressure and cloudiness.
 
-#Learn More
+## Learn More
 Visit our wiki: [OpenWeatherJS Wiki](https://github.com/andreypudov/OpenWeatherJS/wiki)
